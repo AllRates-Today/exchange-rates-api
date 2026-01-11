@@ -17,7 +17,7 @@ A free, fast, and reliable REST API for real-time and historical currency exchan
 
 ### 1. Get Your Free API Key
 
-Sign up at [allratestoday.com/register](https://allratestoday.com/register) to get your free API key.
+Visit [allratestoday.com/developers](https://allratestoday.com/developers) to get your free API key.
 
 ### 2. Make Your First Request
 
