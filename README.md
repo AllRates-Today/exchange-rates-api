@@ -1,6 +1,6 @@
-# AllRatesToday Exchange Rates API
+# Exchange Rates API
 
-A free, fast, and reliable REST API for real-time and historical currency exchange rates.
+A free, fast, realtime and reliable,  REST API for real-time and historical currency exchange rates.
 
 [![API Status](https://img.shields.io/badge/API-Online-brightgreen)](https://allratestoday.com)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
