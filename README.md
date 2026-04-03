@@ -17,7 +17,7 @@ A free, fast, realtime and reliable,  REST API for real-time and historical curr
 
 ### 1. Get Your Free API Key
 
-Visit [allratestoday.com/developers](https://allratestoday.com/developers) to get your free API key.
+Visit [allratestoday.com](https://allratestoday.com/) to get your free API key.
 
 ### 2. Make Your First Request
 
