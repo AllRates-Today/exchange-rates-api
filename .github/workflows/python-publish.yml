@@ -28,15 +28,15 @@ jobs:
 
       - name: Build release distributions
         run: |
-          # NOTE: put your own distribution build steps here.
           python -m pip install build
+          cd sdks/python
           python -m build
 
       - name: Upload distributions
         uses: actions/upload-artifact@v4
         with:
           name: release-dists
-          path: dist/
+          path: sdks/python/dist/
 
   pypi-publish:
     runs-on: ubuntu-latest
@@ -55,7 +55,7 @@ jobs:
       #
       # ALTERNATIVE: if your GitHub Release name is the PyPI project version string
       # ALTERNATIVE: exactly, uncomment the following line instead:
-      # url: https://pypi.org/project/YOURPROJECT/${{ github.event.release.name }}
+      url: https://pypi.org/project/allratestoday/
 
     steps:
       - name: Retrieve release distributions
