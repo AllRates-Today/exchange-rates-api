@@ -33,6 +33,10 @@ export class AllRatesToday {
   private baseUrl: string;
   private timeout: number;
 
+  /**
+   * Create an AllRatesToday client.
+   * @param options - API key is required. Register for free at https://allratestoday.com/register
+   */
   constructor(options: AllRatesTodayOptions = {}) {
     this.apiKey = options.apiKey;
     this.baseUrl = options.baseUrl || BASE_URL;
@@ -67,12 +71,13 @@ export class AllRatesToday {
   }
 
   /**
-   * Get exchange rate between two currencies (free, no auth required)
+   * Get exchange rate between two currencies (requires API key)
    */
   async getRate(from: string, to: string, amount?: number): Promise<RateResponse> {
-    const params: Record<string, string> = { from, to };
+    if (!this.apiKey) throw new AllRatesTodayError('API key required. Register for free at https://allratestoday.com/register');
+    const params: Record<string, string> = { source: from, target: to };
     if (amount !== undefined) params.amount = String(amount);
-    return this.request<RateResponse>('/api/public/rates', params);
+    return this.request<RateResponse>('/api/v1/rates', params);
   }
 
   /**

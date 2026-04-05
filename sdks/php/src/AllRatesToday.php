@@ -34,11 +34,14 @@ class AllRatesToday
      */
     public function getRate(string $from, string $to, ?float $amount = null): array
     {
-        $params = ['from' => $from, 'to' => $to];
+        if (!$this->apiKey) {
+            throw new AllRatesTodayException('API key required. Register for free at https://allratestoday.com/register');
+        }
+        $params = ['source' => $from, 'target' => $to];
         if ($amount !== null) {
             $params['amount'] = $amount;
         }
-        return $this->request('/api/public/rates', $params);
+        return $this->request('/api/v1/rates', $params);
     }
 
     /**

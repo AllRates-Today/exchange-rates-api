@@ -62,7 +62,9 @@ class AllRatesToday:
             raise AllRatesTodayError(f"Connection error: {e.reason}") from e
 
     def get_rate(self, from_currency: str, to_currency: str, amount: Optional[float] = None) -> dict:
-        """Get exchange rate between two currencies (free, no auth required).
+        """Get exchange rate between two currencies (requires API key).
+
+        Register for free at https://allratestoday.com/register
 
         Args:
             from_currency: Source currency code (e.g., 'USD').
@@ -70,12 +72,14 @@ class AllRatesToday:
             amount: Optional amount to convert. Defaults to 1.
 
         Returns:
-            dict with 'from', 'to', 'rate', and 'source' fields.
+            dict with rate data.
         """
-        params = {"from": from_currency, "to": to_currency}
+        if not self.api_key:
+            raise AllRatesTodayError("API key required. Register for free at https://allratestoday.com/register")
+        params = {"source": from_currency, "target": to_currency}
         if amount is not None:
             params["amount"] = str(amount)
-        return self._request("/api/public/rates", params)
+        return self._request("/api/v1/rates", params)
 
     def get_rates(self, source: str, target: str) -> list:
         """Get authenticated exchange rate (requires API key).
