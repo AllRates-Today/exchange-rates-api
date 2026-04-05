@@ -1,0 +1,25 @@
+{
+    "name": "allratestoday/sdk",
+    "description": "Official PHP SDK for AllRatesToday exchange rate API",
+    "version": "1.0.0",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "AllRatesToday",
+            "email": "info@allratestoday.com"
+        }
+    ],
+    "homepage": "https://allratestoday.com",
+    "keywords": ["exchange-rate", "currency", "forex", "api", "allratestoday", "reuters"],
+    "require": {
+        "php": ">=7.4",
+        "ext-json": "*",
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "AllRatesToday\\": "src/"
+        }
+    }
+}

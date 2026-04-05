@@ -1,0 +1,41 @@
+{
+  "name": "@allratestoday/sdk",
+  "version": "1.0.0",
+  "description": "Official JavaScript/TypeScript SDK for AllRatesToday exchange rate API",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "exchange-rate",
+    "currency",
+    "forex",
+    "api",
+    "allratestoday",
+    "conversion",
+    "mid-market-rate",
+    "reuters"
+  ],
+  "author": "AllRatesToday <info@allratestoday.com>",
+  "license": "MIT",
+  "homepage": "https://allratestoday.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/allratestoday/sdk-javascript"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  }
+}
