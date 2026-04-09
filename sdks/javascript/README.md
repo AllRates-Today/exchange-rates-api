@@ -1,6 +1,8 @@
 # @allratestoday/sdk
 
 [![npm version](https://img.shields.io/npm/v/@allratestoday/sdk.svg)](https://www.npmjs.com/package/@allratestoday/sdk)
+[![codecov](https://codecov.io/gh/allratestoday/exchange-rates-api/branch/main/graph/badge.svg)](https://codecov.io/gh/allratestoday/exchange-rates-api)
+[![Known Vulnerabilities](https://snyk.io/test/github/allratestoday/exchange-rates-api/badge.svg)](https://snyk.io/test/github/allratestoday/exchange-rates-api)
 [![license](https://img.shields.io/npm/l/@allratestoday/sdk.svg)](https://github.com/allratestoday/exchange-rates-api/blob/main/LICENSE)
 [![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://www.typescriptlang.org/)
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://www.npmjs.com/package/@allratestoday/sdk)
@@ -468,6 +470,28 @@ console.log({ labels, values });
 | `getRate(from, to, amount?, options?)` | Get a single exchange rate |
 | `getRates(source, target, options?)` | Get rates with full metadata |
 | `getHistoricalRates(source, target, period?, options?)` | Historical rates by preset period (1d/7d/30d/1y) |
+
+---
+
+## Testing
+
+Run isolated unit tests (no API calls needed):
+
+```bash
+npm test
+```
+
+Run tests with coverage report:
+
+```bash
+npm run test:coverage
+```
+
+Watch mode for development:
+
+```bash
+npm run test:watch
+```
 
 ---
 
