@@ -1,0 +1,14 @@
+{
+  "name": "allratestoday-exchange-rates-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Official SDKs for AllRatesToday exchange rate API",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/allratestoday/exchange-rates-api"
+  },
+  "workspaces": [
+    "sdks/javascript"
+  ]
+}
