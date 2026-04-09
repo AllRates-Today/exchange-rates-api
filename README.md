@@ -18,7 +18,7 @@ A free, fast, and reliable REST API for real-time and historical currency exchan
 - **Real-time rates** — Live mid-market exchange rates updated on every request
 - **160+ currencies** — Major, emerging market, and popular currencies
 - **Historical data** — Access historical rates with flexible date ranges (1d/7d/30d/1y)
-- **Official SDKs** — JavaScript/TypeScript, Python, and PHP
+- **Official SDKs** — JavaScript/TypeScript, Python, PHP, and React
 - **Free tier** — 300 requests/month, no credit card required
 - **Fast & reliable** — Powered by Cloudflare's global edge network
 - **Data source** — Reuters (Refinitiv) and interbank market feeds
@@ -91,6 +91,74 @@ $auth = new AllRatesToday('art_live_...');
 $history = $auth->getHistoricalRates('USD', 'EUR', '30d');
 ```
 
+### React
+
+```bash
+npm install @allratestoday/react
+```
+
+```tsx
+import { LocalizedPrice } from '@allratestoday/react';
+
+// Automatically detects user's currency via IP geolocation
+function PricingCard() {
+  return (
+    <div>
+      <h3>Pro Plan</h3>
+      <LocalizedPrice
+        basePrice={19.99}
+        baseCurrency="USD"
+        apiKey="art_live_..."
+      />
+    </div>
+  );
+}
+```
+
+```tsx
+import { useCurrencyConverter } from '@allratestoday/react';
+
+// Hook-based API for full control
+function ProductPrice({ price }: { price: number }) {
+  const { convertedPrice, localCurrency, isLoading } = useCurrencyConverter({
+    basePrice: price,
+    baseCurrency: 'USD',
+    apiKey: 'art_live_...',
+  });
+
+  if (isLoading) return <span>Loading...</span>;
+
+  return (
+    <span>
+      {new Intl.NumberFormat(undefined, {
+        style: 'currency',
+        currency: localCurrency || 'USD',
+      }).format(convertedPrice || price)}
+    </span>
+  );
+}
+```
+
+```tsx
+import { useCurrencyLocalizer } from '@allratestoday/react';
+
+// Batch conversion for product lists
+function ProductList({ products }) {
+  const { convertAndFormat, isReady } = useCurrencyLocalizer({
+    baseCurrency: 'USD',
+    apiKey: 'art_live_...',
+  });
+
+  return (
+    <ul>
+      {products.map(p => (
+        <li key={p.id}>{p.name}: {isReady ? convertAndFormat(p.price) : '...'}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
 ## Quick Start (No SDK)
 
 ### Free Public Endpoint (No API Key)
@@ -124,7 +192,8 @@ Get your free API key at [allratestoday.com/profile](https://allratestoday.com/p
 | GET | `/api/public/rates` | No | Free public rates (100/hour per IP) |
 | GET | `/api/v1/rates` | Yes | Authenticated rates with higher limits |
 | GET | `/api/rate` | No | Simple pair rate lookup |
-| GET | `/api/historical-rates` | Yes | Historical rate data |
+| GET | `/api/historical-rates` | Yes | Historical rate data & time series |
+| GET | `/api/v1/symbols` | Yes | List all 160+ supported currencies |
 
 ## Pricing
 
