@@ -1,10 +1,10 @@
-# @allratestoday/react
+# react-currency-localizer-realtime
 
-[![npm version](https://img.shields.io/npm/v/@allratestoday/react.svg)](https://www.npmjs.com/package/@allratestoday/react)
+[![npm version](https://img.shields.io/npm/v/react-currency-localizer-realtime.svg)](https://www.npmjs.com/package/react-currency-localizer-realtime)
 [![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://www.typescriptlang.org/)
 [![Tests](https://github.com/allratestoday/exchange-rates-api/actions/workflows/test.yml/badge.svg)](https://github.com/allratestoday/exchange-rates-api/actions/workflows/test.yml)
-[![license](https://img.shields.io/npm/l/@allratestoday/react.svg)](https://github.com/allratestoday/exchange-rates-api/blob/main/LICENSE)
-[![zero dependencies](https://img.shields.io/badge/runtime_deps-0-brightgreen.svg)](https://www.npmjs.com/package/@allratestoday/react)
+[![license](https://img.shields.io/npm/l/react-currency-localizer-realtime.svg)](https://github.com/allratestoday/exchange-rates-api/blob/main/LICENSE)
+[![zero dependencies](https://img.shields.io/badge/runtime_deps-0-brightgreen.svg)](https://www.npmjs.com/package/react-currency-localizer-realtime)
 
 **React hooks and components for automatically displaying prices in a user's local currency using IP geolocation**
 
@@ -33,13 +33,13 @@ Get your free API key from [allratestoday.com/register](https://allratestoday.co
 
 ```bash
 # npm
-npm install @allratestoday/react
+npm install react-currency-localizer-realtime
 
 # yarn
-yarn add @allratestoday/react
+yarn add react-currency-localizer-realtime
 
 # pnpm
-pnpm add @allratestoday/react
+pnpm add react-currency-localizer-realtime
 ```
 
 > **Note:** React 17+ is a peer dependency. No other dependencies required.
@@ -49,7 +49,7 @@ pnpm add @allratestoday/react
 ### 1. Use the Component (Simplest)
 
 ```tsx
-import { LocalizedPrice } from '@allratestoday/react'
+import { LocalizedPrice } from 'react-currency-localizer-realtime'
 
 function ProductCard() {
   return (
@@ -68,7 +68,7 @@ function ProductCard() {
 ### 2. Use the Hook (Full Control)
 
 ```tsx
-import { useCurrencyConverter } from '@allratestoday/react'
+import { useCurrencyConverter } from 'react-currency-localizer-realtime'
 
 function ProductPrice({ price }: { price: number }) {
   const { convertedPrice, localCurrency, isLoading, error } = useCurrencyConverter({
@@ -94,7 +94,7 @@ function ProductPrice({ price }: { price: number }) {
 ### 3. Batch Conversion (Product Lists)
 
 ```tsx
-import { useCurrencyLocalizer } from '@allratestoday/react'
+import { useCurrencyLocalizer } from 'react-currency-localizer-realtime'
 
 function ProductList({ products }) {
   const { convertAndFormat, isReady } = useCurrencyLocalizer({
@@ -185,7 +185,7 @@ Batch-friendly hook for converting multiple prices efficiently. Ideal for e-comm
 **Example**
 
 ```tsx
-import { useCurrencyLocalizer } from '@allratestoday/react'
+import { useCurrencyLocalizer } from 'react-currency-localizer-realtime'
 
 function ProductList({ products }) {
   const { convertAndFormat, isReady } = useCurrencyLocalizer({
@@ -231,7 +231,7 @@ React component for displaying localized prices. Automatically handles loading, 
 ### E-Commerce Product Grid
 
 ```tsx
-import { LocalizedPrice } from '@allratestoday/react'
+import { LocalizedPrice } from 'react-currency-localizer-realtime'
 
 function ProductGrid() {
   const products = [
@@ -294,7 +294,7 @@ function PricingTable() {
 
 ```tsx
 import { useState } from 'react'
-import { LocalizedPrice } from '@allratestoday/react'
+import { LocalizedPrice } from 'react-currency-localizer-realtime'
 
 function CurrencySelector() {
   const [selectedCurrency, setSelectedCurrency] = useState('')

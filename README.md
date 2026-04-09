@@ -94,11 +94,11 @@ $history = $auth->getHistoricalRates('USD', 'EUR', '30d');
 ### React
 
 ```bash
-npm install @allratestoday/react
+npm install react-currency-localizer-realtime
 ```
 
 ```tsx
-import { LocalizedPrice } from '@allratestoday/react';
+import { LocalizedPrice } from 'react-currency-localizer-realtime';
 
 // Automatically detects user's currency via IP geolocation
 function PricingCard() {
@@ -116,7 +116,7 @@ function PricingCard() {
 ```
 
 ```tsx
-import { useCurrencyConverter } from '@allratestoday/react';
+import { useCurrencyConverter } from 'react-currency-localizer-realtime';
 
 // Hook-based API for full control
 function ProductPrice({ price }: { price: number }) {
@@ -140,7 +140,7 @@ function ProductPrice({ price }: { price: number }) {
 ```
 
 ```tsx
-import { useCurrencyLocalizer } from '@allratestoday/react';
+import { useCurrencyLocalizer } from 'react-currency-localizer-realtime';
 
 // Batch conversion for product lists
 function ProductList({ products }) {
