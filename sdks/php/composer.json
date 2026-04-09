@@ -1,7 +1,6 @@
 {
     "name": "allratestoday/sdk",
     "description": "Official PHP SDK for AllRatesToday exchange rate API",
-    "version": "1.1.0",
     "type": "library",
     "license": "MIT",
     "authors": [
