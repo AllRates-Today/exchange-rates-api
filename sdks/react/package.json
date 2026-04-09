@@ -1,0 +1,58 @@
+{
+  "name": "@allratestoday/react",
+  "version": "1.0.0",
+  "description": "React hooks and components for automatic currency localization. Display prices in your user's local currency using AllRatesToday real-time exchange rates.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --external react",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "react",
+    "currency",
+    "converter",
+    "hook",
+    "geolocation",
+    "exchange-rate",
+    "localization",
+    "pricing",
+    "internationalization",
+    "allratestoday",
+    "mid-market-rate"
+  ],
+  "author": "AllRatesToday <info@allratestoday.com>",
+  "license": "MIT",
+  "homepage": "https://allratestoday.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/allratestoday/exchange-rates-api",
+    "directory": "sdks/react"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.0.0",
+    "@types/react": "^18.3.0",
+    "@vitest/coverage-v8": "^4.1.4",
+    "jsdom": "^25.0.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^4.1.4"
+  }
+}
