@@ -1,7 +1,7 @@
 {
   "name": "@allratestoday/sdk",
   "version": "1.3.0",
-  "description": "Official JavaScript/TypeScript SDK for AllRatesToday exchange rate API",
+  "description": "The most elegant way to access real-time mid-market exchange rates in Node.js and browsers. 160+ currencies, Reuters/Refinitiv data, zero dependencies.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",

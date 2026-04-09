@@ -2,17 +2,24 @@
 
 [![npm version](https://img.shields.io/npm/v/@allratestoday/sdk.svg)](https://www.npmjs.com/package/@allratestoday/sdk)
 [![license](https://img.shields.io/npm/l/@allratestoday/sdk.svg)](https://github.com/allratestoday/exchange-rates-api/blob/main/LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue.svg)](https://www.typescriptlang.org/)
+[![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://www.typescriptlang.org/)
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://www.npmjs.com/package/@allratestoday/sdk)
 
-The most elegant way to access **real-time mid-market exchange rates** in Node.js and browsers.
+**The most elegant way to access real-time mid-market exchange rates in Node.js and browsers**
 
-- **Zero runtime dependencies** — pure TypeScript, nothing to audit
-- **160+ currencies** — major, minor, and exotic pairs
-- **Real-time data** — updated every 60 seconds from Reuters (Refinitiv)
-- **Mid-market rates** — the true interbank rate, no hidden spread
-- **Full TypeScript support** — complete type definitions with autocomplete
-- **Works everywhere** — Node.js 18+ and modern browsers
+## Why Choose This Client?
+
+- **Lightning Fast**: Zero runtime dependencies, pure TypeScript performance
+- **Real-Time Data**: Rates updated every 60 seconds from Reuters (Refinitiv) and interbank feeds
+- **Mid-Market Rates**: The true interbank rate — no hidden spread or markup
+- **160+ Currencies**: Major, minor, and exotic currency pairs
+- **Type-Safe**: Full TypeScript support with intelligent autocomplete
+- **Universal**: Works seamlessly in Node.js 18+ and modern browsers
+- **Developer-Friendly**: Simple API, extensive documentation, and great DX
+
+## Get Your API Key
+
+Ready to start? Get your free API key from [allratestoday.com/register](https://allratestoday.com/register) — no credit card required. The free tier includes 300 requests/month.
 
 ## Installation
 
@@ -30,374 +37,292 @@ pnpm add @allratestoday/sdk
 
 ## Quick Start
 
-Get your free API key at [allratestoday.com/register](https://allratestoday.com/register) — no credit card required.
+Get up and running in seconds:
 
 ```typescript
 import AllRatesToday from '@allratestoday/sdk';
 
-const client = new AllRatesToday({ apiKey: 'art_live_your_key_here' });
+// Set your API key
+const client = new AllRatesToday({ apiKey: 'YOUR_API_KEY' });
 
-// Get the latest exchange rates
+// Get latest exchange rates
 const { rates } = await client.latest({ base: 'USD', symbols: ['EUR', 'GBP', 'JPY'] });
-console.log(rates); // { EUR: 0.9234, GBP: 0.7891, JPY: 151.42 }
-
-// Convert an amount
-const result = await client.convert('USD', 'EUR', 1000);
-console.log(`$1,000 = €${result.result}`);
-
-// Get rates for a specific date
-const historical = await client.forDate('2026-01-15', { base: 'USD', symbols: ['EUR'] });
-console.log(historical.rates); // { EUR: 0.9187 }
-
-// List all supported currencies
-const { symbols } = await client.symbols();
-console.log(symbols); // { USD: 'United States Dollar', EUR: 'Euro', ... }
+console.log(rates);
 ```
 
 ## API Reference
 
-### `new AllRatesToday(options?)`
-
-Create a new client instance.
-
-```typescript
-const client = new AllRatesToday({
-  apiKey: 'art_live_your_key_here',
-  baseUrl: 'https://allratestoday.com', // optional
-  timeout: 10000,                        // optional, in ms
-});
-```
-
-| Option    | Type     | Default                       | Description                                                      |
-| --------- | -------- | ----------------------------- | ---------------------------------------------------------------- |
-| `apiKey`  | `string` | —                             | Your API key ([register free](https://allratestoday.com/register)) |
-| `baseUrl` | `string` | `https://allratestoday.com`   | API base URL                                                     |
-| `timeout` | `number` | `10000`                       | Request timeout in milliseconds                                  |
+- [Latest Rates](#-latest-exchange-rates) — Get current exchange rates
+- [Historical Data](#-historical-exchange-rates) — Fetch rates for specific dates
+- [Currency Conversion](#-currency-conversion) — Convert between currencies
+- [Time Series](#-time-series-data) — Get rates over date ranges
+- [Available Currencies](#-available-currencies) — List all supported currencies
+- [Single Rate](#-single-rate) — Get one currency pair
+- [Historical by Period](#-historical-rates-by-period) — Preset period lookups
 
 ---
 
-### `client.latest(options?)`
+### Latest Exchange Rates
 
-Get the latest exchange rates for one or more currencies.
+Get the most current exchange rates with a single call:
 
 ```typescript
-// All rates from USD (default base)
+// Get all rates from USD
 const data = await client.latest();
-console.log(data.rates.EUR); // 0.9234
+console.log(data);
 
-// Specific symbols with EUR base
-const data = await client.latest({
-  base: 'EUR',
-  symbols: ['USD', 'GBP', 'JPY'],
-});
-console.log(data.rates);
-// { USD: 1.0830, GBP: 0.8546, JPY: 163.92 }
+// Target specific currencies
+const data = await client.latest({ base: 'USD', symbols: ['CHF', 'GBP', 'JPY'] });
+console.log(data);
 ```
 
-**Parameters**
+**Response:**
 
-| Option    | Type       | Default | Description                                |
-| --------- | ---------- | ------- | ------------------------------------------ |
-| `base`    | `string`   | `USD`   | Base currency code                         |
-| `symbols` | `string[]` | all     | Target currency codes to return            |
-| `apiKey`  | `string`   | —       | Override the API key for this request only  |
-
-**Response**
-
-```typescript
+```javascript
 {
-  base: string;               // "USD"
-  date: string;               // "2026-04-09T14:30:00Z"
-  rates: Record<string, number>; // { EUR: 0.9234, GBP: 0.7891 }
+  base: 'USD',
+  date: '2026-04-09T14:30:00Z',
+  rates: {
+    CHF: 0.8821,
+    GBP: 0.7891,
+    JPY: 151.42
+  }
 }
 ```
 
----
+### Historical Exchange Rates
 
-### `client.forDate(date, options?)`
-
-Get exchange rates for a specific historical date. Accepts a `string` (`YYYY-MM-DD`) or a JavaScript `Date` object.
+Travel back in time to get rates from any date:
 
 ```typescript
-// Using a date string
-const data = await client.forDate('2026-01-15');
+// Using a string date
+const data = await client.forDate('2026-01-15', { base: 'USD', symbols: ['EUR'] });
+console.log(data);
 
 // Using a Date object
-const data = await client.forDate(new Date('2026-01-15'));
-
-// With base and symbols
-const data = await client.forDate('2025-12-31', {
-  base: 'GBP',
-  symbols: ['USD', 'EUR'],
-});
-
-console.log(data.rates); // { USD: 1.2534, EUR: 1.1723 }
+const data = await client.forDate(new Date('2026-01-15'), { base: 'EUR', symbols: ['USD', 'GBP'] });
+console.log(data);
 ```
 
-**Parameters**
+**Response:**
 
-| Parameter | Type              | Description                               |
-| --------- | ----------------- | ----------------------------------------- |
-| `date`    | `string \| Date`  | Target date (`YYYY-MM-DD` or Date object) |
-
-**Options**
-
-| Option    | Type       | Default | Description                                |
-| --------- | ---------- | ------- | ------------------------------------------ |
-| `base`    | `string`   | `USD`   | Base currency code                         |
-| `symbols` | `string[]` | all     | Target currency codes                      |
-| `apiKey`  | `string`   | —       | Override the API key for this request only  |
-
-**Response**
-
-```typescript
+```javascript
 {
-  base: string;               // "USD"
-  date: string;               // "2026-01-15"
-  rates: Record<string, number>; // { EUR: 0.9187 }
+  base: 'USD',
+  date: '2026-01-15',
+  rates: {
+    EUR: 0.9187
+  }
 }
 ```
 
----
+### Currency Conversion
 
-### `client.timeSeries(startDate, endDate, options?)`
+Convert any amount between currencies — including historical conversions:
 
-Get exchange rate time series between two dates. Useful for charts, reporting, and trend analysis.
+```typescript
+// Current conversion
+const result = await client.convert('USD', 'EUR', 1000);
+console.log(result);
+```
+
+**Response:**
+
+```javascript
+{
+  from: 'USD',
+  to: 'EUR',
+  amount: 1000,
+  result: 923.4,
+  rate: 0.9234
+}
+```
+
+```typescript
+// Historical conversion — what was $1,000 worth on Jan 15?
+const result = await client.convert('USD', 'EUR', 1000, { date: '2026-01-15' });
+console.log(result);
+```
+
+**Response:**
+
+```javascript
+{
+  from: 'USD',
+  to: 'EUR',
+  amount: 1000,
+  result: 918.7,
+  rate: 0.9187,
+  date: '2026-01-15'
+}
+```
+
+### Available Currencies
+
+Discover all 160+ supported currency symbols and names:
+
+```typescript
+const data = await client.symbols();
+console.log(data);
+```
+
+**Response:**
+
+```javascript
+{
+  symbols: {
+    AED: 'United Arab Emirates Dirham',
+    AFN: 'Afghan Afghani',
+    ALL: 'Albanian Lek',
+    AMD: 'Armenian Dram',
+    AUD: 'Australian Dollar',
+    BDT: 'Bangladeshi Taka',
+    BRL: 'Brazilian Real',
+    CAD: 'Canadian Dollar',
+    CHF: 'Swiss Franc',
+    CNY: 'Chinese Yuan',
+    EUR: 'Euro',
+    GBP: 'British Pound Sterling',
+    INR: 'Indian Rupee',
+    JPY: 'Japanese Yen',
+    KRW: 'South Korean Won',
+    USD: 'United States Dollar',
+    // ...160+ currencies
+  }
+}
+```
+
+### Time Series Data
+
+Get exchange rates over a date range for trend analysis and charting:
 
 ```typescript
 const data = await client.timeSeries('2026-01-01', '2026-03-31', {
   base: 'USD',
   symbols: ['EUR', 'GBP'],
 });
-
-// Rates are grouped by date
-console.log(data.rates['2026-01-15']); // { EUR: 0.9187, GBP: 0.7834 }
-console.log(data.rates['2026-02-20']); // { EUR: 0.9301, GBP: 0.7912 }
+console.log(data);
 ```
 
-**Parameters**
+**Response:**
 
-| Parameter   | Type             | Description                               |
-| ----------- | ---------------- | ----------------------------------------- |
-| `startDate` | `string \| Date` | Start of the range (`YYYY-MM-DD` or Date) |
-| `endDate`   | `string \| Date` | End of the range (`YYYY-MM-DD` or Date)   |
-
-**Options**
-
-| Option    | Type       | Default | Description                                |
-| --------- | ---------- | ------- | ------------------------------------------ |
-| `base`    | `string`   | `USD`   | Base currency code                         |
-| `symbols` | `string[]` | all     | Target currency codes                      |
-| `apiKey`  | `string`   | —       | Override the API key for this request only  |
-
-**Response**
-
-```typescript
+```javascript
 {
-  base: string;                                   // "USD"
-  startDate: string;                              // "2026-01-01"
-  endDate: string;                                // "2026-03-31"
-  rates: Record<string, Record<string, number>>; // { "2026-01-01": { EUR: 0.92 } }
+  base: 'USD',
+  startDate: '2026-01-01',
+  endDate: '2026-03-31',
+  rates: {
+    '2026-01-01': {
+      EUR: 0.9187,
+      GBP: 0.7834
+    },
+    '2026-01-02': {
+      EUR: 0.9195,
+      GBP: 0.7841
+    },
+    '2026-01-03': {
+      EUR: 0.9201,
+      GBP: 0.7856
+    },
+    // ...
+  }
 }
 ```
 
----
+### Single Rate
 
-### `client.convert(from, to, amount, options?)`
-
-Convert an amount from one currency to another. Supports both current and historical conversions.
-
-```typescript
-// Current conversion
-const result = await client.convert('USD', 'EUR', 1000);
-console.log(result);
-// { from: 'USD', to: 'EUR', amount: 1000, result: 923.4, rate: 0.9234 }
-
-// Historical conversion — what was $1,000 worth in EUR on Jan 15?
-const result = await client.convert('USD', 'EUR', 1000, {
-  date: '2026-01-15',
-});
-console.log(result);
-// { from: 'USD', to: 'EUR', amount: 1000, result: 918.7, rate: 0.9187, date: '2026-01-15' }
-
-// Using a Date object
-const result = await client.convert('GBP', 'JPY', 500, {
-  date: new Date('2025-12-31'),
-});
-```
-
-**Parameters**
-
-| Parameter | Type     | Description               |
-| --------- | -------- | ------------------------- |
-| `from`    | `string` | Source currency code       |
-| `to`      | `string` | Target currency code       |
-| `amount`  | `number` | Amount to convert          |
-
-**Options**
-
-| Option   | Type             | Default | Description                                          |
-| -------- | ---------------- | ------- | ---------------------------------------------------- |
-| `date`   | `string \| Date` | now     | Historical date for conversion (`YYYY-MM-DD` or Date) |
-| `apiKey` | `string`         | —       | Override the API key for this request only             |
-
-**Response**
-
-```typescript
-{
-  from: string;    // "USD"
-  to: string;      // "EUR"
-  amount: number;  // 1000
-  result: number;  // 923.4
-  rate: number;    // 0.9234
-  date?: string;   // "2026-01-15" (only for historical)
-}
-```
-
----
-
-### `client.symbols(options?)`
-
-Get all supported currency codes and their full names. Useful for building currency dropdowns and selectors.
-
-```typescript
-const { symbols } = await client.symbols();
-console.log(symbols);
-// {
-//   USD: 'United States Dollar',
-//   EUR: 'Euro',
-//   GBP: 'British Pound Sterling',
-//   JPY: 'Japanese Yen',
-//   ...160+ currencies
-// }
-
-// Build a dropdown
-const options = Object.entries(symbols).map(([code, name]) => ({
-  value: code,
-  label: `${code} — ${name}`,
-}));
-```
-
-**Options**
-
-| Option   | Type     | Default | Description                               |
-| -------- | -------- | ------- | ----------------------------------------- |
-| `apiKey` | `string` | —       | Override the API key for this request only |
-
-**Response**
-
-```typescript
-{
-  symbols: Record<string, string>; // { USD: 'United States Dollar', ... }
-}
-```
-
----
-
-### `client.getRate(from, to, amount?, options?)`
-
-Get a single exchange rate between two currencies.
+Get a single exchange rate between two currencies:
 
 ```typescript
 const rate = await client.getRate('USD', 'EUR');
-console.log(`1 USD = ${rate.rate} EUR`);
+console.log(rate);
+```
 
+**Response:**
+
+```javascript
+{
+  from: { currency: 'USD', amount: 1 },
+  to: { currency: 'EUR', amount: 0.9234 },
+  rate: 0.9234,
+  source: 'wise'
+}
+```
+
+```typescript
 // With amount
 const rate = await client.getRate('USD', 'EUR', 500);
 console.log(`$500 = €${rate.to.amount}`);
 ```
 
-**Response**
+### Historical Rates by Period
 
-```typescript
-{
-  from: { currency: string; amount: number };
-  to: { currency: string; amount: number };
-  rate: number;
-  source: string;
-}
-```
-
----
-
-### `client.getRates(source, target, options?)`
-
-Get exchange rates with full metadata (timestamp, source).
-
-```typescript
-const rates = await client.getRates('USD', 'EUR');
-rates.forEach(r => {
-  console.log(`${r.source}/${r.target}: ${r.rate} at ${r.time}`);
-});
-```
-
-**Response**
-
-```typescript
-Array<{
-  rate: number;
-  source: string;
-  target: string;
-  time: string;
-}>
-```
-
----
-
-### `client.getHistoricalRates(source, target, period?, options?)`
-
-Get historical rates using a preset period.
+Get historical rates using preset periods — no date math needed:
 
 ```typescript
 const history = await client.getHistoricalRates('USD', 'EUR', '30d');
+console.log(history);
+```
 
-console.log(`Current: ${history.current.rate}`);
-history.rates.forEach(point => {
-  console.log(`${point.time}: ${point.rate}`);
+**Response:**
+
+```javascript
+{
+  source: 'USD',
+  target: 'EUR',
+  period: '30d',
+  current: { rate: 0.9234, time: '2026-04-09T14:30:00Z' },
+  rates: [
+    { rate: 0.9198, time: '2026-03-10T00:00:00Z' },
+    { rate: 0.9210, time: '2026-03-11T00:00:00Z' },
+    // ...
+  ]
+}
+```
+
+**Available periods:** `1d` | `7d` | `30d` | `1y`
+
+---
+
+## Configuration
+
+```typescript
+const client = new AllRatesToday({
+  apiKey: 'YOUR_API_KEY',          // Required — get one free at allratestoday.com/register
+  baseUrl: 'https://allratestoday.com', // Optional — API base URL
+  timeout: 10000,                       // Optional — request timeout in ms
 });
 ```
 
-**Period options:** `1d` | `7d` | `30d` | `1y` (default: `7d`)
-
-**Response**
-
-```typescript
-{
-  source: string;
-  target: string;
-  period: string;
-  current: { rate: number; time: string };
-  rates: Array<{ rate: number; time: string }>;
-}
-```
+| Option    | Type     | Default                     | Description                      |
+| --------- | -------- | --------------------------- | -------------------------------- |
+| `apiKey`  | `string` | —                           | Your API key                     |
+| `baseUrl` | `string` | `https://allratestoday.com` | API base URL                     |
+| `timeout` | `number` | `10000`                     | Request timeout in milliseconds  |
 
 ---
 
 ## Per-Request API Key Override
 
-Every method accepts an optional `apiKey` parameter to override the client-level key. This is useful for multi-tenant applications where different users have different API keys.
+Every method supports a per-request API key override — useful for multi-tenant apps:
 
 ```typescript
 const client = new AllRatesToday({ apiKey: 'default_key' });
 
-// Use a different key for this specific request
+// Override for a specific request
 const data = await client.latest({ apiKey: 'other_users_key' });
-
-// Works on all methods
-const result = await client.convert('USD', 'EUR', 100, { apiKey: 'other_key' });
-const { symbols } = await client.symbols({ apiKey: 'other_key' });
+const result = await client.convert('USD', 'EUR', 100, { apiKey: 'tenant_key' });
+const { symbols } = await client.symbols({ apiKey: 'another_key' });
 ```
 
 ---
 
 ## Error Handling
 
-All errors are thrown as `AllRatesTodayError` with an optional HTTP status code.
+All errors are thrown as `AllRatesTodayError` with an optional HTTP status code:
 
 ```typescript
 import AllRatesToday, { AllRatesTodayError } from '@allratestoday/sdk';
-
-const client = new AllRatesToday({ apiKey: 'art_live_your_key_here' });
 
 try {
   const rate = await client.getRate('USD', 'INVALID');
@@ -409,15 +334,13 @@ try {
 }
 ```
 
-Common error scenarios:
-
-| Status | Cause                                       |
-| ------ | ------------------------------------------- |
-| —      | Missing API key (thrown before request)       |
-| `401`  | Invalid API key                              |
-| `404`  | Currency code not found                      |
-| `429`  | Rate limit exceeded ([upgrade plan](https://allratestoday.com/pricing)) |
-| `500`  | Server error (retry or check [status](https://allratestoday.com/status)) |
+| Status | Meaning                              |
+| ------ | ------------------------------------ |
+| —      | Missing API key (thrown before request) |
+| `401`  | Invalid API key                      |
+| `404`  | Currency code not found              |
+| `429`  | Rate limit exceeded                  |
+| `500`  | Server error                         |
 
 ---
 
@@ -429,6 +352,7 @@ The SDK is written in TypeScript and ships full type definitions. All interfaces
 import AllRatesToday, {
   AllRatesTodayError,
   AllRatesTodayOptions,
+  RequestOptions,
   RateResponse,
   AuthRateResponse,
   LatestOptions,
@@ -441,7 +365,6 @@ import AllRatesToday, {
   TimeSeriesResponse,
   HistoricalRateResponse,
   SymbolsResponse,
-  RequestOptions,
 } from '@allratestoday/sdk';
 ```
 
@@ -452,7 +375,7 @@ import AllRatesToday, {
 ```javascript
 const AllRatesToday = require('@allratestoday/sdk').default;
 
-const client = new AllRatesToday({ apiKey: 'art_live_your_key_here' });
+const client = new AllRatesToday({ apiKey: 'YOUR_API_KEY' });
 client.latest().then(data => console.log(data.rates));
 ```
 
@@ -523,13 +446,28 @@ const data = await client.timeSeries('2026-01-01', '2026-04-01', {
   symbols: ['EUR'],
 });
 
-// Format for charting library (e.g., Chart.js)
+// Format for charting libraries (Chart.js, Recharts, etc.)
 const labels = Object.keys(data.rates).sort();
 const values = labels.map(date => data.rates[date].EUR);
 
 console.log({ labels, values });
 // { labels: ['2026-01-01', '2026-01-02', ...], values: [0.92, 0.921, ...] }
 ```
+
+---
+
+## Methods Reference
+
+| Method | Description |
+| ------ | ----------- |
+| `latest(options?)` | Get latest rates for one or more currencies |
+| `forDate(date, options?)` | Get rates for a specific historical date |
+| `convert(from, to, amount, options?)` | Convert amount between currencies (supports historical date) |
+| `timeSeries(start, end, options?)` | Get rates across a custom date range |
+| `symbols(options?)` | List all 160+ supported currency codes and names |
+| `getRate(from, to, amount?, options?)` | Get a single exchange rate |
+| `getRates(source, target, options?)` | Get rates with full metadata |
+| `getHistoricalRates(source, target, period?, options?)` | Historical rates by preset period (1d/7d/30d/1y) |
 
 ---
 
