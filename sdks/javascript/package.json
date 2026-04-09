@@ -32,7 +32,8 @@
   "homepage": "https://allratestoday.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/allratestoday/sdk-javascript"
+    "url": "https://github.com/allratestoday/exchange-rates-api",
+    "directory": "sdks/javascript"
   },
   "devDependencies": {
     "tsup": "^8.0.0",
