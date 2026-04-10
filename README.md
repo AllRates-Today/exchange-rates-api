@@ -19,7 +19,7 @@ A free, fast, and reliable REST API for real-time and historical currency exchan
 - **160+ currencies** — Major, emerging market, and popular currencies
 - **Historical data** — Access historical rates with flexible date ranges (1d/7d/30d/1y)
 - **Official SDKs** — JavaScript/TypeScript, Python, PHP, and React
-- **Free tier** — 300 requests/month, no credit card required
+- **Free tier** — Get started at no cost
 - **Fast & reliable** — Powered by Cloudflare's global edge network
 - **Data source** — Reuters (Refinitiv) and interbank market feeds
 
@@ -195,17 +195,6 @@ Get your free API key at [allratestoday.com/profile](https://allratestoday.com/p
 | GET | `/api/historical-rates` | Yes | Historical rate data & time series |
 | GET | `/api/v1/symbols` | Yes | List all 160+ supported currencies |
 
-## Pricing
-
-| Plan | Requests/Month | Rate Limit | Price |
-|------|---------------|------------|-------|
-| Free | 300 | 10/min | Free |
-| Small | 5,000 | 10/min | €4.99/mo |
-| Medium | 10,000 | Unlimited | €9.99/mo |
-| Large | 100,000 | Unlimited | €49.99/mo |
-
-See [allratestoday.com/pricing](https://allratestoday.com/pricing) for details.
-
 ## Supported Currencies
 
 160+ currencies including:
@@ -230,7 +219,6 @@ See [allratestoday.com/pricing](https://allratestoday.com/pricing) for details.
 - **API Docs:** [allratestoday.com/docs](https://allratestoday.com/docs)
 - **Developer Guide:** [allratestoday.com/developers](https://allratestoday.com/developers)
 - **Status:** [allratestoday.com/status](https://allratestoday.com/status)
-- **Pricing:** [allratestoday.com/pricing](https://allratestoday.com/pricing)
 - **Support:** [allratestoday.com/contact](https://allratestoday.com/contact)
 
 ## License

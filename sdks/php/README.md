@@ -89,7 +89,6 @@ try {
 
 - [API Documentation](https://allratestoday.com/docs)
 - [Get API Key](https://allratestoday.com/profile)
-- [Pricing](https://allratestoday.com/pricing)
 
 ## License
 

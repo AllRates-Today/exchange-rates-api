@@ -20,7 +20,7 @@
 
 ## Get Your API Key
 
-Ready to start? Get your free API key from [allratestoday.com/register](https://allratestoday.com/register) — no credit card required. The free tier includes 300 requests/month.
+Ready to start? Get your free API key from [allratestoday.com/register](https://allratestoday.com/register).
 
 ## Installation
 
@@ -494,25 +494,11 @@ npm run test:watch
 
 ---
 
-## Pricing
-
-| Plan   | Requests/Month | Price      |
-| ------ | -------------- | ---------- |
-| Free   | 300            | Free       |
-| Small  | 5,000          | €4.99/mo   |
-| Medium | 10,000         | €9.99/mo   |
-| Large  | 100,000        | €49.99/mo  |
-
-All plans get the same features: real-time rates (60s updates), 160+ currencies, any base currency, full API access. Plans differ only in request volume.
-
----
-
 ## Links
 
 - [API Documentation](https://allratestoday.com/developers)
 - [Register (Free)](https://allratestoday.com/register)
 - [Dashboard](https://allratestoday.com/profile)
-- [Pricing](https://allratestoday.com/pricing)
 - [Status](https://allratestoday.com/status)
 - [GitHub](https://github.com/allratestoday/exchange-rates-api)
 

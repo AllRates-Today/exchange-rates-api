@@ -23,11 +23,11 @@ Built with real-time mid-market exchange rates from AllRatesToday (Reuters/Refin
 - **Lightweight**: ~10KB minified (~4KB gzipped) — less than half the size of alternatives
 - **Graceful Fallbacks**: Shows original price if conversion fails — your users never see a broken UI
 - **Case-Insensitive**: Currency codes work in any case (`'usd'`, `'USD'`, `'Usd'`)
-- **Free APIs**: Both geolocation and exchange rates work on free tiers — no credit card required
+- **Free APIs**: Both geolocation and exchange rates work on free tiers
 
 ## Get Your API Key
 
-Get your free API key from [allratestoday.com/register](https://allratestoday.com/register) — no credit card required. 300 requests/month on the free tier. With intelligent caching, this serves thousands of daily visitors.
+Get your free API key from [allratestoday.com/register](https://allratestoday.com/register).
 
 ## Installation
 
@@ -412,7 +412,7 @@ This package uses a carefully designed decoupled architecture for maximum reliab
 | Service | Purpose | Key Required? | Why This Service? |
 |---------|---------|--------------|-------------------|
 | [ipapi.co](https://ipapi.co) | IP geolocation (currency detection) | No | HTTPS-compatible, no API key, robust rate limiting |
-| [AllRatesToday](https://allratestoday.com) | Real-time exchange rates | Yes (free tier) | Mid-market rates from Reuters/Refinitiv, 60s updates |
+| [AllRatesToday](https://allratestoday.com) | Real-time exchange rates | Yes | Mid-market rates from Reuters/Refinitiv, 60s updates |
 
 **Philosophy:** Use specialized services for what they do best — ipapi.co for location identification, AllRatesToday for financial data.
 
@@ -431,8 +431,7 @@ This package uses a carefully designed decoupled architecture for maximum reliab
 | Rate type | Mid-market (no spread) | Retail (includes spread) | Retail |
 | Update frequency | Every 60 seconds | Daily | Hourly |
 | Data source | Reuters/Refinitiv (named) | Undisclosed | "Multiple sources" |
-| Free tier | 300 req/month | 1,500 req/month | 1,000 req/month |
-| Base currency | Any (free tier) | USD only (free tier) | USD only (free tier) |
+| Base currency | Any | USD only (free) | USD only (free) |
 
 ---
 
@@ -574,19 +573,6 @@ npm run test:watch     # Watch mode for development
 ```
 
 25 tests covering hooks, components, caching, error handling, and edge cases.
-
----
-
-## Pricing
-
-| Plan   | Requests/Month | Price      |
-| ------ | -------------- | ---------- |
-| Free   | 300            | Free       |
-| Small  | 5,000          | €4.99/mo   |
-| Medium | 10,000         | €9.99/mo   |
-| Large  | 100,000        | €49.99/mo  |
-
-With intelligent caching, a site with 10,000 daily visitors uses only ~24 API calls/day (1-hour cache) — well within the free tier.
 
 ---
 
