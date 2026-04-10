@@ -8,21 +8,21 @@
 
 **Real-time mid-market currency exchange rates for Node.js and browsers. The most elegant way to access 160+ currencies from Reuters/Refinitiv.**
 
-## Why Choose This Client?
+## 🚀 Why Choose This Client?
 
-- **Lightning Fast**: Zero runtime dependencies, pure TypeScript performance
-- **Real-Time Data**: Rates updated every 60 seconds from Reuters (Refinitiv) and interbank feeds
-- **Mid-Market Rates**: The true interbank rate — no hidden spread or markup
-- **160+ Currencies**: Major, minor, and exotic currency pairs
-- **Type-Safe**: Full TypeScript support with intelligent autocomplete
-- **Universal**: Works seamlessly in Node.js 18+ and modern browsers
-- **Developer-Friendly**: Simple API, extensive documentation, and great DX
+- ⚡ **Lightning Fast** — Zero runtime dependencies, pure TypeScript performance
+- 📡 **Real-Time Data** — Rates updated every 60 seconds from Reuters (Refinitiv) and interbank feeds
+- 💹 **Mid-Market Rates** — The true interbank rate — no hidden spread or markup
+- 🌍 **160+ Currencies** — Major, minor, and exotic currency pairs
+- 🔷 **Type-Safe** — Full TypeScript support with intelligent autocomplete
+- 🌐 **Universal** — Works seamlessly in Node.js 18+ and modern browsers
+- 🧑‍💻 **Developer-Friendly** — Simple API, extensive documentation, and great DX
 
-## Get Your API Key
+## 🔑 Get Your API Key
 
 Ready to start? Get your free API key from [allratestoday.com/register](https://allratestoday.com/register).
 
-## Installation
+## 📦 Installation
 
 ```bash
 npm install @allratestoday/sdk
@@ -36,7 +36,7 @@ yarn add @allratestoday/sdk
 pnpm add @allratestoday/sdk
 ```
 
-## Quick Start
+## 🏁 Quick Start
 
 Get up and running in seconds:
 
@@ -51,7 +51,7 @@ const { rates } = await client.latest({ base: 'USD', symbols: ['EUR', 'GBP', 'JP
 console.log(rates);
 ```
 
-## API Reference
+## 📚 API Reference
 
 - [Latest Rates](#-latest-exchange-rates) — Get current exchange rates
 - [Historical Data](#-historical-exchange-rates) — Fetch rates for specific dates
@@ -285,7 +285,7 @@ console.log(history);
 
 ---
 
-## Configuration
+## 🔧 Configuration
 
 ```typescript
 const client = new AllRatesToday({
@@ -303,7 +303,7 @@ const client = new AllRatesToday({
 
 ---
 
-## Per-Request API Key Override
+## 🔀 Per-Request API Key Override
 
 Every method supports a per-request API key override — useful for multi-tenant apps:
 
@@ -318,7 +318,7 @@ const { symbols } = await client.symbols({ apiKey: 'another_key' });
 
 ---
 
-## Error Handling
+## 🛡️ Error Handling
 
 All errors are thrown as `AllRatesTodayError` with an optional HTTP status code:
 
@@ -345,7 +345,7 @@ try {
 
 ---
 
-## TypeScript
+## 🔷 TypeScript
 
 The SDK is written in TypeScript and ships full type definitions. All interfaces are exported:
 
@@ -371,7 +371,7 @@ import AllRatesToday, {
 
 ---
 
-## CommonJS
+## 📦 CommonJS
 
 ```javascript
 const AllRatesToday = require('@allratestoday/sdk').default;
@@ -382,7 +382,7 @@ client.latest().then(data => console.log(data.rates));
 
 ---
 
-## Examples
+## 💡 Examples
 
 ### Currency Dropdown (React)
 
@@ -457,7 +457,7 @@ console.log({ labels, values });
 
 ---
 
-## Methods Reference
+## 📖 Methods Reference
 
 | Method | Description |
 | ------ | ----------- |
@@ -472,7 +472,7 @@ console.log({ labels, values });
 
 ---
 
-## Testing
+## 🧪 Testing
 
 Run isolated unit tests (no API calls needed):
 
@@ -494,7 +494,7 @@ npm run test:watch
 
 ---
 
-## Links
+## 🔗 Links
 
 - [API Documentation](https://allratestoday.com/developers)
 - [Register (Free)](https://allratestoday.com/register)
@@ -502,6 +502,6 @@ npm run test:watch
 - [Status](https://allratestoday.com/status)
 - [GitHub](https://github.com/allratestoday/exchange-rates-api)
 
-## License
+## 📜 License
 
 MIT

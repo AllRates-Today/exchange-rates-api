@@ -4,40 +4,28 @@ Official PHP SDK for the [AllRatesToday](https://allratestoday.com) exchange rat
 
 Real-time mid-market exchange rates for 160+ currencies, sourced from Reuters (Refinitiv) and interbank market feeds.
 
-## Installation
+## 📦 Installation
 
 ```bash
 composer require allratestoday/sdk
 ```
 
-## Quick Start
+## 🏁 Quick Start
 
-### Free Public Rates (No API Key)
-
-```php
-use AllRatesToday\AllRatesToday;
-
-$client = new AllRatesToday();
-
-// Get exchange rate
-$rate = $client->getRate('USD', 'EUR');
-echo "1 USD = {$rate['rate']} EUR\n";
-
-// Convert amount
-$result = $client->convert('USD', 'EUR', 100);
-echo "\$100 = €{$result['result']}\n";
-```
-
-### Authenticated Rates (API Key Required)
+Get your free API key at [allratestoday.com/register](https://allratestoday.com/register).
 
 ```php
 use AllRatesToday\AllRatesToday;
 
 $client = new AllRatesToday('art_live_your_key_here');
 
-// Get authenticated rates
-$rates = $client->getRates('USD', 'EUR');
-print_r($rates);
+// Get exchange rate
+$rate = $client->getRate('USD', 'EUR');
+echo "1 USD = {$rate[0]['rate']} EUR\n";
+
+// Convert amount
+$result = $client->convert('USD', 'EUR', 100);
+echo "\$100 = €{$result['result']}\n";
 
 // Get historical rates
 $history = $client->getHistoricalRates('USD', 'EUR', '30d');
@@ -46,26 +34,28 @@ foreach ($history['rates'] as $point) {
 }
 ```
 
-## API Reference
+## 📚 API Reference
 
 ### `new AllRatesToday($apiKey, $baseUrl, $timeout)`
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `$apiKey` | `string\|null` | `null` | Your API key ([get one](https://allratestoday.com/profile)) |
+| `$apiKey` | `string` | **required** | Your API key ([register free](https://allratestoday.com/register)) |
 | `$baseUrl` | `string` | `https://allratestoday.com` | API base URL |
 | `$timeout` | `int` | `10` | Request timeout in seconds |
 
 ### Methods
 
-| Method | Auth | Description |
-|--------|------|-------------|
-| `getRate($from, $to, $amount)` | No | Get exchange rate (free) |
-| `convert($from, $to, $amount)` | No | Convert amount between currencies |
-| `getRates($source, $target)` | Yes | Authenticated rate lookup |
-| `getHistoricalRates($source, $target, $period)` | Yes | Historical rates (1d/7d/30d/1y) |
+| Method | Description |
+|--------|-------------|
+| `getRate($from, $to, $amount)` | Get exchange rate between two currencies |
+| `convert($from, $to, $amount)` | Convert amount between currencies |
+| `getRates($source, $target)` | Get rate data with metadata |
+| `getHistoricalRates($source, $target, $period)` | Historical rates (1d/7d/30d/1y) |
 
-### Error Handling
+All methods require an API key.
+
+### 🛡️ Error Handling
 
 ```php
 use AllRatesToday\AllRatesToday;
@@ -79,17 +69,18 @@ try {
 }
 ```
 
-## Requirements
+## ⚙️ Requirements
 
 - PHP >= 7.4
 - ext-curl
 - ext-json
 
-## Links
+## 🔗 Links
 
 - [API Documentation](https://allratestoday.com/docs)
-- [Get API Key](https://allratestoday.com/profile)
+- [Register (Free)](https://allratestoday.com/register)
+- [Dashboard](https://allratestoday.com/profile)
 
-## License
+## 📜 License
 
 MIT

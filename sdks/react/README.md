@@ -10,26 +10,26 @@
 
 Built with real-time mid-market exchange rates from AllRatesToday (Reuters/Refinitiv data, 160+ currencies). Perfect for e-commerce sites, pricing pages, and international applications.
 
-## Why Choose This Library?
+## 🚀 Features
 
-- **Real-Time Mid-Market Rates**: Updated every 60 seconds from Reuters/Refinitiv — no hidden spreads or markup
-- **Automatic Currency Detection**: Uses IP geolocation to detect user's local currency (no API key needed for geolocation)
-- **160+ Currencies**: Major, minor, and exotic pairs — covering 99% of UN-recognized territories
-- **Intelligent Caching**: 24-hour localStorage for geolocation, 1-hour memory cache for exchange rates
-- **Multiple Usage Patterns**: Hook-based API, batch converter, and declarative component
-- **Manual Override**: Bypass geolocation with explicit currency selection
-- **TypeScript**: Fully typed with comprehensive type definitions and autocomplete
-- **Zero Runtime Dependencies**: Only peer dependency is React itself — no TanStack Query, no extra bundles
-- **Lightweight**: ~10KB minified (~4KB gzipped) — less than half the size of alternatives
-- **Graceful Fallbacks**: Shows original price if conversion fails — your users never see a broken UI
-- **Case-Insensitive**: Currency codes work in any case (`'usd'`, `'USD'`, `'Usd'`)
-- **Free APIs**: Both geolocation and exchange rates work on free tiers
+- ⚡ **Real-Time Mid-Market Rates** — Updated every 60 seconds from Reuters/Refinitiv — no hidden spreads or markup
+- 🌍 **Automatic Currency Detection** — Uses IP geolocation to detect user's local currency (no API key needed for geolocation)
+- 💱 **160+ Currencies** — Major, minor, and exotic pairs — covering 99% of UN-recognized territories
+- 🧠 **Intelligent Caching** — 24-hour localStorage for geolocation, 1-hour memory cache for exchange rates
+- 🔀 **Multiple Usage Patterns** — Hook-based API, batch converter, and declarative component
+- 🎯 **Manual Override** — Bypass geolocation with explicit currency selection
+- 🔷 **TypeScript** — Fully typed with comprehensive type definitions and autocomplete
+- 📦 **Zero Runtime Dependencies** — Only peer dependency is React itself — no TanStack Query, no extra bundles
+- 🪶 **Lightweight** — ~10KB minified (~4KB gzipped) — less than half the size of alternatives
+- 🛡️ **Graceful Fallbacks** — Shows original price if conversion fails — your users never see a broken UI
+- 🔤 **Case-Insensitive** — Currency codes work in any case (`'usd'`, `'USD'`, `'Usd'`)
+- 🆓 **Free APIs** — Both geolocation and exchange rates work on free tiers
 
-## Get Your API Key
+## 🔑 Get Your API Key
 
 Get your free API key from [allratestoday.com/register](https://allratestoday.com/register).
 
-## Installation
+## 📦 Installation
 
 ```bash
 # npm
@@ -44,7 +44,7 @@ pnpm add react-currency-localizer-realtime
 
 > **Note:** React 17+ is a peer dependency. No other dependencies required.
 
-## Quick Start
+## 🏁 Quick Start
 
 ### 1. Use the Component (Simplest)
 
@@ -116,7 +116,7 @@ function ProductList({ products }) {
 
 ---
 
-## API Reference
+## 📚 API Reference
 
 - [useCurrencyConverter](#usecurrencyconverteroptions) — Convert a single price
 - [useCurrencyLocalizer](#usecurrencylocalizeroptions) — Batch convert multiple prices
@@ -226,7 +226,7 @@ React component for displaying localized prices. Automatically handles loading, 
 
 ---
 
-## Usage Examples
+## 💡 Usage Examples
 
 ### E-Commerce Product Grid
 
@@ -403,7 +403,7 @@ function CustomErrorPrice() {
 
 ---
 
-## Architecture Overview
+## 🏗️ Architecture Overview
 
 ### Two-API Strategy
 
@@ -435,7 +435,7 @@ This package uses a carefully designed decoupled architecture for maximum reliab
 
 ---
 
-## Performance
+## ⚡ Performance
 
 | Metric | Value |
 |--------|-------|
@@ -448,7 +448,7 @@ This package uses a carefully designed decoupled architecture for maximum reliab
 
 ---
 
-## Environment Variables
+## 🔧 Environment Variables
 
 ```bash
 # Vite
@@ -463,7 +463,7 @@ NEXT_PUBLIC_ALLRATESTODAY_KEY=your_api_key_here
 
 ---
 
-## Server-Side Rendering (SSR) Caveats
+## ⚠️ Server-Side Rendering (SSR) Caveats
 
 When using this library with SSR frameworks (Next.js, Remix, SvelteKit), be aware that:
 
@@ -485,7 +485,7 @@ useEffect(() => setIsClient(true), [])
 
 ---
 
-## Supported Currencies
+## 🌍 Supported Currencies
 
 The package supports **160+ currencies** via AllRatesToday, covering 99% of all UN-recognized states and territories.
 
@@ -511,7 +511,7 @@ The following currencies experience heightened volatility with substantial diffe
 
 ---
 
-## Troubleshooting
+## 🔍 Troubleshooting
 
 ### "API key is missing" Error
 
@@ -564,7 +564,7 @@ useCurrencyConverter({
 
 ---
 
-## Testing
+## 🧪 Testing
 
 ```bash
 npm test               # Run unit tests (mocked APIs, no network needed)
@@ -576,20 +576,20 @@ npm run test:watch     # Watch mode for development
 
 ---
 
-## Key Design Decisions
+## ✨ Key Design Decisions
 
-- **Zero Runtime Dependencies** — No TanStack Query, no axios, no bloat. Just React hooks and the Fetch API
-- **Two-API Architecture** — Specialized services for maximum accuracy (geolocation vs exchange rates)
-- **Hook-Based API** — Modern React patterns with full TypeScript support
-- **LocalizedPrice Component** — Declarative wrapper for the common case
-- **Intelligent Caching** — Optimized per data type (24h geo, 1h rates)
-- **Graceful Degradation** — Always shows a price, even if conversion fails
-- **Mid-Market Rates** — Reuters/Refinitiv data with no hidden spreads
-- **Free APIs Only** — Zero cost barrier to entry
+- 📦 **Zero Runtime Dependencies** — No TanStack Query, no axios, no bloat. Just React hooks and the Fetch API
+- 🏗️ **Two-API Architecture** — Specialized services for maximum accuracy (geolocation vs exchange rates)
+- 🪝 **Hook-Based API** — Modern React patterns with full TypeScript support
+- 🧩 **LocalizedPrice Component** — Declarative wrapper for the common case
+- 🧠 **Intelligent Caching** — Optimized per data type (24h geo, 1h rates)
+- 🛡️ **Graceful Degradation** — Always shows a price, even if conversion fails
+- 💹 **Mid-Market Rates** — Reuters/Refinitiv data with no hidden spreads
+- 🆓 **Free APIs Only** — Zero cost barrier to entry
 
 ---
 
-## Links
+## 🔗 Links
 
 - [API Documentation](https://allratestoday.com/developers)
 - [Register (Free)](https://allratestoday.com/register)
@@ -597,6 +597,6 @@ npm run test:watch     # Watch mode for development
 - [GitHub](https://github.com/allratestoday/exchange-rates-api)
 - [Core SDK (Node.js)](https://www.npmjs.com/package/@allratestoday/sdk)
 
-## License
+## 📜 License
 
 MIT

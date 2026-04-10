@@ -13,17 +13,17 @@ A free, fast, and reliable REST API for real-time and historical currency exchan
 [![PyPI](https://img.shields.io/pypi/v/allratestoday?label=PyPI&color=3775a9)](https://pypi.org/project/allratestoday/)
 [![Packagist](https://img.shields.io/packagist/v/allratestoday/sdk?label=Packagist&color=f28d1a)](https://packagist.org/packages/allratestoday/sdk)
 
-## Features
+## 🚀 Features
 
-- **Real-time rates** — Live mid-market exchange rates updated on every request
-- **160+ currencies** — Major, emerging market, and popular currencies
-- **Historical data** — Access historical rates with flexible date ranges (1d/7d/30d/1y)
-- **Official SDKs** — JavaScript/TypeScript, Python, PHP, and React
-- **Free tier** — Get started at no cost
-- **Fast & reliable** — Powered by Cloudflare's global edge network
-- **Data source** — Reuters (Refinitiv) and interbank market feeds
+- ⚡ **Real-time rates** — Live mid-market exchange rates updated on every request
+- 🌍 **160+ currencies** — Major, emerging market, and popular currencies
+- 📅 **Historical data** — Access historical rates with flexible date ranges (1d/7d/30d/1y)
+- 📦 **Official SDKs** — JavaScript/TypeScript, Python, PHP, and React
+- 🆓 **Free tier** — Get started at no cost
+- 🛡️ **Fast & reliable** — Powered by Cloudflare's global edge network
+- 📡 **Data source** — Reuters (Refinitiv) and interbank market feeds
 
-## Official SDKs
+## 📦 Official SDKs
 
 ### JavaScript / TypeScript
 
@@ -159,7 +159,7 @@ function ProductList({ products }) {
 }
 ```
 
-## Quick Start (No SDK)
+## 🏁 Quick Start (No SDK)
 
 ### Free Public Endpoint (No API Key)
 
@@ -185,7 +185,7 @@ curl "https://allratestoday.com/api/v1/rates?source=USD&target=EUR" \
 
 Get your free API key at [allratestoday.com/profile](https://allratestoday.com/profile).
 
-## API Endpoints
+## 📚 API Endpoints
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
@@ -195,7 +195,7 @@ Get your free API key at [allratestoday.com/profile](https://allratestoday.com/p
 | GET | `/api/historical-rates` | Yes | Historical rate data & time series |
 | GET | `/api/v1/symbols` | Yes | List all 160+ supported currencies |
 
-## Supported Currencies
+## 🌍 Supported Currencies
 
 160+ currencies including:
 
@@ -203,7 +203,7 @@ Get your free API key at [allratestoday.com/profile](https://allratestoday.com/p
 
 **Popular:** INR, CNY, BRL, MXN, TRY, ZAR, SGD, HKD, KRW, THB, PHP, PKR, BDT, LKR, NGN, GHS, KES, AED, SAR, EGP, and more
 
-## Error Handling
+## 🛡️ Error Handling
 
 | Code | Description |
 |------|-------------|
@@ -213,7 +213,7 @@ Get your free API key at [allratestoday.com/profile](https://allratestoday.com/p
 | 500 | Internal server error |
 | 503 | Service temporarily unavailable |
 
-## Links
+## 🔗 Links
 
 - **Website:** [allratestoday.com](https://allratestoday.com)
 - **API Docs:** [allratestoday.com/docs](https://allratestoday.com/docs)
@@ -221,6 +221,6 @@ Get your free API key at [allratestoday.com/profile](https://allratestoday.com/p
 - **Status:** [allratestoday.com/status](https://allratestoday.com/status)
 - **Support:** [allratestoday.com/contact](https://allratestoday.com/contact)
 
-## License
+## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

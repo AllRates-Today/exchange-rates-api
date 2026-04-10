@@ -9,27 +9,27 @@
 
 **The most elegant way to access real-time mid-market exchange rates in Python**
 
-## Why Choose This Client?
+## 🚀 Why Choose This Client?
 
-- **Lightning Fast**: Zero dependencies, pure Python standard library
-- **Real-Time Data**: Rates updated every 60 seconds from Reuters (Refinitiv) and interbank feeds
-- **Mid-Market Rates**: The true interbank rate — no hidden spread or markup
-- **160+ Currencies**: Major, minor, and exotic currency pairs
-- **Type Hints**: Full type annotations for IDE autocomplete
-- **Zero Dependencies**: Uses only `urllib` and `json` from the standard library
-- **100% Test Coverage**: Comprehensive test suite with full coverage
+- ⚡ **Lightning Fast** — Zero dependencies, pure Python standard library
+- 📡 **Real-Time Data** — Rates updated every 60 seconds from Reuters (Refinitiv) and interbank feeds
+- 💹 **Mid-Market Rates** — The true interbank rate — no hidden spread or markup
+- 🌍 **160+ Currencies** — Major, minor, and exotic currency pairs
+- 🔷 **Type Hints** — Full type annotations for IDE autocomplete
+- 📦 **Zero Dependencies** — Uses only `urllib` and `json` from the standard library
+- ✅ **100% Test Coverage** — Comprehensive test suite with full coverage
 
-## Get Your API Key
+## 🔑 Get Your API Key
 
 Ready to start? Get your free API key from [allratestoday.com/register](https://allratestoday.com/register).
 
-## Installation
+## 📦 Installation
 
 ```bash
 pip install allratestoday
 ```
 
-## Quick Start
+## 🏁 Quick Start
 
 Get up and running in seconds:
 
@@ -48,7 +48,7 @@ result = client.convert("USD", "EUR", 1000)
 print(f"$1,000 = €{result['result']}")
 ```
 
-## API Reference
+## 📚 API Reference
 
 - [Latest Rates](#latest-exchange-rates) — Get current exchange rates
 - [Historical Data](#historical-exchange-rates) — Fetch rates for specific dates
@@ -229,7 +229,7 @@ for point in history["rates"]:
 
 ---
 
-## Configuration
+## 🔧 Configuration
 
 ```python
 client = AllRatesToday(
@@ -247,7 +247,7 @@ client = AllRatesToday(
 
 ---
 
-## Per-Request API Key Override
+## 🔀 Per-Request API Key Override
 
 Every method supports a per-request API key override — useful for multi-tenant apps:
 
@@ -262,7 +262,7 @@ symbols = client.symbols(api_key="another_key")
 
 ---
 
-## Error Handling
+## 🛡️ Error Handling
 
 All errors are raised as `AllRatesTodayError` with an optional HTTP status code:
 
@@ -288,7 +288,7 @@ except AllRatesTodayError as e:
 
 ---
 
-## Testing
+## 🧪 Testing
 
 Run tests:
 
@@ -305,7 +305,7 @@ pytest tests/ --cov=allratestoday --cov-report=term-missing
 
 ---
 
-## Methods Reference
+## 📖 Methods Reference
 
 | Method                                              | Description                                                |
 | --------------------------------------------------- | ---------------------------------------------------------- |
@@ -320,13 +320,13 @@ pytest tests/ --cov=allratestoday --cov-report=term-missing
 
 ---
 
-## Zero Dependencies
+## 📦 Zero Dependencies
 
 This SDK uses only Python standard library (`urllib`, `json`). No external packages required. Nothing to audit, nothing to break.
 
 ---
 
-## Links
+## 🔗 Links
 
 - [API Documentation](https://allratestoday.com/developers)
 - [Register (Free)](https://allratestoday.com/register)
@@ -334,6 +334,6 @@ This SDK uses only Python standard library (`urllib`, `json`). No external packa
 - [Status](https://allratestoday.com/status)
 - [GitHub](https://github.com/allratestoday/exchange-rates-api)
 
-## License
+## 📜 License
 
 MIT
