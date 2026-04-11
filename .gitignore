@@ -16,3 +16,17 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Build artifacts
+dist/
+coverage/
+*.egg-info/
+*.tgz
+*.whl
+*.tar.gz
+
+# Duplicate top-level SDK working copies (canonical copies live under sdks/sdks/)
+/javascript/
+/react/
+/python/
+/php/

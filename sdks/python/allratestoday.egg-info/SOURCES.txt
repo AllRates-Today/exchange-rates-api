@@ -1,9 +1,0 @@
-README.md
-pyproject.toml
-allratestoday/__init__.py
-allratestoday/client.py
-allratestoday.egg-info/PKG-INFO
-allratestoday.egg-info/SOURCES.txt
-allratestoday.egg-info/dependency_links.txt
-allratestoday.egg-info/top_level.txt
-tests/test_client.py
