@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "allratestoday"
-version = "1.3.2"
+version = "1.3.3"
 description = "The most elegant way to access real-time mid-market exchange rates in Python. 160+ currencies, Reuters/Refinitiv data, zero dependencies."
 readme = "README.md"
 license = {text = "MIT"}
