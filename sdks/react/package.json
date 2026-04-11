@@ -1,6 +1,6 @@
 {
   "name": "react-currency-localizer-realtime",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "React hooks and components for automatic currency localization. Display prices in your user's local currency using AllRatesToday real-time exchange rates.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

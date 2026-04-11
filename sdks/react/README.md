@@ -5,6 +5,7 @@
 [![Tests](https://github.com/allratestoday/exchange-rates-api/actions/workflows/test.yml/badge.svg)](https://github.com/allratestoday/exchange-rates-api/actions/workflows/test.yml)
 [![license](https://img.shields.io/npm/l/react-currency-localizer-realtime.svg)](https://github.com/allratestoday/exchange-rates-api/blob/main/LICENSE)
 [![zero dependencies](https://img.shields.io/badge/runtime_deps-0-brightgreen.svg)](https://www.npmjs.com/package/react-currency-localizer-realtime)
+[![Known Vulnerabilities](https://snyk.io/test/github/allratestoday/exchange-rates-api/badge.svg)](https://snyk.io/test/github/allratestoday/exchange-rates-api)
 
 **React hooks and components for automatically displaying prices in a user's local currency using IP geolocation**
 
