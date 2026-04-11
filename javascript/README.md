@@ -5,7 +5,7 @@
 [![license](https://img.shields.io/npm/l/@allratestoday/sdk.svg)](https://github.com/allratestoday/exchange-rates-api/blob/main/LICENSE)
 [![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://www.typescriptlang.org/)
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://www.npmjs.com/package/@allratestoday/sdk)
-[![Security: Snyk](https://img.shields.io/badge/Security-Snyk-4C4A73?logo=snyk&logoColor=white)](https://snyk.io/test/github/allratestoday/exchange-rates-api)
+[![Snyk Package Health](https://snyk.io/advisor/npm-package/@allratestoday/sdk/badge.svg)](https://snyk.io/advisor/npm-package/@allratestoday/sdk)
 
 **Real-time mid-market currency exchange rates for Node.js and browsers. The most elegant way to access 160+ currencies from Reuters/Refinitiv.**
 

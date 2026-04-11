@@ -1,3 +1,28 @@
+Metadata-Version: 2.4
+Name: allratestoday
+Version: 1.3.3
+Summary: The most elegant way to access real-time mid-market exchange rates in Python. 160+ currencies, Reuters/Refinitiv data, zero dependencies.
+Author-email: AllRatesToday <info@allratestoday.com>
+License: MIT
+Project-URL: Homepage, https://allratestoday.com
+Project-URL: Documentation, https://allratestoday.com/docs
+Project-URL: Repository, https://github.com/allratestoday/exchange-rates-api
+Project-URL: Issues, https://github.com/allratestoday/exchange-rates-api/issues
+Keywords: exchange-rate,currency,forex,api,allratestoday,reuters
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Office/Business :: Financial
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+
 # allratestoday
 
 [![PyPI version](https://img.shields.io/pypi/v/allratestoday.svg)](https://pypi.org/project/allratestoday/)
@@ -6,7 +31,7 @@
 [![license](https://img.shields.io/pypi/l/allratestoday.svg)](https://github.com/allratestoday/exchange-rates-api/blob/main/LICENSE)
 [![Python](https://img.shields.io/pypi/pyversions/allratestoday.svg)](https://pypi.org/project/allratestoday/)
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://pypi.org/project/allratestoday/)
-[![Security: Snyk](https://img.shields.io/badge/Security-Snyk-4C4A73?logo=snyk&logoColor=white)](https://snyk.io/test/github/allratestoday/exchange-rates-api)
+[![Known Vulnerabilities](https://snyk.io/test/github/allratestoday/exchange-rates-api/badge.svg)](https://snyk.io/test/github/allratestoday/exchange-rates-api)
 
 **The most elegant way to access real-time mid-market exchange rates in Python**
 
