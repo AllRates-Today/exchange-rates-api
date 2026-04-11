@@ -6,6 +6,7 @@
 [![license](https://img.shields.io/pypi/l/allratestoday.svg)](https://github.com/allratestoday/exchange-rates-api/blob/main/LICENSE)
 [![Python](https://img.shields.io/pypi/pyversions/allratestoday.svg)](https://pypi.org/project/allratestoday/)
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://pypi.org/project/allratestoday/)
+[![Snyk Package Health](https://snyk.io/advisor/python/allratestoday/badge.svg)](https://snyk.io/advisor/python/allratestoday)
 
 **The most elegant way to access real-time mid-market exchange rates in Python**
 
