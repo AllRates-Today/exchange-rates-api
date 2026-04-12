@@ -172,7 +172,8 @@ Get your free API key at [allratestoday.com/register](https://allratestoday.com/
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| GET | `/api/v1/rates` | Yes | Exchange rates with free & paid tiers |
+| GET | `/api/v1/rates` | Yes | Exchange rates (supports comma-separated targets) |
+| GET | `/api/v1/symbols` | No | List all supported currencies |
 | GET | `/api/rate` | Yes | Simple pair rate lookup |
 | GET | `/api/historical-rates` | Yes | Historical rate data & time series |
 
@@ -194,9 +195,17 @@ Get your free API key at [allratestoday.com/register](https://allratestoday.com/
 | 500 | Internal server error |
 | 503 | Service temporarily unavailable |
 
+## 📄 API Specifications
+
+For the complete technical reference, download the **AllRatesToday Currency Data API Specifications** document:
+
+- **[Download PDF](docs/AllRatesToday-API-Specifications.pdf)** — Full 20-page API specification (endpoints, parameters, responses, error codes, SDKs)
+- **[View Online](https://allratestoday.com/api-specifications)** — Browse the specification on our website
+
 ## 🔗 Links
 
 - **Website:** [allratestoday.com](https://allratestoday.com)
+- **API Specs:** [allratestoday.com/api-specifications](https://allratestoday.com/api-specifications)
 - **API Docs:** [allratestoday.com/docs](https://allratestoday.com/docs)
 - **Developer Guide:** [allratestoday.com/developers](https://allratestoday.com/developers)
 - **Status:** [allratestoday.com/status](https://allratestoday.com/status)
