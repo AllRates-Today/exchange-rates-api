@@ -161,39 +161,20 @@ function ProductList({ products }) {
 
 ## 🏁 Quick Start (No SDK)
 
-### Free Public Endpoint (No API Key)
-
-```bash
-curl "https://allratestoday.com/api/public/rates?from=USD&to=EUR"
-```
-
-```json
-{
-  "from": { "currency": "USD", "amount": 1 },
-  "to": { "currency": "EUR", "amount": 0.9215 },
-  "rate": 0.9215,
-  "source": "AllRatesToday.com"
-}
-```
-
-### Authenticated Endpoint
-
 ```bash
 curl "https://allratestoday.com/api/v1/rates?source=USD&target=EUR" \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
-Get your free API key at [allratestoday.com/profile](https://allratestoday.com/profile).
+Get your free API key at [allratestoday.com/register](https://allratestoday.com/register).
 
 ## 📚 API Endpoints
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| GET | `/api/public/rates` | No | Free public rates (100/hour per IP) |
-| GET | `/api/v1/rates` | Yes | Authenticated rates with higher limits |
-| GET | `/api/rate` | No | Simple pair rate lookup |
+| GET | `/api/v1/rates` | Yes | Exchange rates with free & paid tiers |
+| GET | `/api/rate` | Yes | Simple pair rate lookup |
 | GET | `/api/historical-rates` | Yes | Historical rate data & time series |
-| GET | `/api/v1/symbols` | Yes | List all 160+ supported currencies |
 
 ## 🌍 Supported Currencies
 
