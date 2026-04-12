@@ -24,7 +24,7 @@ class AllRatesToday
     }
 
     /**
-     * Get exchange rate between two currencies (free, no auth required).
+     * Get exchange rate between two currencies.
      *
      * @param string     $from   Source currency code (e.g., 'USD')
      * @param string     $to     Target currency code (e.g., 'EUR')
