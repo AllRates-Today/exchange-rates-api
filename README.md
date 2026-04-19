@@ -1,6 +1,10 @@
-# AllRatesToday - Exchange Rates API
+# AllRatesToday — Exchange Rates API
 
-A free, fast, and reliable REST API for real-time and historical currency exchange rates. Sourced from Reuters (Refinitiv) and interbank market feeds.
+**[AllRatesToday](https://allratestoday.com/)** is a free, fast, and reliable REST API for real-time and historical currency exchange rates. Sourced from Reuters (Refinitiv) and interbank market feeds.
+
+- Website: [allratestoday.com](https://allratestoday.com/)
+- Free API key: [allratestoday.com/register](https://allratestoday.com/register/)
+- Docs: [allratestoday.com/docs](https://allratestoday.com/docs/)
 
 [![API Status](https://img.shields.io/badge/API-Online-brightgreen)](https://allratestoday.com/status)
 [![Tests](https://github.com/allratestoday/exchange-rates-api/actions/workflows/test.yml/badge.svg)](https://github.com/allratestoday/exchange-rates-api/actions/workflows/test.yml)
