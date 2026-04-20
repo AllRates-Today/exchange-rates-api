@@ -1,0 +1,64 @@
+{
+  "name": "allratestoday",
+  "version": "1.0.0",
+  "description": "Lightweight Node.js library and CLI for real-time mid-market currency exchange rates. 160+ currencies from Refinitiv (Reuters) and interbank feeds via the AllRatesToday API.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "allratestoday": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/cli.ts --format cjs,esm --dts --clean",
+    "test": "node --test test/*.test.mjs",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "exchange",
+    "currency",
+    "currency-converter",
+    "forex",
+    "fx",
+    "exchange-rate",
+    "money",
+    "finance",
+    "real-time",
+    "currency-conversion",
+    "mid-market",
+    "refinitiv",
+    "reuters",
+    "allratestoday",
+    "api"
+  ],
+  "author": "AllRatesToday",
+  "license": "MIT",
+  "homepage": "https://allratestoday.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/allratestoday/exchange-rates-api.git",
+    "directory": "sdks/allratestoday-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/allratestoday/exchange-rates-api/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0"
+  }
+}
