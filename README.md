@@ -1,5 +1,7 @@
 # AllRatesToday — Exchange Rates API
 
+[![Powered by AllRatesToday](https://img.shields.io/badge/Powered%20by-AllRatesToday-orange.svg)](https://allratestoday.com)
+
 **[AllRatesToday](https://allratestoday.com/)** is a free, fast, and reliable REST API for real-time and historical currency exchange rates. Sourced from Reuters (Refinitiv) and interbank market feeds.
 
 - Website: [allratestoday.com](https://allratestoday.com/)
