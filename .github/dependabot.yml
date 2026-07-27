@@ -12,28 +12,6 @@ updates:
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
   - package-ecosystem: "npm"
-    directory: "/javascript"
-    schedule:
-      interval: "daily"
-    groups:
-      minor-and-patch:
-        patterns: ["*"]
-        update-types: ["minor", "patch"]
-    ignore:
-      - dependency-name: "typescript"
-        update-types: ["version-update:semver-major"]
-  - package-ecosystem: "npm"
-    directory: "/react"
-    schedule:
-      interval: "daily"
-    groups:
-      minor-and-patch:
-        patterns: ["*"]
-        update-types: ["minor", "patch"]
-    ignore:
-      - dependency-name: "typescript"
-        update-types: ["version-update:semver-major"]
-  - package-ecosystem: "npm"
     directory: "/sdks/javascript"
     schedule:
       interval: "daily"
@@ -55,12 +33,16 @@ updates:
     ignore:
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
-  - package-ecosystem: "pip"
-    directory: "/python"
+  - package-ecosystem: "composer"
+    directory: "/"
     schedule:
       interval: "daily"
   - package-ecosystem: "composer"
-    directory: "/php"
+    directory: "/sdks/php"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "pip"
+    directory: "/sdks/python"
     schedule:
       interval: "daily"
   - package-ecosystem: "github-actions"
