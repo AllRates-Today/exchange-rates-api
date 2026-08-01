@@ -30,3 +30,6 @@ coverage/
 /react/
 /python/
 /php/
+
+# Nested standalone repo (live-currency-converter), tracked separately
+/javascript-wrapper/
