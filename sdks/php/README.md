@@ -2,7 +2,7 @@
 
 Official PHP SDK for the [AllRatesToday](https://allratestoday.com) exchange rate API.
 
-Real-time mid-market exchange rates for 160+ currencies, sourced from Reuters (Refinitiv) and interbank market feeds.
+Real-time mid-market exchange rates for 160+ currencies, sourced from institutional interbank market data.
 
 ## 📦 Installation
 

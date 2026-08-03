@@ -13,7 +13,7 @@
 ## 🚀 Why Choose This Client?
 
 - ⚡ **Lightning Fast** — Zero dependencies, pure Python standard library
-- 📡 **Real-Time Data** — Rates updated every 60 seconds from Reuters (Refinitiv) and interbank feeds
+- 📡 **Real-Time Data** — Rates updated every 60 seconds from institutional interbank market data
 - 💹 **Mid-Market Rates** — The true interbank rate — no hidden spread or markup
 - 🌍 **160+ Currencies** — Major, minor, and exotic currency pairs
 - 🔷 **Type Hints** — Full type annotations for IDE autocomplete

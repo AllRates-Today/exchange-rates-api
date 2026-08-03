@@ -9,11 +9,11 @@
 
 **React hooks and components for automatically displaying prices in a user's local currency using IP geolocation**
 
-Built with real-time mid-market exchange rates from AllRatesToday (Reuters/Refinitiv data, 160+ currencies). Perfect for e-commerce sites, pricing pages, and international applications.
+Built with real-time mid-market exchange rates from AllRatesToday (institutional interbank market data, 160+ currencies). Perfect for e-commerce sites, pricing pages, and international applications.
 
 ## 🚀 Features
 
-- ⚡ **Real-Time Mid-Market Rates** — Updated every 60 seconds from Reuters/Refinitiv — no hidden spreads or markup
+- ⚡ **Real-Time Mid-Market Rates** — Updated every 60 seconds from institutional interbank market data — no hidden spreads or markup
 - 🌍 **Automatic Currency Detection** — Uses IP geolocation to detect user's local currency (no API key needed for geolocation)
 - 💱 **160+ Currencies** — Major, minor, and exotic pairs — covering 99% of UN-recognized territories
 - 🧠 **Intelligent Caching** — 24-hour localStorage for geolocation, 1-hour memory cache for exchange rates
@@ -413,7 +413,7 @@ This package uses a carefully designed decoupled architecture for maximum reliab
 | Service | Purpose | Key Required? | Why This Service? |
 |---------|---------|--------------|-------------------|
 | [ipapi.co](https://ipapi.co) | IP geolocation (currency detection) | No | HTTPS-compatible, no API key, robust rate limiting |
-| [AllRatesToday](https://allratestoday.com) | Real-time exchange rates | Yes | Mid-market rates from Reuters/Refinitiv, 60s updates |
+| [AllRatesToday](https://allratestoday.com) | Real-time exchange rates | Yes | Mid-market rates from institutional interbank market data, 60s updates |
 
 **Philosophy:** Use specialized services for what they do best — ipapi.co for location identification, AllRatesToday for financial data.
 
@@ -431,7 +431,7 @@ This package uses a carefully designed decoupled architecture for maximum reliab
 |---------|--------------|---------------------|-------------------|
 | Rate type | Mid-market (no spread) | Retail (includes spread) | Retail |
 | Update frequency | Every 60 seconds | Daily | Hourly |
-| Data source | Reuters/Refinitiv (named) | Undisclosed | "Multiple sources" |
+| Data source | Institutional interbank feeds | Undisclosed | "Multiple sources" |
 | Base currency | Any | USD only (free) | USD only (free) |
 
 ---
@@ -585,7 +585,7 @@ npm run test:watch     # Watch mode for development
 - 🧩 **LocalizedPrice Component** — Declarative wrapper for the common case
 - 🧠 **Intelligent Caching** — Optimized per data type (24h geo, 1h rates)
 - 🛡️ **Graceful Degradation** — Always shows a price, even if conversion fails
-- 💹 **Mid-Market Rates** — Reuters/Refinitiv data with no hidden spreads
+- 💹 **Mid-Market Rates** — institutional interbank market data with no hidden spreads
 - 🆓 **Free APIs Only** — Zero cost barrier to entry
 
 ---

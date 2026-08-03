@@ -7,12 +7,12 @@
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://www.npmjs.com/package/@allratestoday/sdk)
 [![Security: Snyk](https://img.shields.io/badge/Security-Snyk-4C4A73?logo=snyk&logoColor=white)](https://snyk.io/test/github/allratestoday/exchange-rates-api)
 
-**Real-time mid-market currency exchange rates for Node.js and browsers. The most elegant way to access 160+ currencies from Reuters/Refinitiv.**
+**Real-time mid-market currency exchange rates for Node.js and browsers. The most elegant way to access 160+ currencies from institutional interbank market data.**
 
 ## 🚀 Why Choose This Client?
 
 - ⚡ **Lightning Fast** — Zero runtime dependencies, pure TypeScript performance
-- 📡 **Real-Time Data** — Rates updated every 60 seconds from Reuters (Refinitiv) and interbank feeds
+- 📡 **Real-Time Data** — Rates updated every 60 seconds from institutional interbank market data
 - 💹 **Mid-Market Rates** — The true interbank rate — no hidden spread or markup
 - 🌍 **160+ Currencies** — Major, minor, and exotic currency pairs
 - 🔷 **Type-Safe** — Full TypeScript support with intelligent autocomplete
