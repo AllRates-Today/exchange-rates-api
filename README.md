@@ -106,16 +106,14 @@ npm install react-currency-localizer-realtime
 ```tsx
 import { LocalizedPrice } from 'react-currency-localizer-realtime';
 
-// Automatically detects user's currency via IP geolocation
+// Automatically detects the visitor's currency. No API key needed:
+// keyless mode uses free daily ECB rates (~30 currencies) and renders a
+// "Rates by AllRatesToday" link. Pass apiKey for real-time + 160 currencies.
 function PricingCard() {
   return (
     <div>
       <h3>Pro Plan</h3>
-      <LocalizedPrice
-        basePrice={19.99}
-        baseCurrency="USD"
-        apiKey="art_live_..."
-      />
+      <LocalizedPrice basePrice={19.99} baseCurrency="USD" />
     </div>
   );
 }
