@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "allratestoday-central-bank"
+version = "1.0.0"
+description = "Official exchange rates published by 100+ central banks and tax authorities (ECB, Fed, BOJ, HMRC, US Treasury). Works without an API key. Zero dependencies."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [
+    {name = "AllRatesToday", email = "info@allratestoday.com"},
+]
+keywords = [
+    "central-bank", "exchange-rate", "currency", "forex", "fx",
+    "ecb", "hmrc", "vat", "tax", "accounting", "allratestoday",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Office/Business :: Financial",
+    "Topic :: Office/Business :: Financial :: Accounting",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://allratestoday.com/central-bank-rates-api/"
+Documentation = "https://allratestoday.com/docs"
+Repository = "https://github.com/AllRates-Today/exchange-rates-api"
+Issues = "https://github.com/AllRates-Today/exchange-rates-api/issues"
+Changelog = "https://github.com/AllRates-Today/exchange-rates-api/releases"
+
+[tool.setuptools]
+packages = ["allratestoday_central_bank"]
+
+[tool.setuptools.package-data]
+allratestoday_central_bank = ["py.typed"]
