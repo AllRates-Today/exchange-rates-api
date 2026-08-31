@@ -1,7 +1,7 @@
 {
-  "name": "@allratestoday/sdk",
-  "version": "1.3.9",
-  "description": "Exchange Rate API \u2014 Real-time mid-market currency exchange rates for Node.js and browsers. 160+ currencies from institutional interbank market data, zero dependencies, free tier.",
+  "name": "@allratestoday/central-bank",
+  "version": "1.0.0",
+  "description": "Official exchange rates published by 100+ central banks and tax authorities (ECB, Fed, BOJ, HMRC, US Treasury). Works without an API key. Zero dependencies.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -19,29 +19,34 @@
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
+    "central-bank",
     "exchange-rate",
     "currency",
     "forex",
-    "api",
-    "allratestoday",
-    "conversion",
-    "mid-market-rate",
-    "fx"
+    "fx",
+    "ecb",
+    "hmrc",
+    "vat",
+    "tax",
+    "accounting",
+    "allratestoday"
   ],
   "author": "AllRatesToday <info@allratestoday.com>",
   "license": "MIT",
-  "homepage": "https://allratestoday.com",
+  "homepage": "https://allratestoday.com/central-bank-rates-api/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AllRates-Today/exchange-rates-api.git",
-    "directory": "sdks/javascript"
+    "directory": "sdks/javascript-central-bank"
+  },
+  "bugs": "https://github.com/AllRates-Today/exchange-rates-api/issues",
+  "engines": {
+    "node": ">=18"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "^4.1.11",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
     "vitest": "^4.1.4"

@@ -1,8 +1,8 @@
 # Exchange Rate API — @allratestoday/sdk
 
 [![npm version](https://img.shields.io/npm/v/@allratestoday/sdk.svg)](https://www.npmjs.com/package/@allratestoday/sdk)
-[![codecov](https://codecov.io/gh/allratestoday/exchange-rates-api/branch/main/graph/badge.svg)](https://codecov.io/gh/allratestoday/exchange-rates-api)
-[![license](https://img.shields.io/npm/l/@allratestoday/sdk.svg)](https://github.com/allratestoday/exchange-rates-api/blob/main/LICENSE)
+[![codecov](https://codecov.io/gh/AllRates-Today/exchange-rates-api/branch/main/graph/badge.svg)](https://codecov.io/gh/AllRates-Today/exchange-rates-api)
+[![license](https://img.shields.io/npm/l/@allratestoday/sdk.svg)](https://github.com/AllRates-Today/exchange-rates-api/blob/main/LICENSE)
 [![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://www.typescriptlang.org/)
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://www.npmjs.com/package/@allratestoday/sdk)
 [![Security: Snyk](https://img.shields.io/badge/Security-Snyk-4C4A73?logo=snyk&logoColor=white)](https://snyk.io/test/github/allratestoday/exchange-rates-api)
@@ -501,7 +501,7 @@ npm run test:watch
 - [Register (Free)](https://allratestoday.com/register)
 - [Dashboard](https://allratestoday.com/profile)
 - [Status](https://allratestoday.com/status)
-- [GitHub](https://github.com/allratestoday/exchange-rates-api)
+- [GitHub](https://github.com/AllRates-Today/exchange-rates-api)
 
 ## 📜 License
 
