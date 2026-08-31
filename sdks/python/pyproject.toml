@@ -1,34 +1,46 @@
 [build-system]
-requires = ["setuptools>=84.0.0", "wheel"]
+requires = ["setuptools>=77.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "allratestoday"
-version = "1.3.4"
+version = "1.3.5"
 description = "The most elegant way to access real-time mid-market exchange rates in Python. 160+ currencies, institutional interbank market data, zero dependencies."
 readme = "README.md"
-license = {text = "MIT"}
-requires-python = ">=3.8"
+# PEP 639: an SPDX expression plus license-files, not the deprecated
+# {text = ...} table and "License :: OSI Approved" classifier pair.
+license = "MIT"
+license-files = ["LICENSE"]
+# 3.8 reached end of life in October 2024. Nothing here needs to keep it alive.
+requires-python = ">=3.9"
 authors = [
     {name = "AllRatesToday", email = "info@allratestoday.com"},
 ]
-keywords = ["exchange-rate", "currency", "forex", "api", "allratestoday", "reuters"]
+keywords = ["exchange-rate", "currency", "forex", "fx", "central-bank", "api", "allratestoday"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Office/Business :: Financial",
     "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
 ]
 
 [project.urls]
 Homepage = "https://allratestoday.com"
 Documentation = "https://allratestoday.com/docs"
-Repository = "https://github.com/allratestoday/exchange-rates-api"
-Issues = "https://github.com/allratestoday/exchange-rates-api/issues"
+Repository = "https://github.com/AllRates-Today/exchange-rates-api"
+Issues = "https://github.com/AllRates-Today/exchange-rates-api/issues"
+Changelog = "https://github.com/AllRates-Today/exchange-rates-api/releases"
+
+[tool.setuptools]
+packages = ["allratestoday"]
+
+[tool.setuptools.package-data]
+allratestoday = ["py.typed"]

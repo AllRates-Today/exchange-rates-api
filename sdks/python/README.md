@@ -1,12 +1,12 @@
 # allratestoday
 
 [![PyPI version](https://img.shields.io/pypi/v/allratestoday.svg)](https://pypi.org/project/allratestoday/)
-[![codecov](https://codecov.io/gh/allratestoday/exchange-rates-api/branch/main/graph/badge.svg)](https://codecov.io/gh/allratestoday/exchange-rates-api)
-[![Tests](https://github.com/allratestoday/exchange-rates-api/actions/workflows/test.yml/badge.svg)](https://github.com/allratestoday/exchange-rates-api/actions/workflows/test.yml)
-[![license](https://img.shields.io/pypi/l/allratestoday.svg)](https://github.com/allratestoday/exchange-rates-api/blob/main/LICENSE)
+[![codecov](https://codecov.io/gh/AllRates-Today/exchange-rates-api/branch/main/graph/badge.svg)](https://codecov.io/gh/AllRates-Today/exchange-rates-api)
+[![Tests](https://github.com/AllRates-Today/exchange-rates-api/actions/workflows/test.yml/badge.svg)](https://github.com/AllRates-Today/exchange-rates-api/actions/workflows/test.yml)
+[![license](https://img.shields.io/pypi/l/allratestoday.svg)](https://github.com/AllRates-Today/exchange-rates-api/blob/main/LICENSE)
 [![Python](https://img.shields.io/pypi/pyversions/allratestoday.svg)](https://pypi.org/project/allratestoday/)
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://pypi.org/project/allratestoday/)
-[![Security: Snyk](https://img.shields.io/badge/Security-Snyk-4C4A73?logo=snyk&logoColor=white)](https://snyk.io/test/github/allratestoday/exchange-rates-api)
+[![Security: Snyk](https://img.shields.io/badge/Security-Snyk-4C4A73?logo=snyk&logoColor=white)](https://snyk.io/test/github/AllRates-Today/exchange-rates-api)
 
 **The most elegant way to access real-time mid-market exchange rates in Python**
 
@@ -333,7 +333,7 @@ This SDK uses only Python standard library (`urllib`, `json`). No external packa
 - [Register (Free)](https://allratestoday.com/register)
 - [Dashboard](https://allratestoday.com/profile)
 - [Status](https://allratestoday.com/status)
-- [GitHub](https://github.com/allratestoday/exchange-rates-api)
+- [GitHub](https://github.com/AllRates-Today/exchange-rates-api)
 
 ## 📜 License
 
