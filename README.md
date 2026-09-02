@@ -7,6 +7,7 @@
 - Website: [allratestoday.com](https://allratestoday.com/)
 - Free API key: [allratestoday.com/register](https://allratestoday.com/register/)
 - Docs: [allratestoday.com/docs](https://allratestoday.com/docs/)
+- Overview: [Exchange Rate API](https://allratestoday.com/exchange-rate-api/) · [Currency API](https://allratestoday.com/currency-api/)
 
 [![API Status](https://img.shields.io/badge/API-Online-brightgreen)](https://allratestoday.com/status)
 [![Tests](https://github.com/allratestoday/exchange-rates-api/actions/workflows/test.yml/badge.svg)](https://github.com/allratestoday/exchange-rates-api/actions/workflows/test.yml)
@@ -210,6 +211,7 @@ For the complete technical reference, download the **AllRatesToday Currency Data
 
 - **Website:** [allratestoday.com](https://allratestoday.com)
 - **API Specs:** [allratestoday.com/api-specifications](https://allratestoday.com/api-specifications)
+- **Exchange Rate API overview:** [allratestoday.com/exchange-rate-api](https://allratestoday.com/exchange-rate-api/)
 - **API Docs:** [allratestoday.com/docs](https://allratestoday.com/docs)
 - **Developer Guide:** [allratestoday.com/developers](https://allratestoday.com/developers)
 - **Status:** [allratestoday.com/status](https://allratestoday.com/status)
