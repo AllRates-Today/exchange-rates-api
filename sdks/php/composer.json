@@ -13,7 +13,7 @@
     "support": {
         "source": "https://github.com/allratestoday/exchange-rates-api/tree/main/sdks/php"
     },
-    "keywords": ["exchange-rate", "currency", "forex", "api", "allratestoday", "reuters"],
+    "keywords": ["exchange-rate", "currency", "forex", "api", "allratestoday", "mid-market"],
     "require": {
         "php": ">=7.4",
         "ext-json": "*",
