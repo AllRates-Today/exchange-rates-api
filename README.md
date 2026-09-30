@@ -2,7 +2,7 @@
 
 [![Powered by AllRatesToday](https://img.shields.io/badge/Powered%20by-AllRatesToday-orange.svg)](https://allratestoday.com)
 
-**[AllRatesToday](https://allratestoday.com/)** is a free, fast, and reliable REST API for real-time and historical currency exchange rates. Sourced from institutional interbank market data.
+**[AllRatesToday](https://allratestoday.com/)** is a free, fast, and reliable REST API for real-time and historical currency exchange rates. Mid-market rates with no retail spread.
 
 - Website: [allratestoday.com](https://allratestoday.com/)
 - Free API key: [allratestoday.com/register](https://allratestoday.com/register/)
@@ -28,7 +28,7 @@
 - 📦 **Official SDKs** — JavaScript/TypeScript, Python, PHP, and React
 - 🆓 **Free tier** — Get started at no cost
 - 🛡️ **Fast & reliable** — Powered by Cloudflare's global edge network
-- 📡 **Data source** — institutional interbank market data
+- 💹 **Mid-market rates** — no retail spread baked in
 
 ## 📦 Official SDKs
 
