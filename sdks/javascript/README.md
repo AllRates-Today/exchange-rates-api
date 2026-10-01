@@ -15,6 +15,7 @@
 - 📡 **Real-Time Data** — Rates updated every 60 seconds
 - 💹 **Mid-Market Rates** — No retail spread or markup baked in
 - 🌍 **160+ Currencies** — Major, minor, and exotic currency pairs
+- 🏛️ **Official Rates Too** — latest tables from 121 central banks + 3 tax authorities via `officialRates()`, no key needed
 - 🔷 **Type-Safe** — Full TypeScript support with intelligent autocomplete
 - 🌐 **Universal** — Works seamlessly in Node.js 18+ and modern browsers
 - 🧑‍💻 **Developer-Friendly** — Simple API, extensive documentation, and great DX
@@ -257,6 +258,34 @@ const rate = await client.getRate('USD', 'EUR', 500);
 console.log(`$500 = €${rate.to.amount}`);
 ```
 
+### Official Central-Bank & Tax-Authority Rates (no key needed)
+
+The methods above return live mid-market rates. For the **official rate an
+institution published** — what invoices, VAT returns, customs declarations and
+audits require — use `officialRates()`. It covers 121 central banks plus HMRC,
+the US Treasury and Swiss BAZG, and the latest table needs **no API key**:
+
+```typescript
+const client = new AllRatesToday(); // no key
+
+// Full ECB reference table
+const table = await client.officialRates('ecb');
+console.log(table.rate_date, table.rates); // [{ base: 'EUR', quote: 'USD', type: 'reference', value: 1.17 }, …]
+
+// One pair (cross-computed inside the bank's own table if not published directly → `derived: true`)
+const usd = await client.officialRates('ecb', { source: 'EUR', target: 'USD' });
+console.log(`ECB ${usd.rate_date}: 1 EUR = ${usd.rate} USD`);
+
+// Which sources exist, and which are behind their publication schedule
+const { sources } = await client.officialSources();
+console.log(sources.map((s) => `${s.code} ${s.latest}${s.stale ? ' (stale)' : ''}`));
+```
+
+Always cite the returned `rate_date` — it is the institution's publication date,
+not the time of your call. Dated tables, history and publication calendars sit
+behind the free key on `/api/v1/central-bank/{bank}/{date}`; see the
+[central bank rates API](https://allratestoday.com/central-bank-rates-api/).
+
 ### Historical Rates by Period
 
 Get historical rates using preset periods — no date math needed:
@@ -470,6 +499,8 @@ console.log({ labels, values });
 | `getRate(from, to, amount?, options?)` | Get a single exchange rate |
 | `getRates(source, target, options?)` | Get rates with full metadata |
 | `getHistoricalRates(source, target, period?, options?)` | Historical rates by preset period (1d/7d/30d/1y) |
+| `officialRates(bank, options?)` | Latest official table (or one pair) published by a central bank / tax authority — **keyless** |
+| `officialSources(options?)` | Every covered official source with latest publication date and freshness — **keyless** |
 
 ---
 

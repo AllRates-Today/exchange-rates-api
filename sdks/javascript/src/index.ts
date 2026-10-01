@@ -103,6 +103,66 @@ export interface SymbolsResponse {
 // Error
 // ---------------------------------------------------------------------------
 
+export interface OfficialRateOptions extends RequestOptions {
+  /** Base currency of the pair, e.g. `USD`. Give together with `target` to narrow to one pair. */
+  source?: string;
+  /** Quote currency of the pair, e.g. `EUR`. Give together with `source` to narrow to one pair. */
+  target?: string;
+}
+
+export interface OfficialRateEntry {
+  base: string;
+  quote: string;
+  /** Rate type as the institution labels it, e.g. `reference`, `buy`, `sell`, `mid`. */
+  type: string;
+  value: number;
+}
+
+export interface OfficialRateAttribution {
+  source: string;
+  url: string;
+  terms: string;
+}
+
+export interface OfficialRatesResponse {
+  /** Source code, e.g. `ecb`, `fed`, `hmrc`. */
+  bank: string;
+  /** Publication date of the table (YYYY-MM-DD) — cite this, not today's date. */
+  rate_date: string;
+  /** Full published table. Present when no pair was requested. */
+  rates?: OfficialRateEntry[];
+  /** Pair fields. Present when `source` and `target` were given. */
+  source?: string;
+  target?: string;
+  rate?: number;
+  rate_type?: string;
+  /** True when the pair was cross-computed inside the bank's own table rather than published directly. */
+  derived?: boolean;
+  method?: 'published' | 'inverse';
+  /** True when the institution is behind its own publication schedule. */
+  stale?: boolean;
+  attribution: OfficialRateAttribution;
+  free_key: string;
+}
+
+export interface OfficialSource {
+  /** Pass this as `bank` to `officialRates()`. */
+  code: string;
+  name: string;
+  /** Latest publication date, or null if never ingested. */
+  latest: string | null;
+  stale?: boolean;
+  [extra: string]: unknown;
+}
+
+export interface OfficialSourcesResponse {
+  sources: OfficialSource[];
+  stale_count: number;
+  checked_at: string;
+  docs: string;
+  free_key: string;
+}
+
 export class AllRatesTodayError extends Error {
   /** HTTP status code (when available). */
   status?: number;
@@ -336,6 +396,60 @@ export class AllRatesToday {
   async symbols(options: RequestOptions = {}): Promise<SymbolsResponse> {
     const key = this.resolveKey(options.apiKey);
     return this.request<SymbolsResponse>('/api/v1/symbols', {}, key);
+  }
+
+  /**
+   * Latest table of OFFICIAL rates published by a central bank or tax
+   * authority (121 central banks + HMRC, US Treasury, Swiss BAZG). These are
+   * the fixed, citable rates for invoicing, tax, customs and accounting — not
+   * live market rates. **No API key needed.**
+   *
+   * ```ts
+   * // Full ECB reference table
+   * const table = await client.officialRates('ecb');
+   * console.log(table.rate_date, table.rates);
+   *
+   * // One pair — cross-computed inside the bank's table when not published directly
+   * const usd = await client.officialRates('ecb', { source: 'EUR', target: 'USD' });
+   * console.log(`ECB ${usd.rate_date}: 1 EUR = ${usd.rate} USD`);
+   * ```
+   *
+   * Dated tables and history need a free key: see `/api/v1/central-bank/{bank}/{date}`.
+   */
+  async officialRates(
+    bank: string,
+    options: OfficialRateOptions = {},
+  ): Promise<OfficialRatesResponse> {
+    const code = bank.trim().toLowerCase();
+    if (!/^[a-z0-9_-]{2,20}$/.test(code)) {
+      throw new AllRatesTodayError(`Invalid source code: ${bank}. Call officialSources() for the list.`);
+    }
+    if (Boolean(options.source) !== Boolean(options.target)) {
+      throw new AllRatesTodayError('Provide both source and target, or neither.');
+    }
+    const params: Record<string, string> = {};
+    if (options.source && options.target) {
+      params.source = options.source.toUpperCase();
+      params.target = options.target.toUpperCase();
+    }
+    return this.request<OfficialRatesResponse>(
+      `/api/open/central-bank/${encodeURIComponent(code)}`,
+      params,
+      options.apiKey,
+    );
+  }
+
+  /**
+   * Every covered official source with its code, name, latest publication
+   * date and whether it is behind schedule. **No API key needed.**
+   *
+   * ```ts
+   * const { sources } = await client.officialSources();
+   * const behind = sources.filter((s) => s.stale).map((s) => s.code);
+   * ```
+   */
+  async officialSources(options: RequestOptions = {}): Promise<OfficialSourcesResponse> {
+    return this.request<OfficialSourcesResponse>('/api/open/central-banks', {}, options.apiKey);
   }
 
   /**

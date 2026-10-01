@@ -792,3 +792,46 @@ describe('date formatting', () => {
     expect(calledUrl).toContain('from=2025-06-15');
   });
 });
+
+// ---------------------------------------------------------------------------
+// Official (central bank) rates — keyless
+// ---------------------------------------------------------------------------
+
+describe('officialRates / officialSources', () => {
+  it('fetches a full table without an API key', async () => {
+    const body = { bank: 'ecb', rate_date: '2026-09-30', rates: [{ base: 'EUR', quote: 'USD', type: 'reference', value: 1.17 }], attribution: { source: '', url: '', terms: '' }, free_key: '' };
+    const fetchMock = mockFetch(body);
+    vi.stubGlobal('fetch', fetchMock);
+    const keyless = new AllRatesToday();
+    const res = await keyless.officialRates('ECB');
+    expect(res.rate_date).toBe('2026-09-30');
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe('https://allratestoday.com/api/open/central-bank/ecb');
+    expect(init.headers.Authorization).toBeUndefined();
+  });
+
+  it('narrows to one pair with uppercased codes', async () => {
+    const fetchMock = mockFetch({ bank: 'ecb', rate_date: '2026-09-30', rate: 1.17 });
+    vi.stubGlobal('fetch', fetchMock);
+    await client.officialRates('ecb', { source: 'eur', target: 'usd' });
+    const url = new URL(fetchMock.mock.calls[0][0]);
+    expect(url.searchParams.get('source')).toBe('EUR');
+    expect(url.searchParams.get('target')).toBe('USD');
+  });
+
+  it('rejects a lone source or target', async () => {
+    await expect(client.officialRates('ecb', { source: 'EUR' })).rejects.toThrow(/both source and target/);
+  });
+
+  it('rejects an invalid bank code', async () => {
+    await expect(client.officialRates('not a bank!')).rejects.toThrow(/Invalid source code/);
+  });
+
+  it('lists sources without an API key', async () => {
+    const fetchMock = mockFetch({ sources: [{ code: 'ecb', name: 'European Central Bank', latest: '2026-09-30' }], stale_count: 0, checked_at: '', docs: '', free_key: '' });
+    vi.stubGlobal('fetch', fetchMock);
+    const res = await new AllRatesToday().officialSources();
+    expect(res.sources[0].code).toBe('ecb');
+    expect(fetchMock.mock.calls[0][0]).toBe('https://allratestoday.com/api/open/central-banks');
+  });
+});
