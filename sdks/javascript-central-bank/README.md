@@ -4,7 +4,7 @@
 [![license](https://img.shields.io/npm/l/@allratestoday/central-bank.svg)](https://github.com/AllRates-Today/exchange-rates-api/blob/main/LICENSE)
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://www.npmjs.com/package/@allratestoday/central-bank)
 
-**Official exchange rates as published by 100+ central banks and tax authorities — ECB, Federal Reserve, Bank of Japan, HMRC, US Treasury and more.**
+**Official exchange rates as published by 121 central banks and tax authorities — ECB, Federal Reserve, Bank of Japan, HMRC, US Treasury and more.**
 
 ```bash
 npm install @allratestoday/central-bank

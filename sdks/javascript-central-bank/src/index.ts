@@ -81,7 +81,7 @@ export class NeedsApiKeyError extends CentralBankError {
 }
 
 /**
- * Official published exchange rates from 100+ central banks and tax authorities.
+ * Official published exchange rates from 121 central banks and tax authorities.
  *
  * Works without an API key: {@link CentralBankRates.latest} reads the open,
  * edge-cached endpoint serving each source's most recent published table.
