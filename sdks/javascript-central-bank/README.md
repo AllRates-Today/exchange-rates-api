@@ -117,8 +117,8 @@ async function invoiceTotalInGbp(amountUsd: number, invoiceDate: string) {
 
 - **Live mid-market rates:** [`@allratestoday/sdk`](https://www.npmjs.com/package/@allratestoday/sdk)
 - **Python:** [`allratestoday-central-bank`](https://pypi.org/project/allratestoday-central-bank/)
-- **Single-source packages:** `ecb-exchange-rate`, `hmrc-exchange-rate` and 100+ others
-- **MCP server** for AI agents: `npx -y @allratestoday/central-bank-mcp`
+- **Single-source packages:** `ecb-exchange-rate`, `hmrc-exchange-rate` and 120 more
+- **MCP server** for AI agents: `npx -y @allratestoday/central-bank-mcp`, or the hosted keyless endpoint `https://allratestoday.com/api/mcp`
 - **Claude Code plugin:** `/plugin marketplace add AllRates-Today/claude-code-plugin`
 
 ## Links

@@ -75,6 +75,15 @@ try {
 - ext-curl
 - ext-json
 
+## 🤖 Use it from an AI agent
+
+The same rates are available to coding agents and LLM tools without a second integration:
+
+- **Claude Code plugin** (no key): `/plugin marketplace add AllRates-Today/claude-code-plugin` then `/plugin install allratestoday@allratestoday`
+- **Hosted MCP endpoint**: `https://allratestoday.com/api/mcp` — Streamable HTTP, keyless, nothing to install
+- **Local MCP servers**: `npx -y @allratestoday/mcp-server` (live mid-market rates) · `npx -y @allratestoday/central-bank-mcp` (official central-bank rates)
+- Machine-readable site guide: [llms.txt](https://allratestoday.com/llms.txt)
+
 ## 🔗 Links
 
 - [API Documentation](https://allratestoday.com/docs)

@@ -114,8 +114,8 @@ def invoice_total_in_gbp(amount_usd: float, invoice_date: str) -> tuple[float, s
 ## Also available
 
 - **Live mid-market rates:** [`allratestoday`](https://pypi.org/project/allratestoday/)
-- **Single-source packages:** `ecb-exchange-rate`, `hmrc-exchange-rate` and 100+ others on npm
-- **MCP server** for AI agents: `npx -y @allratestoday/central-bank-mcp`
+- **Single-source packages:** `ecb-exchange-rate`, `hmrc-exchange-rate` and 120 more on npm
+- **MCP server** for AI agents: `npx -y @allratestoday/central-bank-mcp`, or the hosted keyless endpoint `https://allratestoday.com/api/mcp`
 - **Claude Code plugin:** `/plugin marketplace add AllRates-Today/claude-code-plugin`
 
 ## Links

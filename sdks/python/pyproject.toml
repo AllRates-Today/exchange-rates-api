@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "allratestoday"
-version = "1.3.5"
+version = "1.3.6"
 description = "The most elegant way to access real-time mid-market exchange rates in Python. 160+ currencies, mid-market rates, zero dependencies."
 readme = "README.md"
 # PEP 639: an SPDX expression plus license-files, not the deprecated
