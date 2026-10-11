@@ -209,6 +209,7 @@ For the complete technical reference, download the **AllRatesToday Currency Data
 
 ## 🔗 Links
 
+- **Keyless endpoints, no sign-up:** [free-exchange-rate-api](https://github.com/AllRates-Today/free-exchange-rate-api) — open central-bank tables, drop-ins for Frankfurter, Fixer, exchangeratesapi and exchangerate.host
 - **Website:** [allratestoday.com](https://allratestoday.com)
 - **API Specs:** [allratestoday.com/api-specifications](https://allratestoday.com/api-specifications)
 - **Exchange Rate API overview:** [allratestoday.com/exchange-rate-api](https://allratestoday.com/exchange-rate-api/)
