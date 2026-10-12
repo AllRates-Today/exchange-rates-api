@@ -117,6 +117,7 @@ def invoice_total_in_gbp(amount_usd: float, invoice_date: str) -> tuple[float, s
 - **Single-source packages:** `ecb-exchange-rate`, `hmrc-exchange-rate` and 120 more on npm
 - **MCP server** for AI agents: `npx -y @allratestoday/central-bank-mcp`, or the hosted keyless endpoint `https://allratestoday.com/api/mcp`
 - **Claude Code plugin:** `/plugin marketplace add AllRates-Today/claude-code-plugin`
+- **Trial key for agents** (no signup): `POST https://allratestoday.com/api/agent/keys` with `Content-Type: application/json` → 100 calls over 7 days, enough to test dated tables and history; MCP tool `request_trial_key`
 
 ## Links
 
