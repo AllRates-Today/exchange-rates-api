@@ -1,6 +1,6 @@
 {
   "name": "@allratestoday/central-bank",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Official exchange rates published by 121 central banks and tax authorities (ECB, Fed, BOJ, HMRC, US Treasury). Works without an API key. Zero dependencies.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -32,7 +32,9 @@
     "vat",
     "tax",
     "accounting",
-    "allratestoday"
+    "allratestoday",
+    "exchangerate",
+    "exchange rate"
   ],
   "author": "AllRatesToday <info@allratestoday.com>",
   "license": "MIT",
