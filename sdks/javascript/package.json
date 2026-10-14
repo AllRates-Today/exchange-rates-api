@@ -1,6 +1,6 @@
 {
   "name": "@allratestoday/sdk",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Exchange Rate API — Real-time mid-market currency exchange rates for Node.js and browsers. 160+ currencies, zero dependencies, free tier.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -45,5 +45,10 @@
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
     "vitest": "^4.1.4"
-  }
+  },
+  "bugs": "https://github.com/AllRates-Today/exchange-rates-api/issues",
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": false
 }
