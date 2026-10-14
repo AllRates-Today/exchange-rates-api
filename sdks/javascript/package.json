@@ -1,6 +1,6 @@
 {
   "name": "@allratestoday/sdk",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Exchange Rate API — Real-time mid-market currency exchange rates for Node.js and browsers. 160+ currencies, zero dependencies, free tier.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -32,7 +32,13 @@
     "mid-market-rate",
     "fx",
     "exchangerate",
-    "exchange rate"
+    "exchange rate",
+    "currency-api",
+    "currency-exchange-rates",
+    "forex-api",
+    "currency-conversion",
+    "currency-exchange",
+    "currency-rates"
   ],
   "author": "AllRatesToday <info@allratestoday.com>",
   "license": "MIT",
