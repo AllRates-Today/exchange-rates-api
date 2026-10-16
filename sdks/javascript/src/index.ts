@@ -253,6 +253,52 @@ export class AllRatesToday {
     return date;
   }
 
+  /**
+   * The history endpoint serves fixed windows ending today (7d, 30d, 1y) and
+   * one target per call, so pick the smallest window that reaches `start`.
+   */
+  private windowFor(start: string): '7d' | '30d' | '1y' {
+    const today = new Date().toISOString().split('T')[0];
+    const days = Math.round((Date.parse(`${today}T00:00:00Z`) - Date.parse(`${start}T00:00:00Z`)) / 86_400_000);
+    if (Number.isNaN(days)) throw new AllRatesTodayError(`Invalid date: ${start}. Use YYYY-MM-DD.`);
+    if (days < 0) throw new AllRatesTodayError(`Date ${start} is in the future.`);
+    if (days <= 6) return '7d';
+    if (days <= 29) return '30d';
+    if (days <= 364) return '1y';
+    throw new AllRatesTodayError(`Historical market rates cover the last 365 days; ${start} is older.`);
+  }
+
+  private requireSymbols(symbols: string[] | undefined, method: string): string[] {
+    if (!symbols?.length) {
+      throw new AllRatesTodayError(`${method}() needs symbols, e.g. { symbols: ['EUR'] }.`);
+    }
+    return symbols;
+  }
+
+  private async historyPoints(
+    source: string,
+    target: string,
+    period: string,
+    key: string,
+  ): Promise<Array<{ date: string; rate: number; timestamp: number }>> {
+    const raw = await this.request<{ data?: Array<{ date: string; rate: number; timestamp: number }> }>(
+      '/api/historical-rates',
+      { source, target, period },
+      key,
+    );
+    return (raw.data ?? []).slice().sort((a, b) => a.timestamp - b.timestamp);
+  }
+
+  /** Rate on `date`, or the closest earlier point (the 1y window is weekly). */
+  private async rateOn(source: string, target: string, date: string, key: string): Promise<number | undefined> {
+    let rate: number | undefined;
+    for (const p of await this.historyPoints(source, target, this.windowFor(date), key)) {
+      if (p.date.slice(0, 10) > date) break;
+      rate = p.rate;
+    }
+    return rate;
+  }
+
   // -------------------------------------------------------------------------
   // Public API
   // -------------------------------------------------------------------------
@@ -310,29 +356,13 @@ export class AllRatesToday {
   ): Promise<ForDateResponse> {
     const key = this.resolveKey(options.apiKey);
     const dateStr = this.formatDate(date);
-    const params: Record<string, string> = {
-      source: options.base || 'USD',
-      from: dateStr,
-      to: dateStr,
-    };
-    if (options.symbols?.length) {
-      params.target = options.symbols.join(',');
-    }
-    const raw = await this.request<HistoricalRateResponse>(
-      '/api/historical-rates',
-      params,
-      key,
-    );
+    const source = options.base || 'USD';
     const rates: Record<string, number> = {};
-    if (raw.rates?.length) {
-      for (const r of raw.rates) {
-        rates[raw.target] = r.rate;
-      }
+    for (const target of this.requireSymbols(options.symbols, 'forDate')) {
+      const rate = await this.rateOn(source, target, dateStr, key);
+      if (rate !== undefined) rates[target] = rate;
     }
-    if (raw.current) {
-      rates[raw.target] = raw.current.rate;
-    }
-    return { base: params.source, date: dateStr, rates };
+    return { base: source, date: dateStr, rates };
   }
 
   /**
@@ -357,25 +387,14 @@ export class AllRatesToday {
     const start = this.formatDate(startDate);
     const end = this.formatDate(endDate);
     const source = options.base || 'USD';
-    const params: Record<string, string> = {
-      source,
-      from: start,
-      to: end,
-    };
-    if (options.symbols?.length) {
-      params.target = options.symbols.join(',');
-    }
-    const raw = await this.request<HistoricalRateResponse>(
-      '/api/historical-rates',
-      params,
-      key,
-    );
+    const period = this.windowFor(start);
     const rates: Record<string, Record<string, number>> = {};
-    if (raw.rates) {
-      for (const point of raw.rates) {
-        const dateKey = point.time.split('T')[0];
-        if (!rates[dateKey]) rates[dateKey] = {};
-        rates[dateKey][raw.target] = point.rate;
+    for (const target of this.requireSymbols(options.symbols, 'timeSeries')) {
+      for (const point of await this.historyPoints(source, target, period, key)) {
+        const day = point.date.slice(0, 10);
+        if (day < start || day > end) continue;
+        if (!rates[day]) rates[day] = {};
+        rates[day][target] = point.rate;
       }
     }
     return { base: source, startDate: start, endDate: end, rates };
@@ -395,7 +414,11 @@ export class AllRatesToday {
    */
   async symbols(options: RequestOptions = {}): Promise<SymbolsResponse> {
     const key = this.resolveKey(options.apiKey);
-    return this.request<SymbolsResponse>('/api/v1/symbols', {}, key);
+    // The endpoint returns { currencies: [{ code, name, symbol }], count }.
+    const raw = await this.request<{ currencies?: Array<{ code: string; name: string }> }>('/api/v1/symbols', {}, key);
+    const symbols: Record<string, string> = {};
+    for (const c of raw.currencies ?? []) symbols[c.code] = c.name;
+    return { symbols };
   }
 
   /**
@@ -541,18 +564,10 @@ export class AllRatesToday {
     if (options.date) {
       // Historical conversion
       const dateStr = this.formatDate(options.date);
-      const params: Record<string, string> = {
-        source: from,
-        target: to,
-        from: dateStr,
-        to: dateStr,
-      };
-      const raw = await this.request<HistoricalRateResponse>(
-        '/api/historical-rates',
-        params,
-        key,
-      );
-      const rate = raw.current?.rate ?? raw.rates?.[0]?.rate ?? 0;
+      const rate = await this.rateOn(from, to, dateStr, key);
+      if (rate === undefined) {
+        throw new AllRatesTodayError(`No ${from}/${to} rate available on or before ${dateStr}`);
+      }
       return { from, to, amount, result: Number((amount * rate).toFixed(6)), rate, date: dateStr };
     }
 

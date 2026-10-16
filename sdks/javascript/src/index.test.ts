@@ -235,188 +235,16 @@ describe('latest()', () => {
 // forDate()
 // ---------------------------------------------------------------------------
 
-describe('forDate()', () => {
-  it('fetches rates for a string date', async () => {
-    const fetchMock = mockFetch({
-      source: 'USD',
-      target: 'EUR',
-      period: 'custom',
-      current: { rate: 0.9187, time: '2026-01-15T00:00:00Z' },
-      rates: [{ rate: 0.9187, time: '2026-01-15T00:00:00Z' }],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    const result = await client.forDate('2026-01-15');
-
-    expect(result.date).toBe('2026-01-15');
-    expect(result.base).toBe('USD');
-    expect(result.rates.EUR).toBe(0.9187);
-  });
-
-  it('accepts a Date object', async () => {
-    const fetchMock = mockFetch({
-      source: 'USD',
-      target: 'EUR',
-      period: 'custom',
-      current: { rate: 0.92, time: '2026-01-15T00:00:00Z' },
-      rates: [],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    const result = await client.forDate(new Date('2026-01-15'));
-
-    expect(result.date).toBe('2026-01-15');
-    const calledUrl = fetchMock.mock.calls[0][0];
-    expect(calledUrl).toContain('from=2026-01-15');
-    expect(calledUrl).toContain('to=2026-01-15');
-  });
-
-  it('passes base and symbols', async () => {
-    const fetchMock = mockFetch({
-      source: 'EUR',
-      target: 'GBP',
-      period: 'custom',
-      current: { rate: 0.85, time: '2026-01-15T00:00:00Z' },
-      rates: [],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    await client.forDate('2026-01-15', { base: 'EUR', symbols: ['GBP'] });
-
-    const calledUrl = fetchMock.mock.calls[0][0];
-    expect(calledUrl).toContain('source=EUR');
-    expect(calledUrl).toContain('target=GBP');
-  });
-
-  it('uses current rate when rates array is empty', async () => {
-    const fetchMock = mockFetch({
-      source: 'USD',
-      target: 'EUR',
-      period: 'custom',
-      current: { rate: 0.9187, time: '2026-01-15T00:00:00Z' },
-      rates: [],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    const result = await client.forDate('2026-01-15');
-    expect(result.rates.EUR).toBe(0.9187);
-  });
-});
 
 // ---------------------------------------------------------------------------
 // timeSeries()
 // ---------------------------------------------------------------------------
 
-describe('timeSeries()', () => {
-  it('fetches time series with string dates', async () => {
-    const fetchMock = mockFetch({
-      source: 'USD',
-      target: 'EUR',
-      period: 'custom',
-      current: { rate: 0.92, time: '2026-03-31T00:00:00Z' },
-      rates: [
-        { rate: 0.9187, time: '2026-01-01T00:00:00Z' },
-        { rate: 0.9195, time: '2026-01-02T00:00:00Z' },
-        { rate: 0.9210, time: '2026-01-03T00:00:00Z' },
-      ],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    const result = await client.timeSeries('2026-01-01', '2026-03-31');
-
-    expect(result.base).toBe('USD');
-    expect(result.startDate).toBe('2026-01-01');
-    expect(result.endDate).toBe('2026-03-31');
-    expect(result.rates['2026-01-01'].EUR).toBe(0.9187);
-    expect(result.rates['2026-01-02'].EUR).toBe(0.9195);
-    expect(result.rates['2026-01-03'].EUR).toBe(0.9210);
-  });
-
-  it('accepts Date objects', async () => {
-    const fetchMock = mockFetch({
-      source: 'USD',
-      target: 'EUR',
-      period: 'custom',
-      current: { rate: 0.92, time: '2026-03-31T00:00:00Z' },
-      rates: [],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    await client.timeSeries(new Date('2026-01-01'), new Date('2026-03-31'));
-
-    const calledUrl = fetchMock.mock.calls[0][0];
-    expect(calledUrl).toContain('from=2026-01-01');
-    expect(calledUrl).toContain('to=2026-03-31');
-  });
-
-  it('passes base and symbols options', async () => {
-    const fetchMock = mockFetch({
-      source: 'EUR',
-      target: 'GBP',
-      period: 'custom',
-      current: { rate: 0.85, time: '2026-03-31T00:00:00Z' },
-      rates: [],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    await client.timeSeries('2026-01-01', '2026-03-31', {
-      base: 'EUR',
-      symbols: ['GBP', 'USD'],
-    });
-
-    const calledUrl = fetchMock.mock.calls[0][0];
-    expect(calledUrl).toContain('source=EUR');
-    expect(calledUrl).toContain('target=GBP%2CUSD');
-  });
-
-  it('handles empty rates array', async () => {
-    const fetchMock = mockFetch({
-      source: 'USD',
-      target: 'EUR',
-      period: 'custom',
-      current: { rate: 0.92, time: '2026-03-31T00:00:00Z' },
-      rates: [],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    const result = await client.timeSeries('2026-01-01', '2026-03-31');
-    expect(result.rates).toEqual({});
-  });
-});
 
 // ---------------------------------------------------------------------------
 // symbols()
 // ---------------------------------------------------------------------------
 
-describe('symbols()', () => {
-  it('fetches all symbols', async () => {
-    const mockSymbols = {
-      symbols: {
-        USD: 'United States Dollar',
-        EUR: 'Euro',
-        GBP: 'British Pound Sterling',
-      },
-    };
-    const fetchMock = mockFetch(mockSymbols);
-    vi.stubGlobal('fetch', fetchMock);
-
-    const result = await client.symbols();
-
-    expect(result.symbols.USD).toBe('United States Dollar');
-    expect(result.symbols.EUR).toBe('Euro');
-    expect(result.symbols.GBP).toBe('British Pound Sterling');
-  });
-
-  it('calls the correct endpoint', async () => {
-    const fetchMock = mockFetch({ symbols: {} });
-    vi.stubGlobal('fetch', fetchMock);
-
-    await client.symbols();
-
-    const calledUrl = fetchMock.mock.calls[0][0];
-    expect(calledUrl).toContain('/api/v1/symbols');
-  });
-});
 
 // ---------------------------------------------------------------------------
 // getRate()
@@ -556,92 +384,6 @@ describe('getHistoricalRates()', () => {
 // convert()
 // ---------------------------------------------------------------------------
 
-describe('convert()', () => {
-  it('converts at current rate', async () => {
-    const fetchMock = mockFetch({
-      from: { currency: 'USD', amount: 1000 },
-      to: { currency: 'EUR', amount: 923.4 },
-      rate: 0.9234,
-      source: 'wise',
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    const result = await client.convert('USD', 'EUR', 1000);
-
-    expect(result.from).toBe('USD');
-    expect(result.to).toBe('EUR');
-    expect(result.amount).toBe(1000);
-    expect(result.result).toBe(923.4);
-    expect(result.rate).toBe(0.9234);
-    expect(result.date).toBeUndefined();
-  });
-
-  it('converts at historical date (string)', async () => {
-    const fetchMock = mockFetch({
-      source: 'USD',
-      target: 'EUR',
-      period: 'custom',
-      current: { rate: 0.9187, time: '2026-01-15T00:00:00Z' },
-      rates: [{ rate: 0.9187, time: '2026-01-15T00:00:00Z' }],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    const result = await client.convert('USD', 'EUR', 1000, { date: '2026-01-15' });
-
-    expect(result.rate).toBe(0.9187);
-    expect(result.result).toBe(918.7);
-    expect(result.date).toBe('2026-01-15');
-  });
-
-  it('converts at historical date (Date object)', async () => {
-    const fetchMock = mockFetch({
-      source: 'USD',
-      target: 'EUR',
-      period: 'custom',
-      current: { rate: 0.9187, time: '2026-01-15T00:00:00Z' },
-      rates: [],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    const result = await client.convert('USD', 'EUR', 500, {
-      date: new Date('2026-01-15'),
-    });
-
-    expect(result.date).toBe('2026-01-15');
-    expect(result.amount).toBe(500);
-  });
-
-  it('falls back to rates array when current is missing', async () => {
-    const fetchMock = mockFetch({
-      source: 'USD',
-      target: 'EUR',
-      period: 'custom',
-      current: undefined,
-      rates: [{ rate: 0.9200, time: '2026-01-15T00:00:00Z' }],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    const result = await client.convert('USD', 'EUR', 100, { date: '2026-01-15' });
-
-    expect(result.rate).toBe(0.92);
-  });
-
-  it('returns 0 rate when no data available', async () => {
-    const fetchMock = mockFetch({
-      source: 'USD',
-      target: 'EUR',
-      period: 'custom',
-      current: undefined,
-      rates: [],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    const result = await client.convert('USD', 'EUR', 100, { date: '2026-01-15' });
-
-    expect(result.rate).toBe(0);
-    expect(result.result).toBe(0);
-  });
-});
 
 // ---------------------------------------------------------------------------
 // Error handling
@@ -759,39 +501,6 @@ describe('request construction', () => {
 // formatDate (tested through public methods)
 // ---------------------------------------------------------------------------
 
-describe('date formatting', () => {
-  it('handles string dates', async () => {
-    const fetchMock = mockFetch({
-      source: 'USD',
-      target: 'EUR',
-      period: 'custom',
-      current: { rate: 0.92, time: '2025-12-31T00:00:00Z' },
-      rates: [],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    await client.forDate('2025-12-31');
-
-    const calledUrl = fetchMock.mock.calls[0][0];
-    expect(calledUrl).toContain('from=2025-12-31');
-  });
-
-  it('converts Date objects to YYYY-MM-DD', async () => {
-    const fetchMock = mockFetch({
-      source: 'USD',
-      target: 'EUR',
-      period: 'custom',
-      current: { rate: 0.92, time: '2025-06-15T00:00:00Z' },
-      rates: [],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    await client.forDate(new Date('2025-06-15T12:00:00Z'));
-
-    const calledUrl = fetchMock.mock.calls[0][0];
-    expect(calledUrl).toContain('from=2025-06-15');
-  });
-});
 
 // ---------------------------------------------------------------------------
 // Official (central bank) rates — keyless
@@ -833,5 +542,152 @@ describe('officialRates / officialSources', () => {
     const res = await new AllRatesToday().officialSources();
     expect(res.sources[0].code).toBe('ecb');
     expect(fetchMock.mock.calls[0][0]).toBe('https://allratestoday.com/api/open/central-banks');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// History-backed methods (the endpoint serves 7d / 30d / 1y windows ending today)
+// ---------------------------------------------------------------------------
+
+function historyFetch(byTarget: Record<string, Array<[string, number]>>) {
+  return vi.fn().mockImplementation((url: string) => {
+    const u = new URL(url);
+    const target = u.searchParams.get('target')!;
+    const body = {
+      source: u.searchParams.get('source'),
+      target,
+      period: u.searchParams.get('period'),
+      data: (byTarget[target] ?? []).map(([date, rate]) => ({ date, rate, timestamp: Date.parse(`${date}T00:00:00Z`) })),
+    };
+    return Promise.resolve({ ok: true, status: 200, statusText: 'OK', json: () => Promise.resolve(body) });
+  });
+}
+
+describe('history-backed methods', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-10-16T12:00:00Z'));
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  describe('forDate()', () => {
+    it('returns the requested day, one request per symbol', async () => {
+      const fetchMock = historyFetch({
+        EUR: [['2026-10-12', 0.9], ['2026-10-13', 0.91], ['2026-10-14', 0.92]],
+        GBP: [['2026-10-13', 0.76]],
+      });
+      vi.stubGlobal('fetch', fetchMock);
+
+      const r = await client.forDate('2026-10-13', { base: 'USD', symbols: ['EUR', 'GBP'] });
+
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+      const url = new URL(fetchMock.mock.calls[0][0]);
+      expect(url.pathname).toBe('/api/historical-rates');
+      expect(url.searchParams.get('period')).toBe('7d');
+      expect(r).toEqual({ base: 'USD', date: '2026-10-13', rates: { EUR: 0.91, GBP: 0.76 } });
+    });
+
+    it('uses the closest earlier point when the day is missing', async () => {
+      vi.stubGlobal('fetch', historyFetch({ EUR: [['2026-03-06', 0.86], ['2026-03-13', 0.87]] }));
+      const r = await client.forDate('2026-03-11', { symbols: ['EUR'] });
+      expect(r.rates.EUR).toBe(0.86);
+    });
+
+    it('accepts a Date object', async () => {
+      vi.stubGlobal('fetch', historyFetch({ EUR: [['2026-10-10', 0.9]] }));
+      const r = await client.forDate(new Date('2026-10-10T15:00:00Z'), { symbols: ['EUR'] });
+      expect(r).toEqual({ base: 'USD', date: '2026-10-10', rates: { EUR: 0.9 } });
+    });
+
+    it.each([
+      ['2026-10-10', '7d'],
+      ['2026-09-20', '30d'],
+      ['2026-01-15', '1y'],
+    ])('picks the smallest window for %s (%s)', async (date, period) => {
+      const fetchMock = historyFetch({ EUR: [] });
+      vi.stubGlobal('fetch', fetchMock);
+      await client.forDate(date, { symbols: ['EUR'] });
+      expect(fetchMock.mock.calls[0][0]).toContain(`period=${period}`);
+    });
+
+    it('rejects old, future and malformed dates, and missing symbols', async () => {
+      await expect(client.forDate('2024-01-15', { symbols: ['EUR'] })).rejects.toThrow('last 365 days');
+      await expect(client.forDate('2026-12-01', { symbols: ['EUR'] })).rejects.toThrow('in the future');
+      await expect(client.forDate('not-a-date', { symbols: ['EUR'] })).rejects.toThrow('Invalid date');
+      await expect(client.forDate('2026-10-10')).rejects.toThrow('needs symbols');
+    });
+  });
+
+  describe('timeSeries()', () => {
+    it('builds a date → currency map within the range', async () => {
+      vi.stubGlobal('fetch', historyFetch({
+        EUR: [['2026-10-09', 0.8], ['2026-10-10', 0.9], ['2026-10-11', 0.91], ['2026-10-12', 0.92]],
+        GBP: [['2026-10-10', 0.75], ['2026-10-11', 0.76]],
+      }));
+
+      const r = await client.timeSeries('2026-10-10', new Date('2026-10-11T00:00:00Z'), { symbols: ['EUR', 'GBP'] });
+
+      expect(r).toEqual({
+        base: 'USD',
+        startDate: '2026-10-10',
+        endDate: '2026-10-11',
+        rates: {
+          '2026-10-10': { EUR: 0.9, GBP: 0.75 },
+          '2026-10-11': { EUR: 0.91, GBP: 0.76 },
+        },
+      });
+    });
+
+    it('needs symbols', async () => {
+      await expect(client.timeSeries('2026-10-10', '2026-10-11')).rejects.toThrow('needs symbols');
+    });
+  });
+
+  describe('convert()', () => {
+    it('converts at the current rate', async () => {
+      const fetchMock = mockFetch({
+        from: { currency: 'USD', amount: 1000 },
+        to: { currency: 'EUR', amount: 923.4 },
+        rate: 0.9234,
+        source: 'interbank',
+      });
+      vi.stubGlobal('fetch', fetchMock);
+
+      const r = await client.convert('USD', 'EUR', 1000);
+
+      expect(fetchMock.mock.calls[0][0]).toContain('amount=1000');
+      expect(r).toEqual({ from: 'USD', to: 'EUR', amount: 1000, result: 923.4, rate: 0.9234 });
+    });
+
+    it('converts at a historical date', async () => {
+      vi.stubGlobal('fetch', historyFetch({ EUR: [['2026-10-01', 0.882768]] }));
+      const r = await client.convert('USD', 'EUR', 1000, { date: '2026-10-01' });
+      expect(r).toEqual({ from: 'USD', to: 'EUR', amount: 1000, result: 882.768, rate: 0.882768, date: '2026-10-01' });
+    });
+
+    it('throws instead of returning 0 when no rate exists', async () => {
+      vi.stubGlobal('fetch', historyFetch({ EUR: [] }));
+      await expect(client.convert('USD', 'EUR', 1, { date: '2026-10-01' })).rejects.toThrow('No USD/EUR rate');
+    });
+  });
+});
+
+describe('symbols()', () => {
+  it('maps the currency list to a code → name record', async () => {
+    const fetchMock = mockFetch({
+      currencies: [
+        { code: 'USD', name: 'US Dollar', symbol: '$' },
+        { code: 'EUR', name: 'Euro', symbol: '€' },
+      ],
+      count: 2,
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await client.symbols();
+
+    expect(fetchMock.mock.calls[0][0]).toContain('/api/v1/symbols');
+    expect(result).toEqual({ symbols: { USD: 'US Dollar', EUR: 'Euro' } });
   });
 });
