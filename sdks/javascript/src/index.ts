@@ -496,7 +496,19 @@ export class AllRatesToday {
     const key = this.resolveKey(options.apiKey);
     const params: Record<string, string> = { source: from, target: to };
     if (amount !== undefined) params.amount = String(amount);
-    return this.request<RateResponse>('/api/v1/rates', params, key);
+    const raw = await this.request<RateResponse | AuthRateResponse | AuthRateResponse[]>('/api/v1/rates', params, key);
+    // Without `amount` the endpoint answers with the rates array; return the documented shape.
+    if (Array.isArray(raw) || !('from' in raw)) {
+      const r = Array.isArray(raw) ? raw[0] : raw;
+      if (!r) throw new AllRatesTodayError(`No rate returned for ${from}/${to}`);
+      return {
+        from: { currency: r.source, amount: 1 },
+        to: { currency: r.target, amount: r.rate },
+        rate: r.rate,
+        source: 'interbank',
+      };
+    }
+    return raw;
   }
 
   /**
@@ -533,11 +545,16 @@ export class AllRatesToday {
     options: RequestOptions = {},
   ): Promise<HistoricalRateResponse> {
     const key = this.resolveKey(options.apiKey);
-    return this.request<HistoricalRateResponse>(
-      '/api/historical-rates',
-      { source, target, period },
-      key,
-    );
+    // The endpoint returns { data: [{ date, rate, timestamp }] }; map it to `rates` / `current`.
+    const points = await this.historyPoints(source, target, period, key);
+    const rates = points.map((p) => ({ rate: p.rate, time: p.date }));
+    return {
+      source,
+      target,
+      period,
+      current: rates[rates.length - 1] ?? { rate: 0, time: '' },
+      rates,
+    };
   }
 
   /**

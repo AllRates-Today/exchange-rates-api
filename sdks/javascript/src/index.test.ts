@@ -165,7 +165,7 @@ describe('per-request API key override', () => {
       from: { currency: 'USD', amount: 1 },
       to: { currency: 'EUR', amount: 0.92 },
       rate: 0.92,
-      source: 'wise',
+      source: 'interbank',
     });
     vi.stubGlobal('fetch', fetchMock);
 
@@ -250,55 +250,6 @@ describe('latest()', () => {
 // getRate()
 // ---------------------------------------------------------------------------
 
-describe('getRate()', () => {
-  it('fetches a single rate', async () => {
-    const mockResponse = {
-      from: { currency: 'USD', amount: 1 },
-      to: { currency: 'EUR', amount: 0.9234 },
-      rate: 0.9234,
-      source: 'wise',
-    };
-    const fetchMock = mockFetch(mockResponse);
-    vi.stubGlobal('fetch', fetchMock);
-
-    const result = await client.getRate('USD', 'EUR');
-
-    expect(result.rate).toBe(0.9234);
-    expect(result.from.currency).toBe('USD');
-    expect(result.to.currency).toBe('EUR');
-  });
-
-  it('passes amount when provided', async () => {
-    const fetchMock = mockFetch({
-      from: { currency: 'USD', amount: 500 },
-      to: { currency: 'EUR', amount: 461.7 },
-      rate: 0.9234,
-      source: 'wise',
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    await client.getRate('USD', 'EUR', 500);
-
-    const calledUrl = fetchMock.mock.calls[0][0];
-    expect(calledUrl).toContain('amount=500');
-  });
-
-  it('sends correct query parameters', async () => {
-    const fetchMock = mockFetch({
-      from: { currency: 'GBP', amount: 1 },
-      to: { currency: 'JPY', amount: 191.89 },
-      rate: 191.89,
-      source: 'wise',
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    await client.getRate('GBP', 'JPY');
-
-    const calledUrl = fetchMock.mock.calls[0][0];
-    expect(calledUrl).toContain('source=GBP');
-    expect(calledUrl).toContain('target=JPY');
-  });
-});
 
 // ---------------------------------------------------------------------------
 // getRates()
@@ -324,61 +275,6 @@ describe('getRates()', () => {
 // getHistoricalRates()
 // ---------------------------------------------------------------------------
 
-describe('getHistoricalRates()', () => {
-  it('fetches historical rates with default period', async () => {
-    const mockResponse = {
-      source: 'USD',
-      target: 'EUR',
-      period: '7d',
-      current: { rate: 0.9234, time: '2026-04-09T14:00:00Z' },
-      rates: [
-        { rate: 0.9198, time: '2026-04-02T00:00:00Z' },
-        { rate: 0.9210, time: '2026-04-03T00:00:00Z' },
-      ],
-    };
-    const fetchMock = mockFetch(mockResponse);
-    vi.stubGlobal('fetch', fetchMock);
-
-    const result = await client.getHistoricalRates('USD', 'EUR');
-
-    expect(result.period).toBe('7d');
-    expect(result.current.rate).toBe(0.9234);
-    expect(result.rates).toHaveLength(2);
-  });
-
-  it('passes custom period', async () => {
-    const fetchMock = mockFetch({
-      source: 'USD',
-      target: 'EUR',
-      period: '30d',
-      current: { rate: 0.92, time: '2026-04-09T14:00:00Z' },
-      rates: [],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    await client.getHistoricalRates('USD', 'EUR', '30d');
-
-    const calledUrl = fetchMock.mock.calls[0][0];
-    expect(calledUrl).toContain('period=30d');
-  });
-
-  it('calls the correct endpoint', async () => {
-    const fetchMock = mockFetch({
-      source: 'USD',
-      target: 'EUR',
-      period: '1y',
-      current: { rate: 0.92, time: '2026-04-09T14:00:00Z' },
-      rates: [],
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    await client.getHistoricalRates('USD', 'EUR', '1y');
-
-    const calledUrl = fetchMock.mock.calls[0][0];
-    expect(calledUrl).toContain('/api/historical-rates');
-    expect(calledUrl).toContain('period=1y');
-  });
-});
 
 // ---------------------------------------------------------------------------
 // convert()
@@ -689,5 +585,86 @@ describe('symbols()', () => {
 
     expect(fetchMock.mock.calls[0][0]).toContain('/api/v1/symbols');
     expect(result).toEqual({ symbols: { USD: 'US Dollar', EUR: 'Euro' } });
+  });
+});
+
+describe('getRate()', () => {
+  it('returns the documented shape when the API answers with the rates array', async () => {
+    vi.stubGlobal('fetch', mockFetch([
+      { rate: 0.9234, source: 'USD', target: 'EUR', time: '2026-10-16T08:00:00+0000' },
+    ]));
+
+    const result = await client.getRate('USD', 'EUR');
+
+    expect(result).toEqual({
+      from: { currency: 'USD', amount: 1 },
+      to: { currency: 'EUR', amount: 0.9234 },
+      rate: 0.9234,
+      source: 'interbank',
+    });
+  });
+
+  it('passes amount and returns the conversion as-is', async () => {
+    const body = {
+      from: { currency: 'USD', amount: 500 },
+      to: { currency: 'EUR', amount: 461.7 },
+      rate: 0.9234,
+      source: 'interbank',
+    };
+    const fetchMock = mockFetch(body);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await client.getRate('USD', 'EUR', 500);
+
+    expect(fetchMock.mock.calls[0][0]).toContain('amount=500');
+    expect(result).toEqual(body);
+  });
+
+  it('sends correct query parameters', async () => {
+    const fetchMock = mockFetch([{ rate: 191.89, source: 'GBP', target: 'JPY', time: 't' }]);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await client.getRate('GBP', 'JPY');
+
+    const calledUrl = fetchMock.mock.calls[0][0];
+    expect(calledUrl).toContain('source=GBP');
+    expect(calledUrl).toContain('target=JPY');
+  });
+
+  it('throws when no rate comes back', async () => {
+    vi.stubGlobal('fetch', mockFetch([]));
+    await expect(client.getRate('USD', 'EUR')).rejects.toThrow('No rate returned');
+  });
+});
+
+describe('getHistoricalRates()', () => {
+  it('maps the API data points to rates and current (default 7d)', async () => {
+    const fetchMock = historyFetch({ EUR: [['2026-10-15', 0.89], ['2026-10-14', 0.88], ['2026-10-16', 0.9]] });
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await client.getHistoricalRates('USD', 'EUR');
+
+    const url = new URL(fetchMock.mock.calls[0][0]);
+    expect(url.pathname).toBe('/api/historical-rates');
+    expect(url.searchParams.get('period')).toBe('7d');
+    expect(result).toEqual({
+      source: 'USD',
+      target: 'EUR',
+      period: '7d',
+      current: { rate: 0.9, time: '2026-10-16' },
+      rates: [
+        { rate: 0.88, time: '2026-10-14' },
+        { rate: 0.89, time: '2026-10-15' },
+        { rate: 0.9, time: '2026-10-16' },
+      ],
+    });
+  });
+
+  it('passes a custom period', async () => {
+    const fetchMock = historyFetch({ EUR: [] });
+    vi.stubGlobal('fetch', fetchMock);
+    const result = await client.getHistoricalRates('USD', 'EUR', '1y');
+    expect(fetchMock.mock.calls[0][0]).toContain('period=1y');
+    expect(result.rates).toEqual([]);
   });
 });
