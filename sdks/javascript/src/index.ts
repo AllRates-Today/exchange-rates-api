@@ -22,22 +22,14 @@ export interface RequestOptions {
 export interface RateResponse {
   from: { currency: string; amount: number };
   to: { currency: string; amount: number };
-  /** Units of `to` per 1 unit of `from`. */
   rate: number;
-  /** Rate type label, e.g. `interbank` (live mid-market). */
   source: string;
-  /** Rate timestamp (ISO 8601, UTC) when the API returns one. */
-  time?: string;
 }
 
 export interface AuthRateResponse {
-  /** Units of `target` per 1 unit of `source`. */
   rate: number;
-  /** Base currency code. */
   source: string;
-  /** Quote currency code. */
   target: string;
-  /** Rate timestamp (ISO 8601, UTC). */
   time: string;
 }
 
@@ -50,26 +42,21 @@ export interface LatestOptions extends RequestOptions {
 
 export interface LatestResponse {
   base: string;
-  /** Timestamp of the rates (ISO 8601, UTC). */
   date: string;
-  /** Units of each currency per 1 unit of `base`. */
   rates: Record<string, number>;
 }
 
 export interface ForDateOptions extends RequestOptions {
   /** Base currency code. Default: `USD` */
   base?: string;
-  /** Target currency codes (required). Each symbol is one history request. */
-  symbols: string[];
+  /** Array of target currency codes. */
+  symbols?: string[];
 }
 
 export interface ForDateResponse {
   base: string;
-  /** The date you asked for (YYYY-MM-DD). */
   date: string;
   rates: Record<string, number>;
-  /** Date of the data point actually used per currency. Equal to `date` unless no point exists for that day (then the closest earlier one). */
-  rateDates: Record<string, string>;
 }
 
 export interface ConvertOptions extends RequestOptions {
@@ -83,17 +70,14 @@ export interface ConvertResponse {
   amount: number;
   result: number;
   rate: number;
-  /** Requested date, for historical conversions. */
   date?: string;
-  /** Date of the data point actually used, for historical conversions. */
-  rateDate?: string;
 }
 
 export interface TimeSeriesOptions extends RequestOptions {
   /** Base currency code. Default: `USD` */
   base?: string;
-  /** Target currency codes (required). Each symbol is one history request. */
-  symbols: string[];
+  /** Array of target currency codes. */
+  symbols?: string[];
 }
 
 export interface TimeSeriesResponse {
@@ -103,40 +87,16 @@ export interface TimeSeriesResponse {
   rates: Record<string, Record<string, number>>;
 }
 
-export type HistoryPeriod = '1d' | '7d' | '30d' | '1y';
-
-export interface HistoryPoint {
-  /** `YYYY-MM-DD` for daily/weekly points, full ISO timestamp for hourly (`1d`) points. */
-  date: string;
-  rate: number;
-  /** Unix time in milliseconds. */
-  timestamp: number;
-}
-
 export interface HistoricalRateResponse {
   source: string;
   target: string;
   period: string;
-  /** Most recent point in the series. */
   current: { rate: number; time: string };
-  /** Points oldest first. `time` is the point's date (or timestamp for `1d`). */
   rates: Array<{ rate: number; time: string }>;
-  /** Raw points as the API returns them. */
-  data: HistoryPoint[];
-}
-
-export interface CurrencyInfo {
-  code: string;
-  name: string;
-  symbol: string;
 }
 
 export interface SymbolsResponse {
-  /** Code → name, e.g. `{ USD: 'US Dollar' }`. */
   symbols: Record<string, string>;
-  /** Full list with display symbols. */
-  currencies: CurrencyInfo[];
-  count: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -176,33 +136,13 @@ export interface OfficialRatesResponse {
   target?: string;
   rate?: number;
   rate_type?: string;
-  /** True when the pair is not published as-is: the inverse of a published rate (keyless), or a cross via the bank's base (`officialRatesOn`). */
+  /** True when the pair was cross-computed inside the bank's own table rather than published directly. */
   derived?: boolean;
-  method?: 'published' | 'inverse' | 'cross';
+  method?: 'published' | 'inverse';
   /** True when the institution is behind its own publication schedule. */
   stale?: boolean;
   attribution: OfficialRateAttribution;
   free_key: string;
-}
-
-export interface DatedOfficialRatesResponse {
-  bank: string;
-  /** Institution name, e.g. `European Central Bank`. */
-  name: string;
-  /** The date you asked for (YYYY-MM-DD). */
-  requested_date: string;
-  /** Publication date of the table actually returned. Earlier than `requested_date` on weekends/holidays. */
-  rate_date: string;
-  published_on_requested_date: boolean;
-  /** Full published table. Present when no pair was requested. */
-  rates?: OfficialRateEntry[];
-  source?: string;
-  target?: string;
-  rate?: number;
-  rate_type?: string;
-  derived?: boolean;
-  method?: 'published' | 'inverse' | 'cross';
-  disclaimer?: string;
 }
 
 export interface OfficialSource {
@@ -223,29 +163,14 @@ export interface OfficialSourcesResponse {
   free_key: string;
 }
 
-export type AllRatesTodayErrorCode = 'missing_key' | 'invalid_argument' | 'http' | 'timeout' | 'network';
-
 export class AllRatesTodayError extends Error {
-  /** HTTP status code, for `code: 'http'` errors. */
+  /** HTTP status code (when available). */
   status?: number;
-  /** What went wrong: `missing_key`, `invalid_argument`, `http`, `timeout` or `network`. */
-  code: AllRatesTodayErrorCode;
-  /** Parsed JSON error body from the API, e.g. `{ error, used, limit, plan, resets_at }` on 429. */
-  details?: Record<string, unknown>;
 
-  constructor(
-    message: string,
-    status?: number,
-    code?: AllRatesTodayErrorCode,
-    details?: Record<string, unknown>,
-    options?: { cause?: unknown },
-  ) {
+  constructor(message: string, status?: number) {
     super(message);
     this.name = 'AllRatesTodayError';
     this.status = status;
-    this.code = code ?? (status !== undefined ? 'http' : 'invalid_argument');
-    this.details = details;
-    if (options?.cause !== undefined) (this as { cause?: unknown }).cause = options.cause;
   }
 }
 
@@ -281,9 +206,7 @@ export class AllRatesToday {
     const key = override || this.apiKey;
     if (!key) {
       throw new AllRatesTodayError(
-        'API key is required. Register for free at https://allratestoday.com/register',
-        undefined,
-        'missing_key',
+        'API key is required. Register for free at https://allratestoday.com/register'
       );
     }
     return key;
@@ -307,34 +230,16 @@ export class AllRatesToday {
       headers['Authorization'] = `Bearer ${apiKey}`;
     }
 
-    let response: Response;
-    try {
-      response = await fetch(url.toString(), {
-        headers,
-        signal: AbortSignal.timeout(this.timeout),
-      });
-    } catch (err) {
-      const name = (err as { name?: string })?.name;
-      if (name === 'TimeoutError' || name === 'AbortError') {
-        throw new AllRatesTodayError(`Request timed out after ${this.timeout} ms`, undefined, 'timeout', undefined, { cause: err });
-      }
-      throw new AllRatesTodayError(
-        `Network error: ${(err as Error)?.message ?? String(err)}`,
-        undefined,
-        'network',
-        undefined,
-        { cause: err },
-      );
-    }
+    const response = await fetch(url.toString(), {
+      headers,
+      signal: AbortSignal.timeout(this.timeout),
+    });
 
     if (!response.ok) {
-      const body = await response.json().catch(() => ({ error: response.statusText }));
-      const details = body && typeof body === 'object' ? (body as Record<string, unknown>) : undefined;
+      const error = await response.json().catch(() => ({ error: response.statusText }));
       throw new AllRatesTodayError(
-        (details?.error as string) || `HTTP ${response.status}`,
+        (error as any).error || `HTTP ${response.status}`,
         response.status,
-        'http',
-        details,
       );
     }
 
@@ -342,60 +247,10 @@ export class AllRatesToday {
   }
 
   private formatDate(date: string | Date): string {
-    const str = date instanceof Date ? date.toISOString().split('T')[0] : date;
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(str) || Number.isNaN(Date.parse(`${str}T00:00:00Z`))) {
-      throw new AllRatesTodayError(`Invalid date: ${String(date)}. Use YYYY-MM-DD or a Date.`);
+    if (date instanceof Date) {
+      return date.toISOString().split('T')[0];
     }
-    return str;
-  }
-
-  private requireSymbols(symbols: string[] | undefined, method: string): string[] {
-    if (!symbols?.length) {
-      throw new AllRatesTodayError(`${method}() needs symbols, e.g. { symbols: ['EUR'] }. Each symbol is one request.`);
-    }
-    return symbols;
-  }
-
-  /**
-   * Smallest history window that reaches back to `start`. Market history is
-   * served as windows ending today (7 days, 30 days, 1 year), so older dates
-   * are not available from the market-rate API.
-   */
-  private windowFor(start: string): '7d' | '30d' | '1y' {
-    const today = new Date().toISOString().split('T')[0];
-    const days = Math.round((Date.parse(`${today}T00:00:00Z`) - Date.parse(`${start}T00:00:00Z`)) / 86_400_000);
-    if (days < 0) throw new AllRatesTodayError(`Date ${start} is in the future.`);
-    if (days <= 6) return '7d';
-    if (days <= 29) return '30d';
-    if (days <= 364) return '1y';
-    throw new AllRatesTodayError(
-      `Market-rate history covers the last 365 days; ${start} is older. ` +
-      'For older dates use official central-bank rates: GET /api/v1/central-bank/{bank}/{date} (e.g. ECB from 1999).',
-    );
-  }
-
-  private async history(
-    source: string,
-    target: string,
-    period: HistoryPeriod,
-    key: string,
-  ): Promise<HistoryPoint[]> {
-    const raw = await this.request<{ data?: HistoryPoint[] }>(
-      '/api/historical-rates',
-      { source, target, period },
-      key,
-    );
-    return (raw.data ?? []).slice().sort((a, b) => a.timestamp - b.timestamp);
-  }
-
-  /** Last point on or before `date` (YYYY-MM-DD). */
-  private pointOn(points: HistoryPoint[], date: string): HistoryPoint | undefined {
-    let hit: HistoryPoint | undefined;
-    for (const p of points) {
-      if (p.date.slice(0, 10) <= date) hit = p;
-      else break;
-    }
-    return hit;
+    return date;
   }
 
   // -------------------------------------------------------------------------
@@ -436,78 +291,98 @@ export class AllRatesToday {
   }
 
   /**
-   * Get mid-market rates for a past date within the last 365 days.
-   *
-   * One history request per symbol. Billed per request by window: dates up to
-   * 29 days ago cost 1 call per symbol, older dates (up to 1 year) cost 12,
-   * because the 1-year window is weekly points. If a day has no point, the
-   * closest earlier one is used and reported in `rateDates`.
+   * Get exchange rates for a specific historical date.
    *
    * ```ts
-   * const data = await client.forDate('2026-10-01', { base: 'USD', symbols: ['EUR', 'GBP'] });
-   * // { base: 'USD', date: '2026-10-01', rates: { EUR: 0.85, GBP: 0.74 }, rateDates: { ... } }
+   * // Using a string
+   * const data = await client.forDate('2026-01-15');
+   *
+   * // Using a Date object
+   * const data = await client.forDate(new Date('2026-01-15'));
+   *
+   * // With options
+   * const data = await client.forDate('2026-01-15', { base: 'EUR', symbols: ['USD', 'GBP'] });
    * ```
    */
   async forDate(
     date: string | Date,
-    options: ForDateOptions,
+    options: ForDateOptions = {},
   ): Promise<ForDateResponse> {
-    const key = this.resolveKey(options?.apiKey);
+    const key = this.resolveKey(options.apiKey);
     const dateStr = this.formatDate(date);
-    const symbols = this.requireSymbols(options?.symbols, 'forDate');
-    const base = (options.base || 'USD').toUpperCase();
-    const period = this.windowFor(dateStr);
+    const params: Record<string, string> = {
+      source: options.base || 'USD',
+      from: dateStr,
+      to: dateStr,
+    };
+    if (options.symbols?.length) {
+      params.target = options.symbols.join(',');
+    }
+    const raw = await this.request<HistoricalRateResponse>(
+      '/api/historical-rates',
+      params,
+      key,
+    );
     const rates: Record<string, number> = {};
-    const rateDates: Record<string, string> = {};
-    for (const sym of symbols) {
-      const target = sym.toUpperCase();
-      const point = this.pointOn(await this.history(base, target, period, key), dateStr);
-      if (point) {
-        rates[target] = point.rate;
-        rateDates[target] = point.date.slice(0, 10);
+    if (raw.rates?.length) {
+      for (const r of raw.rates) {
+        rates[raw.target] = r.rate;
       }
     }
-    return { base, date: dateStr, rates, rateDates };
+    if (raw.current) {
+      rates[raw.target] = raw.current.rate;
+    }
+    return { base: params.source, date: dateStr, rates };
   }
 
   /**
-   * Daily mid-market rates between two dates within the last 365 days.
-   *
-   * One history request per symbol. Ranges starting up to 29 days ago return
-   * daily points (1 call per symbol); older starts use the 1-year window,
-   * which has weekly points and costs 12 calls per symbol.
+   * Get exchange rate time series between two dates.
    *
    * ```ts
-   * const data = await client.timeSeries('2026-10-01', '2026-10-10', { symbols: ['EUR', 'GBP'] });
-   * console.log(data.rates['2026-10-05']); // { EUR: 0.86, GBP: 0.75 }
+   * const data = await client.timeSeries('2026-01-01', '2026-03-31', {
+   *   base: 'USD',
+   *   symbols: ['EUR', 'GBP'],
+   * });
+   *
+   * // Access rates by date
+   * console.log(data.rates['2026-01-15']); // { EUR: 0.92, GBP: 0.78 }
    * ```
    */
   async timeSeries(
     startDate: string | Date,
     endDate: string | Date,
-    options: TimeSeriesOptions,
+    options: TimeSeriesOptions = {},
   ): Promise<TimeSeriesResponse> {
-    const key = this.resolveKey(options?.apiKey);
+    const key = this.resolveKey(options.apiKey);
     const start = this.formatDate(startDate);
     const end = this.formatDate(endDate);
-    if (start > end) throw new AllRatesTodayError(`startDate ${start} is after endDate ${end}.`);
-    const symbols = this.requireSymbols(options?.symbols, 'timeSeries');
-    const base = (options.base || 'USD').toUpperCase();
-    const period = this.windowFor(start);
+    const source = options.base || 'USD';
+    const params: Record<string, string> = {
+      source,
+      from: start,
+      to: end,
+    };
+    if (options.symbols?.length) {
+      params.target = options.symbols.join(',');
+    }
+    const raw = await this.request<HistoricalRateResponse>(
+      '/api/historical-rates',
+      params,
+      key,
+    );
     const rates: Record<string, Record<string, number>> = {};
-    for (const sym of symbols) {
-      const target = sym.toUpperCase();
-      for (const point of await this.history(base, target, period, key)) {
-        const day = point.date.slice(0, 10);
-        if (day < start || day > end) continue;
-        (rates[day] ??= {})[target] = point.rate;
+    if (raw.rates) {
+      for (const point of raw.rates) {
+        const dateKey = point.time.split('T')[0];
+        if (!rates[dateKey]) rates[dateKey] = {};
+        rates[dateKey][raw.target] = point.rate;
       }
     }
-    return { base, startDate: start, endDate: end, rates };
+    return { base: source, startDate: start, endDate: end, rates };
   }
 
   /**
-   * Get all supported currency codes and names. **No API key needed.**
+   * Get all supported currency symbols.
    *
    * ```ts
    * const { symbols } = await client.symbols();
@@ -519,15 +394,8 @@ export class AllRatesToday {
    * ```
    */
   async symbols(options: RequestOptions = {}): Promise<SymbolsResponse> {
-    const raw = await this.request<{ currencies?: CurrencyInfo[]; count?: number }>(
-      '/api/v1/symbols',
-      {},
-      options.apiKey,
-    );
-    const currencies = raw.currencies ?? [];
-    const symbols: Record<string, string> = {};
-    for (const c of currencies) symbols[c.code] = c.name;
-    return { symbols, currencies, count: raw.count ?? currencies.length };
+    const key = this.resolveKey(options.apiKey);
+    return this.request<SymbolsResponse>('/api/v1/symbols', {}, key);
   }
 
   /**
@@ -541,12 +409,12 @@ export class AllRatesToday {
    * const table = await client.officialRates('ecb');
    * console.log(table.rate_date, table.rates);
    *
-   * // One pair — published as-is or the inverse of a published rate (`derived: true`)
+   * // One pair — cross-computed inside the bank's table when not published directly
    * const usd = await client.officialRates('ecb', { source: 'EUR', target: 'USD' });
    * console.log(`ECB ${usd.rate_date}: 1 EUR = ${usd.rate} USD`);
    * ```
    *
-   * Cross pairs and past dates need a key: use `officialRatesOn()`.
+   * Dated tables and history need a free key: see `/api/v1/central-bank/{bank}/{date}`.
    */
   async officialRates(
     bank: string,
@@ -568,44 +436,6 @@ export class AllRatesToday {
       `/api/open/central-bank/${encodeURIComponent(code)}`,
       params,
       options.apiKey,
-    );
-  }
-
-  /**
-   * Official table (or one pair) as published on a given date. Needs an API
-   * key; 1 call. On weekends and holidays the last earlier publication is
-   * returned (`published_on_requested_date: false`). Unlike the keyless
-   * `officialRates()`, any pair inside the table can be cross-computed
-   * (`method: 'cross'`), e.g. USD/GBP from the ECB's EUR table.
-   *
-   * ```ts
-   * const r = await client.officialRatesOn('rbi', '2026-09-30', { source: 'USD', target: 'INR' });
-   * console.log(r.rate_date, r.rate); // 2026-09-30 95.9832
-   * ```
-   */
-  async officialRatesOn(
-    bank: string,
-    date: string | Date,
-    options: OfficialRateOptions = {},
-  ): Promise<DatedOfficialRatesResponse> {
-    const key = this.resolveKey(options.apiKey);
-    const code = bank.trim().toLowerCase();
-    if (!/^[a-z0-9_-]{2,20}$/.test(code)) {
-      throw new AllRatesTodayError(`Invalid source code: ${bank}. Call officialSources() for the list.`);
-    }
-    if (Boolean(options.source) !== Boolean(options.target)) {
-      throw new AllRatesTodayError('Provide both source and target, or neither.');
-    }
-    const dateStr = this.formatDate(date);
-    const params: Record<string, string> = {};
-    if (options.source && options.target) {
-      params.source = options.source.toUpperCase();
-      params.target = options.target.toUpperCase();
-    }
-    return this.request<DatedOfficialRatesResponse>(
-      `/api/v1/central-bank/${encodeURIComponent(code)}/${dateStr}`,
-      params,
-      key,
     );
   }
 
@@ -643,21 +473,7 @@ export class AllRatesToday {
     const key = this.resolveKey(options.apiKey);
     const params: Record<string, string> = { source: from, target: to };
     if (amount !== undefined) params.amount = String(amount);
-    const raw = await this.request<RateResponse | AuthRateResponse | AuthRateResponse[]>('/api/v1/rates', params, key);
-    // Without `amount` the API answers with the rates array; normalise to one shape.
-    if (Array.isArray(raw) || !('from' in raw)) {
-      const r = Array.isArray(raw) ? raw[0] : raw;
-      if (!r) throw new AllRatesTodayError(`No rate returned for ${from}/${to}`);
-      const qty = amount ?? 1;
-      return {
-        from: { currency: r.source, amount: qty },
-        to: { currency: r.target, amount: Number((qty * r.rate).toFixed(6)) },
-        rate: r.rate,
-        source: 'interbank',
-        time: r.time,
-      };
-    }
-    return raw;
+    return this.request<RateResponse>('/api/v1/rates', params, key);
   }
 
   /**
@@ -674,13 +490,11 @@ export class AllRatesToday {
     options: RequestOptions = {},
   ): Promise<AuthRateResponse[]> {
     const key = this.resolveKey(options.apiKey);
-    const raw = await this.request<AuthRateResponse | AuthRateResponse[]>('/api/v1/rates', { source, target }, key);
-    return Array.isArray(raw) ? raw : [raw];
+    return this.request<AuthRateResponse[]>('/api/v1/rates', { source, target }, key);
   }
 
   /**
-   * Mid-market history for a preset window ending today: `1d` (hourly),
-   * `7d` / `30d` (daily) or `1y` (weekly). `1y` is billed as 12 calls.
+   * Get historical rates by period.
    *
    * ```ts
    * const history = await client.getHistoricalRates('USD', 'EUR', '30d');
@@ -692,21 +506,15 @@ export class AllRatesToday {
   async getHistoricalRates(
     source: string,
     target: string,
-    period: HistoryPeriod = '7d',
+    period: '1d' | '7d' | '30d' | '1y' = '7d',
     options: RequestOptions = {},
   ): Promise<HistoricalRateResponse> {
     const key = this.resolveKey(options.apiKey);
-    const data = await this.history(source, target, period, key);
-    const rates = data.map((p) => ({ rate: p.rate, time: p.date }));
-    const last = rates[rates.length - 1];
-    return {
-      source: source.toUpperCase(),
-      target: target.toUpperCase(),
-      period,
-      current: last ?? { rate: 0, time: '' },
-      rates,
-      data,
-    };
+    return this.request<HistoricalRateResponse>(
+      '/api/historical-rates',
+      { source, target, period },
+      key,
+    );
   }
 
   /**
@@ -733,21 +541,19 @@ export class AllRatesToday {
     if (options.date) {
       // Historical conversion
       const dateStr = this.formatDate(options.date);
-      const target = to.toUpperCase();
-      const day = await this.forDate(dateStr, { base: from, symbols: [target], apiKey: key });
-      const rate = day.rates[target];
-      if (rate === undefined) {
-        throw new AllRatesTodayError(`No ${from}/${to} rate available on or before ${dateStr}`);
-      }
-      return {
-        from,
-        to,
-        amount,
-        result: Number((amount * rate).toFixed(6)),
-        rate,
-        date: dateStr,
-        rateDate: day.rateDates[target],
+      const params: Record<string, string> = {
+        source: from,
+        target: to,
+        from: dateStr,
+        to: dateStr,
       };
+      const raw = await this.request<HistoricalRateResponse>(
+        '/api/historical-rates',
+        params,
+        key,
+      );
+      const rate = raw.current?.rate ?? raw.rates?.[0]?.rate ?? 0;
+      return { from, to, amount, result: Number((amount * rate).toFixed(6)), rate, date: dateStr };
     }
 
     // Current conversion
