@@ -35,7 +35,10 @@ def get_all_rates(source: str) -> list:
 
 
 def get_historical_rate(source: str, target: str, date: str) -> dict:
-    """Get historical exchange rate for a specific date."""
+    """Get historical exchange rate for a specific date.
+
+    Paid plans only: free and trial keys get 403 historical_requires_paid_plan.
+    """
     response = requests.get(
         f'{BASE_URL}/rates',
         params={'source': source, 'target': target, 'time': date},

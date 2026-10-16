@@ -61,7 +61,8 @@ class AllRatesToday
     }
 
     /**
-     * Get historical rates (requires API key).
+     * Get historical rates (requires a paid plan; free and trial keys get
+     * HTTP 403 historical_requires_paid_plan).
      *
      * @param string $source Source currency code
      * @param string $target Target currency code

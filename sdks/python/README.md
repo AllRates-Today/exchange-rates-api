@@ -90,7 +90,7 @@ print(data["rates"])
 
 ### Historical Exchange Rates
 
-Travel back in time to get rates from any date:
+Travel back in time to get rates from any date (paid plans; free and trial keys get a 403 `historical_requires_paid_plan`):
 
 ```python
 # Using a string date
@@ -120,7 +120,7 @@ data = client.for_date(datetime(2026, 1, 15, 12, 0, 0))
 
 ### Currency Conversion
 
-Convert any amount between currencies — including historical conversions:
+Convert any amount between currencies — including historical conversions (paid plans):
 
 ```python
 # Current conversion
@@ -164,7 +164,7 @@ for code, name in data["symbols"].items():
 
 ### Time Series Data
 
-Get exchange rates over a date range for trend analysis and charting:
+Get exchange rates over a date range for trend analysis and charting (paid plans):
 
 ```python
 data = client.time_series(
@@ -217,7 +217,7 @@ print(f"$500 = €{rate['to']['amount']}")
 
 ### Historical Rates by Period
 
-Get historical rates using preset periods — no date math needed:
+Get historical rates using preset periods — no date math needed (paid plans):
 
 ```python
 history = client.get_historical_rates("USD", "EUR", "30d")
@@ -311,13 +311,13 @@ pytest tests/ --cov=allratestoday --cov-report=term-missing
 | Method                                              | Description                                                |
 | --------------------------------------------------- | ---------------------------------------------------------- |
 | `latest(base, symbols, api_key)`                    | Get latest rates for one or more currencies                |
-| `for_date(date, base, symbols, api_key)`            | Get rates for a specific historical date                   |
-| `convert(from, to, amount, date, api_key)`          | Convert amount (supports historical date)                  |
-| `time_series(start, end, base, symbols, api_key)`   | Get rates across a custom date range                       |
+| `for_date(date, base, symbols, api_key)`            | Get rates for a specific historical date (paid plan)       |
+| `convert(from, to, amount, date, api_key)`          | Convert amount (historical date needs a paid plan)         |
+| `time_series(start, end, base, symbols, api_key)`   | Get rates across a custom date range (paid plan)           |
 | `symbols(api_key)`                                  | List all 160+ supported currency codes and names           |
 | `get_rate(from, to, amount, api_key)`               | Get a single exchange rate                                 |
 | `get_rates(source, target, api_key)`                | Get rates with full metadata                               |
-| `get_historical_rates(source, target, period, api_key)` | Historical rates by preset period (1d/7d/30d/1y)      |
+| `get_historical_rates(source, target, period, api_key)` | Historical rates by preset period (1d/7d/30d/1y; paid plan) |
 
 ---
 
@@ -334,7 +334,7 @@ The same rates are available to coding agents and LLM tools without a second int
 - **Claude Code plugin** (no key): `/plugin marketplace add AllRates-Today/claude-code-plugin` then `/plugin install allratestoday@allratestoday`
 - **Hosted MCP endpoint**: `https://allratestoday.com/api/mcp` — Streamable HTTP, keyless, nothing to install
 - **Local MCP servers**: `npx -y @allratestoday/mcp-server` (live mid-market rates) · `npx -y @allratestoday/central-bank-mcp` (official central-bank rates)
-- **Trial key for agents, no signup**: `POST https://allratestoday.com/api/agent/keys` (send `Content-Type: application/json`) returns a 100-call key valid 7 days, enough to try history and dated tables; both MCP servers expose it as `request_trial_key`
+- **Trial key for agents, no signup**: `POST https://allratestoday.com/api/agent/keys` (send `Content-Type: application/json`) returns a 100-call key valid 7 days for latest rates and latest central-bank tables (history and dated tables are paid-plan only); both MCP servers expose it as `request_trial_key`
 - **Daily Reference Rate** (first published 2026-10-12): one fixed USD table per business day, the 16:00 London median of minute samples, never revised — keyless at `https://allratestoday.com/api/open/reference-rate`, `get_reference_rate` in the MCP server
 - Machine-readable site guide: [llms.txt](https://allratestoday.com/llms.txt)
 

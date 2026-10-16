@@ -27,7 +27,7 @@ echo "1 USD = {$rate[0]['rate']} EUR\n";
 $result = $client->convert('USD', 'EUR', 100);
 echo "\$100 = €{$result['result']}\n";
 
-// Get historical rates
+// Get historical rates (paid plans; free and trial keys get 403 historical_requires_paid_plan)
 $history = $client->getHistoricalRates('USD', 'EUR', '30d');
 foreach ($history['rates'] as $point) {
     echo "{$point['time']}: {$point['rate']}\n";
@@ -51,7 +51,7 @@ foreach ($history['rates'] as $point) {
 | `getRate($from, $to, $amount)` | Get exchange rate between two currencies |
 | `convert($from, $to, $amount)` | Convert amount between currencies |
 | `getRates($source, $target)` | Get rate data with metadata |
-| `getHistoricalRates($source, $target, $period)` | Historical rates (1d/7d/30d/1y) |
+| `getHistoricalRates($source, $target, $period)` | Historical rates (1d/7d/30d/1y; paid plan) |
 
 All methods require an API key.
 
@@ -82,7 +82,7 @@ The same rates are available to coding agents and LLM tools without a second int
 - **Claude Code plugin** (no key): `/plugin marketplace add AllRates-Today/claude-code-plugin` then `/plugin install allratestoday@allratestoday`
 - **Hosted MCP endpoint**: `https://allratestoday.com/api/mcp` — Streamable HTTP, keyless, nothing to install
 - **Local MCP servers**: `npx -y @allratestoday/mcp-server` (live mid-market rates) · `npx -y @allratestoday/central-bank-mcp` (official central-bank rates)
-- **Trial key for agents, no signup**: `POST https://allratestoday.com/api/agent/keys` (send `Content-Type: application/json`) returns a 100-call key valid 7 days, enough to try history and dated tables; both MCP servers expose it as `request_trial_key`
+- **Trial key for agents, no signup**: `POST https://allratestoday.com/api/agent/keys` (send `Content-Type: application/json`) returns a 100-call key valid 7 days for latest rates and latest central-bank tables (history and dated tables are paid-plan only); both MCP servers expose it as `request_trial_key`
 - **Daily Reference Rate** (first published 2026-10-12): one fixed USD table per business day, the 16:00 London median of minute samples, never revised — keyless at `https://allratestoday.com/api/open/reference-rate`, `get_reference_rate` in the MCP server
 - Machine-readable site guide: [llms.txt](https://allratestoday.com/llms.txt)
 

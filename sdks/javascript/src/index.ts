@@ -337,7 +337,8 @@ export class AllRatesToday {
   }
 
   /**
-   * Get exchange rates for a specific historical date.
+   * Get exchange rates for a specific historical date. Paid plans only: free and trial keys
+   * get a 403 `historical_requires_paid_plan` error.
    *
    * ```ts
    * // Using a string
@@ -366,7 +367,8 @@ export class AllRatesToday {
   }
 
   /**
-   * Get exchange rate time series between two dates.
+   * Get exchange rate time series between two dates. Paid plans only: free and trial keys
+   * get a 403 `historical_requires_paid_plan` error.
    *
    * ```ts
    * const data = await client.timeSeries('2026-01-01', '2026-03-31', {
@@ -437,7 +439,7 @@ export class AllRatesToday {
    * console.log(`ECB ${usd.rate_date}: 1 EUR = ${usd.rate} USD`);
    * ```
    *
-   * Dated tables and history need a free key: see `/api/v1/central-bank/{bank}/{date}`.
+   * Dated tables and history need a paid plan: see `/api/v1/central-bank/{bank}/{date}`.
    */
   async officialRates(
     bank: string,
@@ -529,7 +531,8 @@ export class AllRatesToday {
   }
 
   /**
-   * Get historical rates by period.
+   * Get historical rates by period. Paid plans only: free and trial keys
+   * get a 403 `historical_requires_paid_plan` error.
    *
    * ```ts
    * const history = await client.getHistoricalRates('USD', 'EUR', '30d');
@@ -565,7 +568,7 @@ export class AllRatesToday {
    * const result = await client.convert('USD', 'EUR', 1000);
    * console.log(`$1,000 = €${result.result}`);
    *
-   * // Historical conversion
+   * // Historical conversion (paid plans only)
    * const result = await client.convert('USD', 'EUR', 1000, { date: '2026-01-15' });
    * console.log(`Rate on Jan 15: ${result.rate}`);
    * ```

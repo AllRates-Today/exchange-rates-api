@@ -50,8 +50,10 @@ await cb.latest('hmrc');                                 // HMRC's published rat
 await cb.latest('boj', { source: 'USD', target: 'JPY' }); // one pair
 ```
 
-A [free API key](https://allratestoday.com/register) (no card) adds historical
-dates, time series, publication calendars and cross-source comparison:
+A [free API key](https://allratestoday.com/register) (no card) adds publication
+calendars and cross-source comparison. Historical dates and time series
+(`forDate`, `history`) need a [paid plan](https://allratestoday.com/pricing);
+free and trial keys get a 403. Pass the key:
 
 ```ts
 const cb = new CentralBankRates({ apiKey: process.env.ALLRATES_API_KEY });
@@ -66,8 +68,8 @@ Methods that need one throw `NeedsApiKeyError` — a subclass of
 |---|---|---|
 | `latest(bank, { source?, target? })` | no | Newest published table, or one pair from it |
 | `sources()` | yes | Every covered institution with coverage dates |
-| `forDate(bank, on, { source?, target? })` | yes | The table in force on a date |
-| `history(bank, { symbol?, from?, to? })` | yes | Date-by-date official series |
+| `forDate(bank, on, { source?, target? })` | paid plan | The table in force on a date |
+| `history(bank, { symbol?, from?, to? })` | paid plan | Date-by-date official series |
 | `availability(bank, { year? })` | yes | Which dates the institution actually published |
 | `compare(source, target)` | yes | One pair across every institution, with spread stats |
 
@@ -120,7 +122,7 @@ async function invoiceTotalInGbp(amountUsd: number, invoiceDate: string) {
 - **Single-source packages:** `ecb-exchange-rate`, `hmrc-exchange-rate` and 120 more
 - **MCP server** for AI agents: `npx -y @allratestoday/central-bank-mcp`, or the hosted keyless endpoint `https://allratestoday.com/api/mcp`
 - **Claude Code plugin:** `/plugin marketplace add AllRates-Today/claude-code-plugin`
-- **Trial key for agents** (no signup): `POST https://allratestoday.com/api/agent/keys` with `Content-Type: application/json` → 100 calls over 7 days, enough to test dated tables and history; MCP tool `request_trial_key`
+- **Trial key for agents** (no signup): `POST https://allratestoday.com/api/agent/keys` with `Content-Type: application/json` → 100 calls over 7 days for latest rates and latest tables (dated tables and history are paid-plan only); MCP tool `request_trial_key`
 
 ## Links
 

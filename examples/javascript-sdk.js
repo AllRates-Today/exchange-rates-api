@@ -17,7 +17,8 @@ async function main() {
   const result = await client.convert('USD', 'EUR', 1000);
   console.log(`$1,000 = €${result.result}`);
 
-  // Get rates for a specific date
+  // Get rates for a specific date (this and the next two calls need a paid plan;
+  // free and trial keys get 403 historical_requires_paid_plan)
   const historical = await client.forDate('2026-01-15', { base: 'USD', symbols: ['EUR'] });
   console.log('Rate on Jan 15:', historical.rates);
 

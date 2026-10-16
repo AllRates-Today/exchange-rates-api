@@ -85,8 +85,8 @@ export class NeedsApiKeyError extends CentralBankError {
  *
  * Works without an API key: {@link CentralBankRates.latest} reads the open,
  * edge-cached endpoint serving each source's most recent published table.
- * Historical dates, series, publication calendars and cross-source comparison
- * are metered and need a key.
+ * Publication calendars and cross-source comparison are metered and need a
+ * key; historical dates and series need a paid plan.
  *
  * ```ts
  * const cb = new CentralBankRates();               // no key needed

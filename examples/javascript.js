@@ -50,7 +50,8 @@ async function getAllRates(source) {
 }
 
 /**
- * Get historical exchange rate
+ * Get historical exchange rate.
+ * Paid plans only: free and trial keys get 403 historical_requires_paid_plan.
  */
 async function getHistoricalRate(source, target, date) {
   const response = await fetch(

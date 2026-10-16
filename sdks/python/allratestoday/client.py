@@ -154,6 +154,9 @@ class AllRatesToday:
     ) -> Dict[str, Any]:
         """Get exchange rates for a specific historical date.
 
+        Paid plans only: free and trial keys get a 403
+        ``historical_requires_paid_plan`` error.
+
         Args:
             date: Target date (``"YYYY-MM-DD"`` string, ``date``, or ``datetime``).
             base: Base currency code. Default: ``"USD"``.
@@ -200,6 +203,9 @@ class AllRatesToday:
         api_key: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Get exchange rate time series between two dates.
+
+        Paid plans only: free and trial keys get a 403
+        ``historical_requires_paid_plan`` error.
 
         Args:
             start_date: Start of the range (``"YYYY-MM-DD"``, ``date``, or ``datetime``).
@@ -321,6 +327,9 @@ class AllRatesToday:
     ) -> Dict[str, Any]:
         """Get historical rates by preset period.
 
+        Paid plans only: free and trial keys get a 403
+        ``historical_requires_paid_plan`` error.
+
         Args:
             source: Source currency code.
             target: Target currency code.
@@ -354,7 +363,8 @@ class AllRatesToday:
     ) -> Dict[str, Any]:
         """Convert an amount from one currency to another.
 
-        Supports both current and historical conversions.
+        Supports both current and historical conversions; a ``date`` needs a
+        paid plan (free and trial keys get a 403 ``historical_requires_paid_plan``).
 
         Args:
             from_currency: Source currency code.

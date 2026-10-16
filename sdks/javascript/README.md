@@ -123,7 +123,7 @@ console.log(data);
 
 ### Currency Conversion
 
-Convert any amount between currencies — including historical conversions:
+Convert any amount between currencies — including historical conversions (paid plans):
 
 ```typescript
 // Current conversion
@@ -199,7 +199,7 @@ console.log(data);
 
 ### Time Series Data
 
-Get exchange rates over a date range for trend analysis and charting:
+Get exchange rates over a date range for trend analysis and charting (paid plans):
 
 ```typescript
 const data = await client.timeSeries('2026-01-01', '2026-03-31', {
@@ -290,7 +290,7 @@ not the time of your call. Dated tables and history need a paid plan and use
 
 ### Historical Rates by Period
 
-Get historical rates using preset periods — no date math needed:
+Get historical rates using preset periods — no date math needed (paid plans):
 
 ```typescript
 const history = await client.getHistoricalRates('USD', 'EUR', '30d');
@@ -469,6 +469,8 @@ console.log(await getPrice(99.99, 'GBP')); // "78.90 GBP"
 
 ### Historical Chart Data
 
+Needs a paid plan (history is not included in free or trial keys).
+
 ```typescript
 import AllRatesToday from '@allratestoday/sdk';
 
@@ -494,13 +496,13 @@ console.log({ labels, values });
 | Method | Description |
 | ------ | ----------- |
 | `latest(options?)` | Get latest rates for one or more currencies |
-| `forDate(date, options?)` | Get rates for a specific historical date |
-| `convert(from, to, amount, options?)` | Convert amount between currencies (supports historical date) |
-| `timeSeries(start, end, options?)` | Get rates across a custom date range |
+| `forDate(date, options?)` | Get rates for a specific historical date (paid plan) |
+| `convert(from, to, amount, options?)` | Convert amount between currencies (historical `date` needs a paid plan) |
+| `timeSeries(start, end, options?)` | Get rates across a custom date range (paid plan) |
 | `symbols(options?)` | List all 160+ supported currency codes and names |
 | `getRate(from, to, amount?, options?)` | Get a single exchange rate |
 | `getRates(source, target, options?)` | Get rates with full metadata |
-| `getHistoricalRates(source, target, period?, options?)` | Historical rates by preset period (1d/7d/30d/1y) |
+| `getHistoricalRates(source, target, period?, options?)` | Historical rates by preset period (1d/7d/30d/1y; paid plan) |
 | `officialRates(bank, options?)` | Latest official table (or one pair) published by a central bank / tax authority — **keyless** |
 | `officialSources(options?)` | Every covered official source with latest publication date and freshness — **keyless** |
 
@@ -535,7 +537,7 @@ The same rates are available to coding agents and LLM tools without a second int
 - **Claude Code plugin** (no key): `/plugin marketplace add AllRates-Today/claude-code-plugin` then `/plugin install allratestoday@allratestoday`
 - **Hosted MCP endpoint**: `https://allratestoday.com/api/mcp` — Streamable HTTP, keyless, nothing to install
 - **Local MCP servers**: `npx -y @allratestoday/mcp-server` (live mid-market rates) · `npx -y @allratestoday/central-bank-mcp` (official central-bank rates)
-- **Trial key for agents, no signup**: `POST https://allratestoday.com/api/agent/keys` (send `Content-Type: application/json`) returns a 100-call key valid 7 days, enough to try history and dated tables; both MCP servers expose it as `request_trial_key`
+- **Trial key for agents, no signup**: `POST https://allratestoday.com/api/agent/keys` (send `Content-Type: application/json`) returns a 100-call key valid 7 days for latest rates and latest central-bank tables (history and dated tables are paid-plan only); both MCP servers expose it as `request_trial_key`
 - **Daily Reference Rate** (first published 2026-10-12): one fixed USD table per business day, the 16:00 London median of minute samples, never revised — keyless at `https://allratestoday.com/api/open/reference-rate`, `get_reference_rate` in the MCP server
 - Machine-readable site guide: [llms.txt](https://allratestoday.com/llms.txt)
 

@@ -45,9 +45,9 @@ class CentralBankRates:
     """Official published exchange rates from 121 central banks and tax authorities.
 
     Works without an API key: :meth:`latest` reads the open, edge-cached endpoint
-    that serves each source's most recent published table. Historical dates, time
-    series, publication calendars and cross-source comparison are metered and
-    need a key.
+    that serves each source's most recent published table. Publication calendars
+    and cross-source comparison are metered and need a key; historical dates and
+    time series need a paid plan.
 
     Args:
         api_key: Optional AllRatesToday API key. Free tier at

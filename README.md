@@ -24,9 +24,9 @@
 
 - ⚡ **Real-time rates** — Live mid-market exchange rates updated on every request
 - 🌍 **160+ currencies** — Major, emerging market, and popular currencies
-- 📅 **Historical data** — Access historical rates with flexible date ranges (1d/7d/30d/1y)
+- 📅 **Historical data** — Access historical rates with flexible date ranges (1d/7d/30d/1y) on paid plans
 - 📦 **Official SDKs** — JavaScript/TypeScript, Python, PHP, and React
-- 🆓 **Free tier** — Get started at no cost
+- 🆓 **Free tier** — Get started at no cost (300 requests for latest rates; history is on paid plans)
 - 🛡️ **Fast & reliable** — Powered by Cloudflare's global edge network
 - 💹 **Mid-market rates** — no retail spread baked in
 
@@ -50,7 +50,7 @@ console.log(`1 USD = ${rate.rate} EUR`);
 const result = await client.convert('USD', 'EUR', 100);
 console.log(`$100 = €${result.result}`);
 
-// Historical data
+// Historical data (paid plans; free and trial keys get 403 historical_requires_paid_plan)
 const history = await client.getHistoricalRates('USD', 'EUR', '30d');
 ```
 
@@ -72,7 +72,8 @@ print(f"1 USD = {rate[0]['rate']} EUR")
 result = client.convert("USD", "EUR", 100)
 print(f"$100 = €{result['result']}")
 
-# Historical data: {"source", "target", "data": [{"date", "rate", "timestamp"}, ...]}
+# Historical data (paid plans; free and trial keys get 403 historical_requires_paid_plan):
+# {"source", "target", "data": [{"date", "rate", "timestamp"}, ...]}
 history = client.get_historical_rates("USD", "EUR", "30d")
 ```
 
@@ -94,7 +95,7 @@ echo "1 USD = {$rate[0]['rate']} EUR";
 $result = $client->convert('USD', 'EUR', 100);
 echo "$100 = €{$result['result']}";
 
-// Historical data
+// Historical data (paid plans; free and trial keys get 403 historical_requires_paid_plan)
 $history = $client->getHistoricalRates('USD', 'EUR', '30d');
 ```
 
@@ -177,10 +178,10 @@ Get your free API key at [allratestoday.com/register](https://allratestoday.com/
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| GET | `/api/v1/rates` | Yes | Exchange rates (supports comma-separated targets) |
+| GET | `/api/v1/rates` | Yes | Exchange rates (supports comma-separated targets; `time` / `from`/`to` history needs a paid plan) |
 | GET | `/api/v1/symbols` | No | List all supported currencies |
 | GET | `/api/rate` | Yes | Simple pair rate lookup |
-| GET | `/api/historical-rates` | Yes | Historical rate data & time series |
+| GET | `/api/historical-rates` | Paid plan | Historical rate data & time series |
 
 ## 🌍 Supported Currencies
 
