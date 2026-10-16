@@ -2,6 +2,11 @@
  * AllRatesToday - React Currency Localizer Example
  * npm install react-currency-localizer-realtime
  * https://allratestoday.com
+ *
+ * Note: this example targets the legacy 1.x API-key props. The keyed
+ * /api/v1/* endpoints send no CORS headers, so a key cannot be used from the
+ * browser; use react-currency-localizer-realtime 2.x (keyless by default) or
+ * proxy rates through your own backend.
  */
 
 import React, { useState } from 'react';

@@ -7,6 +7,8 @@
 [![zero dependencies](https://img.shields.io/badge/runtime_deps-0-brightgreen.svg)](https://www.npmjs.com/package/react-currency-localizer-realtime)
 [![Security: Snyk](https://img.shields.io/badge/Security-Snyk-4C4A73?logo=snyk&logoColor=white)](https://snyk.io/test/github/allratestoday/exchange-rates-api)
 
+> **Legacy 1.x source.** This folder (1.0.x) sends your API key from the browser to the keyed `/api/v1/rates` endpoint. The keyed `/api/v1/*` endpoints send no CORS headers, so that call fails in browsers, and an API key should never ship in browser code. Install the published 2.x package (`npm install react-currency-localizer-realtime@2`), which is keyless by default, or proxy rates through your own backend.
+
 **React hooks and components for automatically displaying prices in a user's local currency using IP geolocation**
 
 Built with real-time mid-market exchange rates from AllRatesToday (mid-market, 160+ currencies). Perfect for e-commerce sites, pricing pages, and international applications.
