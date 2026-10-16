@@ -41,18 +41,18 @@ npm install @allratestoday/sdk
 ```typescript
 import AllRatesToday from '@allratestoday/sdk';
 
-const client = new AllRatesToday();
+// Official central-bank rates: no API key needed
+const ecb = await new AllRatesToday().officialRates('ecb', { source: 'EUR', target: 'USD' });
+console.log(`ECB ${ecb.rate_date}: 1 EUR = ${ecb.rate} USD`);
+
+// Live mid-market rates, conversion and history: free API key (server-side only)
+const client = new AllRatesToday({ apiKey: process.env.ALLRATESTODAY_API_KEY });
 const rate = await client.getRate('USD', 'EUR');
-console.log(`1 USD = ${rate.rate} EUR`);
-
-// Convert amount
 const result = await client.convert('USD', 'EUR', 100);
-console.log(`$100 = €${result.result}`);
-
-// With API key for higher limits & historical data
-const auth = new AllRatesToday({ apiKey: 'art_live_...' });
-const history = await auth.getHistoricalRates('USD', 'EUR', '30d');
+const history = await client.getHistoricalRates('USD', 'EUR', '30d');
 ```
+
+Full method reference, error codes and browser guidance: [sdks/javascript/README.md](sdks/javascript/README.md) · [changelog](sdks/javascript/CHANGELOG.md)
 
 ### Python
 

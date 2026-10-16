@@ -1,12 +1,13 @@
 {
   "name": "@allratestoday/sdk",
-  "version": "1.4.5",
-  "description": "Exchange Rate API — Real-time mid-market currency exchange rates for Node.js and browsers. 160+ currencies, zero dependencies, free tier.",
+  "version": "1.5.0",
+  "description": "Exchange rate API client: live mid-market rates for 160+ currencies and official rates from 121 central banks. TypeScript, zero dependencies, Node.js 18+.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "CHANGELOG.md"
   ],
   "exports": {
     ".": {
