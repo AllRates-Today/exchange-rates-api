@@ -505,7 +505,7 @@ export class AllRatesToday {
         from: { currency: r.source, amount: 1 },
         to: { currency: r.target, amount: r.rate },
         rate: r.rate,
-        source: 'interbank',
+        source: 'mid-market',
       };
     }
     return raw;

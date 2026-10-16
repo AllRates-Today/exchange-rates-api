@@ -165,7 +165,7 @@ describe('per-request API key override', () => {
       from: { currency: 'USD', amount: 1 },
       to: { currency: 'EUR', amount: 0.92 },
       rate: 0.92,
-      source: 'interbank',
+      source: 'mid-market',
     });
     vi.stubGlobal('fetch', fetchMock);
 
@@ -547,7 +547,7 @@ describe('history-backed methods', () => {
         from: { currency: 'USD', amount: 1000 },
         to: { currency: 'EUR', amount: 923.4 },
         rate: 0.9234,
-        source: 'interbank',
+        source: 'mid-market',
       });
       vi.stubGlobal('fetch', fetchMock);
 
@@ -600,7 +600,7 @@ describe('getRate()', () => {
       from: { currency: 'USD', amount: 1 },
       to: { currency: 'EUR', amount: 0.9234 },
       rate: 0.9234,
-      source: 'interbank',
+      source: 'mid-market',
     });
   });
 
@@ -609,7 +609,7 @@ describe('getRate()', () => {
       from: { currency: 'USD', amount: 500 },
       to: { currency: 'EUR', amount: 461.7 },
       rate: 0.9234,
-      source: 'interbank',
+      source: 'mid-market',
     };
     const fetchMock = mockFetch(body);
     vi.stubGlobal('fetch', fetchMock);

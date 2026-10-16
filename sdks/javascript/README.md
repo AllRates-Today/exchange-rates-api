@@ -95,6 +95,8 @@ console.log(data);
 
 ### Historical Exchange Rates
 
+> Historical methods (`forDate`, `timeSeries`, `getHistoricalRates` and `convert` with a `date`) need a paid plan from €4.99/month. Free and trial keys get latest rates only and receive a 403 `historical_requires_paid_plan` for history.
+
 Travel back in time to get rates from any date:
 
 ```typescript
@@ -282,8 +284,8 @@ console.log(sources.map((s) => `${s.code} ${s.latest}${s.stale ? ' (stale)' : ''
 ```
 
 Always cite the returned `rate_date` — it is the institution's publication date,
-not the time of your call. Dated tables, history and publication calendars sit
-behind the free key on `/api/v1/central-bank/{bank}/{date}`; see the
+not the time of your call. Dated tables and history need a paid plan and use
+`/api/v1/central-bank/{bank}/{date}`; publication calendars work on any key. See the
 [central bank rates API](https://allratestoday.com/central-bank-rates-api/).
 
 ### Historical Rates by Period
