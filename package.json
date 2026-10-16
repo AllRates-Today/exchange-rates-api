@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/allratestoday/exchange-rates-api"
+    "url": "https://github.com/AllRates-Today/exchange-rates-api"
   },
   "workspaces": [
     "sdks/javascript"

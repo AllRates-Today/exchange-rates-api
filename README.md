@@ -10,9 +10,9 @@
 - Overview: [Exchange Rate API](https://allratestoday.com/exchange-rate-api/) · [Currency API](https://allratestoday.com/currency-api/)
 
 [![API Status](https://img.shields.io/badge/API-Online-brightgreen)](https://allratestoday.com/status)
-[![Tests](https://github.com/allratestoday/exchange-rates-api/actions/workflows/test.yml/badge.svg)](https://github.com/allratestoday/exchange-rates-api/actions/workflows/test.yml)
-[![codecov](https://codecov.io/gh/allratestoday/exchange-rates-api/branch/main/graph/badge.svg)](https://codecov.io/gh/allratestoday/exchange-rates-api)
-[![Known Vulnerabilities](https://snyk.io/test/github/allratestoday/exchange-rates-api/badge.svg)](https://snyk.io/test/github/allratestoday/exchange-rates-api)
+[![Tests](https://github.com/AllRates-Today/exchange-rates-api/actions/workflows/test.yml/badge.svg)](https://github.com/AllRates-Today/exchange-rates-api/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/AllRates-Today/exchange-rates-api/branch/main/graph/badge.svg)](https://codecov.io/gh/AllRates-Today/exchange-rates-api)
+[![Known Vulnerabilities](https://snyk.io/test/github/AllRates-Today/exchange-rates-api/badge.svg)](https://snyk.io/test/github/AllRates-Today/exchange-rates-api)
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://www.npmjs.com/package/@allratestoday/sdk)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://www.typescriptlang.org/)
@@ -41,7 +41,8 @@ npm install @allratestoday/sdk
 ```typescript
 import AllRatesToday from '@allratestoday/sdk';
 
-const client = new AllRatesToday();
+// An API key is required (free at https://allratestoday.com/register)
+const client = new AllRatesToday({ apiKey: 'art_live_...' });
 const rate = await client.getRate('USD', 'EUR');
 console.log(`1 USD = ${rate.rate} EUR`);
 
@@ -49,9 +50,8 @@ console.log(`1 USD = ${rate.rate} EUR`);
 const result = await client.convert('USD', 'EUR', 100);
 console.log(`$100 = €${result.result}`);
 
-// With API key for higher limits & historical data
-const auth = new AllRatesToday({ apiKey: 'art_live_...' });
-const history = await auth.getHistoricalRates('USD', 'EUR', '30d');
+// Historical data
+const history = await client.getHistoricalRates('USD', 'EUR', '30d');
 ```
 
 ### Python
@@ -63,17 +63,17 @@ pip install allratestoday
 ```python
 from allratestoday import AllRatesToday
 
-client = AllRatesToday()
-rate = client.get_rate("USD", "EUR")
-print(f"1 USD = {rate['rate']} EUR")
+# An API key is required (free at https://allratestoday.com/register)
+client = AllRatesToday(api_key="art_live_...")
+rate = client.get_rate("USD", "EUR")  # returns a list of rate objects
+print(f"1 USD = {rate[0]['rate']} EUR")
 
 # Convert amount
 result = client.convert("USD", "EUR", 100)
 print(f"$100 = €{result['result']}")
 
-# With API key for higher limits & historical data
-auth = AllRatesToday(api_key="art_live_...")
-history = auth.get_historical_rates("USD", "EUR", "30d")
+# Historical data: {"source", "target", "data": [{"date", "rate", "timestamp"}, ...]}
+history = client.get_historical_rates("USD", "EUR", "30d")
 ```
 
 ### PHP
@@ -85,17 +85,17 @@ composer require allratestoday/sdk
 ```php
 use AllRatesToday\AllRatesToday;
 
-$client = new AllRatesToday();
-$rate = $client->getRate('USD', 'EUR');
-echo "1 USD = {$rate['rate']} EUR";
+// An API key is required (free at https://allratestoday.com/register)
+$client = new AllRatesToday('art_live_...');
+$rate = $client->getRate('USD', 'EUR'); // returns a list of rate objects
+echo "1 USD = {$rate[0]['rate']} EUR";
 
 // Convert amount
 $result = $client->convert('USD', 'EUR', 100);
 echo "$100 = €{$result['result']}";
 
-// With API key for higher limits & historical data
-$auth = new AllRatesToday('art_live_...');
-$history = $auth->getHistoricalRates('USD', 'EUR', '30d');
+// Historical data
+$history = $client->getHistoricalRates('USD', 'EUR', '30d');
 ```
 
 ### React
@@ -204,7 +204,7 @@ Get your free API key at [allratestoday.com/register](https://allratestoday.com/
 
 For the complete technical reference, download the **AllRatesToday Currency Data API Specifications** document:
 
-- **[Download PDF](docs/AllRatesToday-API-Specifications.pdf)** — Full 20-page API specification (endpoints, parameters, responses, error codes, SDKs)
+- **[Download PDF](docs/AllRatesToday-API-Specifications.pdf)** — Full 32-page API specification (endpoints, parameters, responses, error codes, SDKs)
 - **[View Online](https://allratestoday.com/api-specifications)** — Browse the specification on our website
 
 ## 🔗 Links
