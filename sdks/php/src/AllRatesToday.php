@@ -29,7 +29,8 @@ class AllRatesToday
      * @param string     $from   Source currency code (e.g., 'USD')
      * @param string     $to     Target currency code (e.g., 'EUR')
      * @param float|null $amount Optional amount to convert
-     * @return array{from: array, to: array, rate: float, source: string}
+     * @return array Without $amount: list of {rate, source, target, time} (use $rate[0]['rate']).
+     *               With $amount: {from: {currency, amount}, to: {currency, amount}, rate, source}.
      * @throws AllRatesTodayException
      */
     public function getRate(string $from, string $to, ?float $amount = null): array
@@ -75,11 +76,22 @@ class AllRatesToday
         if (!$this->apiKey) {
             throw new AllRatesTodayException('API key required for historical rates');
         }
-        return $this->request('/api/historical-rates', [
+        // The endpoint returns {data: [{date, rate, timestamp}]}; map it to rates / current.
+        $raw = $this->request('/api/historical-rates', [
             'source' => $source,
             'target' => $target,
             'period' => $period,
         ]);
+        $points = $raw['data'] ?? [];
+        usort($points, fn($a, $b) => $a['timestamp'] <=> $b['timestamp']);
+        $rates = array_map(fn($p) => ['rate' => $p['rate'], 'time' => $p['date']], $points);
+        return [
+            'source' => $source,
+            'target' => $target,
+            'period' => $period,
+            'current' => $rates ? $rates[count($rates) - 1] : ['rate' => 0, 'time' => ''],
+            'rates' => $rates,
+        ];
     }
 
     /**

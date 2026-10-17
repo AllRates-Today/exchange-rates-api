@@ -1,6 +1,6 @@
 """AllRatesToday API client."""
 
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from typing import Any, Dict, List, Optional, Union
 import urllib.request
 import urllib.parse
@@ -104,6 +104,51 @@ class AllRatesToday:
             return d.strftime("%Y-%m-%d")
         return d
 
+    @staticmethod
+    def _window_for(start: str) -> str:
+        """The history endpoint serves fixed windows ending today (7d, 30d, 1y)
+        and one target per call, so pick the smallest window that reaches ``start``."""
+        try:
+            days = (datetime.now(timezone.utc).date() - datetime.strptime(start, "%Y-%m-%d").date()).days
+        except ValueError:
+            raise AllRatesTodayError(f"Invalid date: {start}. Use YYYY-MM-DD.")
+        if days < 0:
+            raise AllRatesTodayError(f"Date {start} is in the future.")
+        if days <= 6:
+            return "7d"
+        if days <= 29:
+            return "30d"
+        if days <= 364:
+            return "1y"
+        raise AllRatesTodayError(
+            f"Historical market rates cover the last 365 days; {start} is older."
+        )
+
+    @staticmethod
+    def _require_symbols(symbols: Optional[List[str]], method: str) -> List[str]:
+        if not symbols:
+            raise AllRatesTodayError(f"{method}() needs symbols, e.g. symbols=['EUR'].")
+        return symbols
+
+    def _history_points(
+        self, source: str, target: str, period: str, key: str
+    ) -> List[Dict[str, Any]]:
+        raw = self._request(
+            "/api/historical-rates",
+            {"source": source, "target": target, "period": period},
+            key,
+        )
+        return sorted(raw.get("data") or [], key=lambda p: p["timestamp"])
+
+    def _rate_on(self, source: str, target: str, day: str, key: str) -> Optional[float]:
+        """Rate on ``day``, or the closest earlier point (the 1y window is weekly)."""
+        rate = None
+        for p in self._history_points(source, target, self._window_for(day), key):
+            if p["date"][:10] > day:
+                break
+            rate = p["rate"]
+        return rate
+
     # -------------------------------------------------------------------------
     # Public API
     # -------------------------------------------------------------------------
@@ -160,16 +205,16 @@ class AllRatesToday:
         Args:
             date: Target date (``"YYYY-MM-DD"`` string, ``date``, or ``datetime``).
             base: Base currency code. Default: ``"USD"``.
-            symbols: List of target currency codes.
+            symbols: List of target currency codes (required; one request each).
             api_key: Override the API key for this request only.
 
         Returns:
-            dict with ``base``, ``date``, and ``rates``.
+            dict with ``base``, ``date``, and ``rates``. Covers the last 365 days.
 
         Example::
 
             # Using a string
-            data = client.for_date("2026-01-15")
+            data = client.for_date("2026-01-15", symbols=["EUR"])
 
             # Using a date object
             from datetime import date
@@ -177,20 +222,11 @@ class AllRatesToday:
         """
         key = self._resolve_key(api_key)
         date_str = self._format_date(date)
-        params: Dict[str, str] = {
-            "source": base,
-            "from": date_str,
-            "to": date_str,
-        }
-        if symbols:
-            params["target"] = ",".join(symbols)
-        raw = self._request("/api/historical-rates", params, key)
         rates: Dict[str, float] = {}
-        if raw.get("rates"):
-            for r in raw["rates"]:
-                rates[raw["target"]] = r["rate"]
-        if raw.get("current"):
-            rates[raw["target"]] = raw["current"]["rate"]
+        for target in self._require_symbols(symbols, "for_date"):
+            rate = self._rate_on(base, target, date_str, key)
+            if rate is not None:
+                rates[target] = rate
         return {"base": base, "date": date_str, "rates": rates}
 
     def time_series(
@@ -225,21 +261,14 @@ class AllRatesToday:
         key = self._resolve_key(api_key)
         start = self._format_date(start_date)
         end = self._format_date(end_date)
-        params: Dict[str, str] = {
-            "source": base,
-            "from": start,
-            "to": end,
-        }
-        if symbols:
-            params["target"] = ",".join(symbols)
-        raw = self._request("/api/historical-rates", params, key)
+        period = self._window_for(start)
         rates: Dict[str, Dict[str, float]] = {}
-        if raw.get("rates"):
-            for point in raw["rates"]:
-                date_key = point["time"].split("T")[0]
-                if date_key not in rates:
-                    rates[date_key] = {}
-                rates[date_key][raw["target"]] = point["rate"]
+        for target in self._require_symbols(symbols, "time_series"):
+            for point in self._history_points(base, target, period, key):
+                day = point["date"][:10]
+                if day < start or day > end:
+                    continue
+                rates.setdefault(day, {})[target] = point["rate"]
         return {"base": base, "start_date": start, "end_date": end, "rates": rates}
 
     def symbols(
@@ -265,7 +294,9 @@ class AllRatesToday:
                 print(f"{code}: {name}")
         """
         key = self._resolve_key(api_key)
-        return self._request("/api/v1/symbols", {}, key)
+        # The endpoint returns {"currencies": [{"code", "name", "symbol"}], "count"}.
+        raw = self._request("/api/v1/symbols", {}, key)
+        return {"symbols": {c["code"]: c["name"] for c in raw.get("currencies") or []}}
 
     def get_rate(
         self,
@@ -295,7 +326,19 @@ class AllRatesToday:
         params: Dict[str, str] = {"source": from_currency, "target": to_currency}
         if amount is not None:
             params["amount"] = str(amount)
-        return self._request("/api/v1/rates", params, key)
+        raw = self._request("/api/v1/rates", params, key)
+        # Without ``amount`` the endpoint answers with the rates list; return the documented shape.
+        if isinstance(raw, list) or "from" not in raw:
+            r = raw[0] if isinstance(raw, list) and raw else raw
+            if not r:
+                raise AllRatesTodayError(f"No rate returned for {from_currency}/{to_currency}")
+            return {
+                "from": {"currency": r["source"], "amount": 1},
+                "to": {"currency": r["target"], "amount": r["rate"]},
+                "rate": r["rate"],
+                "source": "mid-market",
+            }
+        return raw
 
     def get_rates(
         self,
@@ -346,11 +389,16 @@ class AllRatesToday:
                 print(f"{point['time']}: {point['rate']}")
         """
         key = self._resolve_key(api_key)
-        return self._request(
-            "/api/historical-rates",
-            {"source": source, "target": target, "period": period},
-            key,
-        )
+        # The endpoint returns {"data": [{"date", "rate", "timestamp"}]}; map it to rates / current.
+        points = self._history_points(source, target, period, key)
+        rates = [{"rate": p["rate"], "time": p["date"]} for p in points]
+        return {
+            "source": source,
+            "target": target,
+            "period": period,
+            "current": rates[-1] if rates else {"rate": 0, "time": ""},
+            "rates": rates,
+        }
 
     def convert(
         self,
@@ -390,18 +438,11 @@ class AllRatesToday:
 
         if date is not None:
             date_str = self._format_date(date)
-            params: Dict[str, str] = {
-                "source": from_currency,
-                "target": to_currency,
-                "from": date_str,
-                "to": date_str,
-            }
-            raw = self._request("/api/historical-rates", params, key)
-            rate = 0.0
-            if raw.get("current"):
-                rate = raw["current"]["rate"]
-            elif raw.get("rates"):
-                rate = raw["rates"][0]["rate"]
+            rate = self._rate_on(from_currency, to_currency, date_str, key)
+            if rate is None:
+                raise AllRatesTodayError(
+                    f"No {from_currency}/{to_currency} rate available on or before {date_str}"
+                )
             return {
                 "from": from_currency,
                 "to": to_currency,

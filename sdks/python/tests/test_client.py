@@ -2,7 +2,7 @@
 
 import json
 import urllib.error
-from datetime import date, datetime
+from datetime import date, datetime, timedelta, timezone
 from io import BytesIO
 from unittest.mock import MagicMock, patch
 
@@ -11,6 +11,22 @@ import pytest
 from allratestoday import AllRatesToday, AllRatesTodayError
 
 API_KEY = "test_api_key_123"
+
+
+def days_ago(n):
+    """ISO date ``n`` days before today (history windows end today)."""
+    return (datetime.now(timezone.utc).date() - timedelta(days=n)).isoformat()
+
+
+def history(*points):
+    """Live /api/historical-rates shape: {data: [{date, rate, timestamp}]}."""
+    return {
+        "source": "USD", "target": "EUR", "period": "7d", "source_api": "mid-market",
+        "data": [
+            {"date": d, "rate": r, "timestamp": int(datetime.fromisoformat(d).replace(tzinfo=timezone.utc).timestamp() * 1000)}
+            for d, r in points
+        ],
+    }
 
 
 def mock_response(body, status=200):
@@ -221,58 +237,53 @@ class TestLatest:
 class TestForDate:
     @patch("allratestoday.client.urllib.request.urlopen")
     def test_string_date(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({
-            "source": "USD", "target": "EUR", "period": "custom",
-            "current": {"rate": 0.9187, "time": "2026-01-15T00:00:00Z"},
-            "rates": [{"rate": 0.9187, "time": "2026-01-15T00:00:00Z"}],
-        })
-        result = client.for_date("2026-01-15")
-        assert result["date"] == "2026-01-15"
+        d = days_ago(3)
+        mock_urlopen.return_value = mock_response(history((days_ago(4), 0.91), (d, 0.9187), (days_ago(2), 0.93)))
+        result = client.for_date(d, symbols=["EUR"])
+        assert result["date"] == d
         assert result["rates"]["EUR"] == 0.9187
+        url = mock_urlopen.call_args[0][0].full_url
+        assert "period=7d" in url
+        assert "from=" not in url
 
     @patch("allratestoday.client.urllib.request.urlopen")
     def test_date_object(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({
-            "source": "USD", "target": "EUR", "period": "custom",
-            "current": {"rate": 0.92, "time": "2026-01-15T00:00:00Z"},
-            "rates": [],
-        })
-        result = client.for_date(date(2026, 1, 15))
-        assert result["date"] == "2026-01-15"
-        url = mock_urlopen.call_args[0][0].full_url
-        assert "from=2026-01-15" in url
+        d = datetime.now(timezone.utc).date() - timedelta(days=20)
+        mock_urlopen.return_value = mock_response(history((d.isoformat(), 0.92)))
+        result = client.for_date(d, symbols=["EUR"])
+        assert result["date"] == d.isoformat()
+        assert "period=30d" in mock_urlopen.call_args[0][0].full_url
 
     @patch("allratestoday.client.urllib.request.urlopen")
     def test_datetime_object(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({
-            "source": "USD", "target": "EUR", "period": "custom",
-            "current": {"rate": 0.92, "time": "2026-06-15T00:00:00Z"},
-            "rates": [],
-        })
-        result = client.for_date(datetime(2026, 6, 15, 12, 0, 0))
-        assert result["date"] == "2026-06-15"
+        d = datetime.now(timezone.utc) - timedelta(days=100)
+        mock_urlopen.return_value = mock_response(history((d.date().isoformat(), 0.92)))
+        result = client.for_date(d, symbols=["EUR"])
+        assert result["date"] == d.date().isoformat()
+        assert "period=1y" in mock_urlopen.call_args[0][0].full_url
 
     @patch("allratestoday.client.urllib.request.urlopen")
     def test_with_base_and_symbols(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({
-            "source": "EUR", "target": "GBP", "period": "custom",
-            "current": {"rate": 0.85, "time": "2026-01-15T00:00:00Z"},
-            "rates": [],
-        })
-        client.for_date("2026-01-15", base="EUR", symbols=["GBP"])
+        mock_urlopen.return_value = mock_response(history((days_ago(1), 0.85)))
+        client.for_date(days_ago(1), base="EUR", symbols=["GBP"])
         url = mock_urlopen.call_args[0][0].full_url
         assert "source=EUR" in url
         assert "target=GBP" in url
 
     @patch("allratestoday.client.urllib.request.urlopen")
-    def test_uses_current_when_rates_empty(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({
-            "source": "USD", "target": "EUR", "period": "custom",
-            "current": {"rate": 0.9187, "time": "2026-01-15T00:00:00Z"},
-            "rates": [],
-        })
-        result = client.for_date("2026-01-15")
-        assert result["rates"]["EUR"] == 0.9187
+    def test_closest_earlier_point(self, mock_urlopen, client):
+        # The 1y window is weekly: a mid-week date takes the previous point.
+        mock_urlopen.return_value = mock_response(history((days_ago(105), 0.90), (days_ago(98), 0.95)))
+        result = client.for_date(days_ago(100), symbols=["EUR"])
+        assert result["rates"]["EUR"] == 0.90
+
+    def test_requires_symbols(self, client):
+        with pytest.raises(AllRatesTodayError, match="needs symbols"):
+            client.for_date(days_ago(1))
+
+    def test_older_than_a_year(self, client):
+        with pytest.raises(AllRatesTodayError, match="last 365 days"):
+            client.for_date(days_ago(400), symbols=["EUR"])
 
 
 # ---------------------------------------------------------------------------
@@ -283,53 +294,39 @@ class TestForDate:
 class TestTimeSeries:
     @patch("allratestoday.client.urllib.request.urlopen")
     def test_basic(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({
-            "source": "USD", "target": "EUR", "period": "custom",
-            "current": {"rate": 0.92, "time": "2026-03-31T00:00:00Z"},
-            "rates": [
-                {"rate": 0.9187, "time": "2026-01-01T00:00:00Z"},
-                {"rate": 0.9195, "time": "2026-01-02T00:00:00Z"},
-            ],
-        })
-        result = client.time_series("2026-01-01", "2026-03-31")
+        a, b = days_ago(20), days_ago(19)
+        mock_urlopen.return_value = mock_response(history((days_ago(25), 0.9), (a, 0.9187), (b, 0.9195)))
+        result = client.time_series(a, days_ago(1), symbols=["EUR"])
         assert result["base"] == "USD"
-        assert result["start_date"] == "2026-01-01"
-        assert result["end_date"] == "2026-03-31"
-        assert result["rates"]["2026-01-01"]["EUR"] == 0.9187
-        assert result["rates"]["2026-01-02"]["EUR"] == 0.9195
+        assert result["start_date"] == a
+        assert result["end_date"] == days_ago(1)
+        assert result["rates"] == {a: {"EUR": 0.9187}, b: {"EUR": 0.9195}}
 
     @patch("allratestoday.client.urllib.request.urlopen")
     def test_date_objects(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({
-            "source": "USD", "target": "EUR", "period": "custom",
-            "current": {"rate": 0.92, "time": "2026-03-31T00:00:00Z"},
-            "rates": [],
-        })
-        client.time_series(date(2026, 1, 1), date(2026, 3, 31))
+        mock_urlopen.return_value = mock_response(history())
+        today = datetime.now(timezone.utc).date()
+        client.time_series(today - timedelta(days=200), today, symbols=["EUR"])
         url = mock_urlopen.call_args[0][0].full_url
-        assert "from=2026-01-01" in url
-        assert "to=2026-03-31" in url
+        assert "period=1y" in url
 
     @patch("allratestoday.client.urllib.request.urlopen")
-    def test_with_options(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({
-            "source": "EUR", "target": "GBP", "period": "custom",
-            "current": {"rate": 0.85, "time": "2026-03-31T00:00:00Z"},
-            "rates": [],
-        })
-        client.time_series("2026-01-01", "2026-03-31", base="EUR", symbols=["GBP", "USD"])
-        url = mock_urlopen.call_args[0][0].full_url
-        assert "source=EUR" in url
-        assert "target=GBP%2CUSD" in url
+    def test_one_call_per_symbol(self, mock_urlopen, client):
+        mock_urlopen.side_effect = [
+            mock_response(history((days_ago(2), 0.85))),
+            mock_response(history((days_ago(2), 1.1))),
+        ]
+        result = client.time_series(days_ago(5), days_ago(0), base="EUR", symbols=["GBP", "USD"])
+        urls = [c[0][0].full_url for c in mock_urlopen.call_args_list]
+        assert len(urls) == 2
+        assert "source=EUR" in urls[0] and "target=GBP" in urls[0]
+        assert "target=USD" in urls[1]
+        assert result["rates"][days_ago(2)] == {"GBP": 0.85, "USD": 1.1}
 
     @patch("allratestoday.client.urllib.request.urlopen")
     def test_empty_rates(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({
-            "source": "USD", "target": "EUR", "period": "custom",
-            "current": {"rate": 0.92, "time": "2026-03-31T00:00:00Z"},
-            "rates": [],
-        })
-        result = client.time_series("2026-01-01", "2026-03-31")
+        mock_urlopen.return_value = mock_response(history())
+        result = client.time_series(days_ago(5), days_ago(0), symbols=["EUR"])
         assert result["rates"] == {}
 
 
@@ -342,15 +339,18 @@ class TestSymbols:
     @patch("allratestoday.client.urllib.request.urlopen")
     def test_basic(self, mock_urlopen, client):
         mock_urlopen.return_value = mock_response({
-            "symbols": {"USD": "United States Dollar", "EUR": "Euro", "GBP": "British Pound Sterling"}
+            "currencies": [
+                {"code": "USD", "name": "United States Dollar", "symbol": "$"},
+                {"code": "EUR", "name": "Euro", "symbol": "€"},
+            ],
+            "count": 2,
         })
         result = client.symbols()
-        assert result["symbols"]["USD"] == "United States Dollar"
-        assert result["symbols"]["EUR"] == "Euro"
+        assert result["symbols"] == {"USD": "United States Dollar", "EUR": "Euro"}
 
     @patch("allratestoday.client.urllib.request.urlopen")
     def test_correct_endpoint(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({"symbols": {}})
+        mock_urlopen.return_value = mock_response({"currencies": [], "count": 0})
         client.symbols()
         url = mock_urlopen.call_args[0][0].full_url
         assert "/api/v1/symbols" in url
@@ -362,6 +362,19 @@ class TestSymbols:
 
 
 class TestGetRate:
+    @patch("allratestoday.client.urllib.request.urlopen")
+    def test_without_amount_normalises_list(self, mock_urlopen, client):
+        mock_urlopen.return_value = mock_response([
+            {"rate": 0.9234, "source": "USD", "target": "EUR", "time": "2026-04-09T14:00:00+0000"}
+        ])
+        result = client.get_rate("USD", "EUR")
+        assert result == {
+            "from": {"currency": "USD", "amount": 1},
+            "to": {"currency": "EUR", "amount": 0.9234},
+            "rate": 0.9234,
+            "source": "mid-market",
+        }
+
     @patch("allratestoday.client.urllib.request.urlopen")
     def test_basic(self, mock_urlopen, client):
         mock_urlopen.return_value = mock_response({
@@ -420,25 +433,19 @@ class TestGetRates:
 class TestGetHistoricalRates:
     @patch("allratestoday.client.urllib.request.urlopen")
     def test_default_period(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({
-            "source": "USD", "target": "EUR", "period": "7d",
-            "current": {"rate": 0.9234, "time": "2026-04-09T14:00:00Z"},
-            "rates": [{"rate": 0.9198, "time": "2026-04-02T00:00:00Z"}],
-        })
+        mock_urlopen.return_value = mock_response(history((days_ago(1), 0.9234), (days_ago(7), 0.9198)))
         result = client.get_historical_rates("USD", "EUR")
         assert result["period"] == "7d"
-        assert result["current"]["rate"] == 0.9234
+        assert result["current"] == {"rate": 0.9234, "time": days_ago(1)}
+        assert [p["rate"] for p in result["rates"]] == [0.9198, 0.9234]
 
     @patch("allratestoday.client.urllib.request.urlopen")
     def test_custom_period(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({
-            "source": "USD", "target": "EUR", "period": "30d",
-            "current": {"rate": 0.92, "time": "2026-04-09T14:00:00Z"},
-            "rates": [],
-        })
-        client.get_historical_rates("USD", "EUR", "30d")
+        mock_urlopen.return_value = mock_response(history())
+        result = client.get_historical_rates("USD", "EUR", "30d")
         url = mock_urlopen.call_args[0][0].full_url
         assert "period=30d" in url
+        assert result["current"] == {"rate": 0, "time": ""}
 
 
 # ---------------------------------------------------------------------------
@@ -464,45 +471,27 @@ class TestConvert:
 
     @patch("allratestoday.client.urllib.request.urlopen")
     def test_historical_string_date(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({
-            "source": "USD", "target": "EUR", "period": "custom",
-            "current": {"rate": 0.9187, "time": "2026-01-15T00:00:00Z"},
-            "rates": [{"rate": 0.9187, "time": "2026-01-15T00:00:00Z"}],
-        })
-        result = client.convert("USD", "EUR", 1000, date="2026-01-15")
+        d = days_ago(10)
+        mock_urlopen.return_value = mock_response(history((d, 0.9187), (days_ago(9), 0.95)))
+        result = client.convert("USD", "EUR", 1000, date=d)
         assert result["rate"] == 0.9187
         assert result["result"] == 918.7
-        assert result["date"] == "2026-01-15"
+        assert result["date"] == d
 
     @patch("allratestoday.client.urllib.request.urlopen")
     def test_historical_date_object(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({
-            "source": "USD", "target": "EUR", "period": "custom",
-            "current": {"rate": 0.9187, "time": "2026-01-15T00:00:00Z"},
-            "rates": [],
-        })
-        result = client.convert("USD", "EUR", 500, date=date(2026, 1, 15))
-        assert result["date"] == "2026-01-15"
+        d = datetime.now(timezone.utc).date() - timedelta(days=3)
+        mock_urlopen.return_value = mock_response(history((d.isoformat(), 0.92)))
+        result = client.convert("USD", "EUR", 500, date=d)
+        assert result["date"] == d.isoformat()
         assert result["amount"] == 500
+        assert result["result"] == 460.0
 
     @patch("allratestoday.client.urllib.request.urlopen")
-    def test_fallback_to_rates_array(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({
-            "source": "USD", "target": "EUR", "period": "custom",
-            "rates": [{"rate": 0.92, "time": "2026-01-15T00:00:00Z"}],
-        })
-        result = client.convert("USD", "EUR", 100, date="2026-01-15")
-        assert result["rate"] == 0.92
-
-    @patch("allratestoday.client.urllib.request.urlopen")
-    def test_no_data_returns_zero(self, mock_urlopen, client):
-        mock_urlopen.return_value = mock_response({
-            "source": "USD", "target": "EUR", "period": "custom",
-            "rates": [],
-        })
-        result = client.convert("USD", "EUR", 100, date="2026-01-15")
-        assert result["rate"] == 0.0
-        assert result["result"] == 0
+    def test_no_data_raises(self, mock_urlopen, client):
+        mock_urlopen.return_value = mock_response(history())
+        with pytest.raises(AllRatesTodayError, match="No USD/EUR rate"):
+            client.convert("USD", "EUR", 100, date=days_ago(2))
 
 
 # ---------------------------------------------------------------------------

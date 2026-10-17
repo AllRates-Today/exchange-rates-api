@@ -90,7 +90,7 @@ print(data["rates"])
 
 ### Historical Exchange Rates
 
-Travel back in time to get rates from any date (paid plans; free and trial keys get a 403 `historical_requires_paid_plan`):
+Get rates for any date in the last 365 days (paid plans; free and trial keys get a 403 `historical_requires_paid_plan`):
 
 ```python
 # Using a string date
@@ -103,8 +103,10 @@ data = client.for_date(date(2026, 1, 15), base="EUR", symbols=["USD", "GBP"])
 
 # Using a datetime object
 from datetime import datetime
-data = client.for_date(datetime(2026, 1, 15, 12, 0, 0))
+data = client.for_date(datetime(2026, 1, 15, 12, 0, 0), symbols=["EUR"])
 ```
+
+`for_date()` and `time_series()` need `symbols` (one request per symbol) and cover the last 365 days.
 
 **Response:**
 
