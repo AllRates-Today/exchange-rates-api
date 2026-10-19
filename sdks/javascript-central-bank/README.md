@@ -123,6 +123,7 @@ async function invoiceTotalInGbp(amountUsd: number, invoiceDate: string) {
 - **MCP server** for AI agents: `npx -y @allratestoday/central-bank-mcp`, or the hosted keyless endpoint `https://allratestoday.com/api/mcp`
 - **Claude Code plugin:** `/plugin marketplace add AllRates-Today/claude-code-plugin`
 - **Trial key for agents** (no signup): `POST https://allratestoday.com/api/agent/keys` with `Content-Type: application/json` → 100 calls over 7 days for latest rates and latest tables (dated tables and history are paid-plan only); MCP tool `request_trial_key`
+- **Open data archive:** the same published tables mirrored daily, one CSV per institution — [Hugging Face](https://huggingface.co/datasets/AllRatesToday/central-bank-exchange-rates) · [Kaggle](https://www.kaggle.com/datasets/allratestoday/central-bank-exchange-rates) (CC BY-NC 4.0)
 
 ## Links
 
