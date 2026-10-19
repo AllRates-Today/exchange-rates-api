@@ -3,17 +3,20 @@
 Bank metadata comes from the npm bank-SDK generator (one list for every SDK);
 cadence comes from the live open endpoint. Run from anywhere:
 
-    python3 scripts/gen_sources_table.py
+    python3 scripts/gen_sources_table.py                       # this package's README
+    python3 scripts/gen_sources_table.py ../javascript-central-bank/README.md "await cb.latest('rbi')"
 """
 import json
 import re
 import subprocess
+import sys
 import urllib.request
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent.parent
 NPM_GEN = HERE.parents[2] / "allratestoday-bank-sdks" / "generate.mjs"
-README = HERE / "README.md"
+README = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else HERE / "README.md"
+EXAMPLE = sys.argv[2] if len(sys.argv) > 2 else 'cb.latest("rbi")'
 
 
 def load_banks():
@@ -48,7 +51,7 @@ def main():
     tax = [b for b in banks if b.get("kind") == "tax authority"]
     table = "\n".join([
         f"**{len(cb)} central banks and {len(tax)} tax authorities.** Pass the `Code` as `bank` "
-        '(e.g. `cb.latest("rbi")`). Every source\'s latest table is keyless.',
+        f"(e.g. `{EXAMPLE}`). Every source's latest table is keyless.",
         "",
         "### Tax authorities",
         "",
