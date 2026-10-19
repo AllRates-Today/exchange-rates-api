@@ -218,6 +218,8 @@ For the complete technical reference, download the **AllRatesToday Currency Data
 - **Developer Guide:** [allratestoday.com/developers](https://allratestoday.com/developers)
 - **Status:** [allratestoday.com/status](https://allratestoday.com/status)
 - **Support:** [allratestoday.com/contact](https://allratestoday.com/contact)
+- **Register (Free):** [allratestoday.com/register](https://allratestoday.com/register)
+- **Dashboard:** [allratestoday.com/profile](https://allratestoday.com/profile)
 
 ## 📜 License
 

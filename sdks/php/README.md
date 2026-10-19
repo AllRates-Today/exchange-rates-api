@@ -91,6 +91,8 @@ The same rates are available to coding agents and LLM tools without a second int
 - [API Documentation](https://allratestoday.com/docs)
 - [Register (Free)](https://allratestoday.com/register)
 - [Dashboard](https://allratestoday.com/profile)
+- [Status](https://allratestoday.com/status)
+- [GitHub](https://github.com/AllRates-Today/exchange-rates-api)
 
 ## 📜 License
 

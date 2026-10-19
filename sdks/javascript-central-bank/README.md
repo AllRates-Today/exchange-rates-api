@@ -129,5 +129,9 @@ async function invoiceTotalInGbp(amountUsd: number, invoiceDate: string) {
 - Coverage and docs: <https://allratestoday.com/central-bank-rates-api/>
 - API reference: <https://allratestoday.com/docs>
 - Support: support@allratestoday.com
+- [Register (Free)](https://allratestoday.com/register)
+- [Dashboard](https://allratestoday.com/profile)
+- [Status](https://allratestoday.com/status)
+- [GitHub](https://github.com/AllRates-Today/exchange-rates-api)
 
 MIT licensed. Rates are served as published by the named institution; AllRatesToday is not affiliated with any of them.
