@@ -1,14 +1,13 @@
 # allratestoday
 
 [![PyPI version](https://img.shields.io/pypi/v/allratestoday.svg)](https://pypi.org/project/allratestoday/)
-[![codecov](https://codecov.io/gh/AllRates-Today/exchange-rates-api/branch/main/graph/badge.svg)](https://codecov.io/gh/AllRates-Today/exchange-rates-api)
 [![Tests](https://github.com/AllRates-Today/exchange-rates-api/actions/workflows/test.yml/badge.svg)](https://github.com/AllRates-Today/exchange-rates-api/actions/workflows/test.yml)
 [![license](https://img.shields.io/pypi/l/allratestoday.svg)](https://github.com/AllRates-Today/exchange-rates-api/blob/main/LICENSE)
 [![Python](https://img.shields.io/pypi/pyversions/allratestoday.svg)](https://pypi.org/project/allratestoday/)
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://pypi.org/project/allratestoday/)
 [![Security: Snyk](https://img.shields.io/badge/Security-Snyk-4C4A73?logo=snyk&logoColor=white)](https://snyk.io/test/github/AllRates-Today/exchange-rates-api)
 
-**The most elegant way to access real-time mid-market exchange rates in Python**
+**Real-time mid-market exchange rates for Python — 160+ currencies, conversions and history from the [AllRatesToday API](https://allratestoday.com/developers), with zero dependencies. Need the official rate a central bank or tax authority published instead? See [`allratestoday-central-bank`](https://pypi.org/project/allratestoday-central-bank/).**
 
 ## 🚀 Why Choose This Client?
 
@@ -18,11 +17,19 @@
 - 🌍 **160+ Currencies** — Major, minor, and exotic currency pairs
 - 🔷 **Type Hints** — Full type annotations for IDE autocomplete
 - 📦 **Zero Dependencies** — Uses only `urllib` and `json` from the standard library
-- ✅ **100% Test Coverage** — Comprehensive test suite with full coverage
+- ✅ **Tested in CI** — the test suite runs on every push
+- 🔀 **Multi-tenant ready** — per-request API key override on every method
 
 ## 🔑 Get Your API Key
 
-Ready to start? Get your free API key from [allratestoday.com/register](https://allratestoday.com/register).
+Get a free API key at [allratestoday.com/register](https://allratestoday.com/register) — no credit card. Your key, usage and plan live on the [dashboard](https://allratestoday.com/profile).
+
+| Plan | Includes |
+| --- | --- |
+| Free | `latest`, `convert`, `get_rate`, `get_rates`, `symbols` |
+| Paid | Everything above plus `for_date`, `time_series`, `get_historical_rates` and dated `convert` — see [pricing](https://allratestoday.com/pricing/) |
+
+AI agents can self-issue a 100-call, 7-day trial key with no signup — see the AI agent section below.
 
 ## 📦 Installation
 
@@ -42,7 +49,7 @@ client = AllRatesToday(api_key="YOUR_API_KEY")
 
 # Get latest exchange rates
 data = client.latest(base="USD", symbols=["EUR", "GBP", "JPY"])
-print(data["rates"])  # {"EUR": 0.9234, "GBP": 0.7891, "JPY": 151.42}
+print(data["rates"])  # {"EUR": 0.891067, "GBP": 0.749934, "JPY": 158.2}
 
 # Convert an amount
 result = client.convert("USD", "EUR", 1000)
@@ -73,7 +80,7 @@ print(data["rates"])
 # Target specific currencies with EUR base
 data = client.latest(base="EUR", symbols=["USD", "GBP", "JPY"])
 print(data["rates"])
-# {"USD": 1.083, "GBP": 0.8546, "JPY": 163.92}
+# {"USD": 1.12225, "GBP": 0.8416, "JPY": 177.53}
 ```
 
 **Response:**
@@ -81,8 +88,8 @@ print(data["rates"])
 ```python
 {
     "base": "EUR",
-    "date": "2026-04-09T14:30:00Z",
-    "rates": {"USD": 1.083, "GBP": 0.8546, "JPY": 163.92}
+    "date": "2026-10-19T11:46:01+0000",
+    "rates": {"USD": 1.12225, "GBP": 0.8416, "JPY": 177.53}
 }
 ```
 
@@ -128,7 +135,7 @@ Convert any amount between currencies — including historical conversions (paid
 # Current conversion
 result = client.convert("USD", "EUR", 1000)
 print(result)
-# {"from": "USD", "to": "EUR", "amount": 1000, "result": 923.4, "rate": 0.9234}
+# {"from": "USD", "to": "EUR", "amount": 1000, "result": 891.067, "rate": 0.891067}
 
 # Historical conversion — what was $1,000 worth on Jan 15?
 result = client.convert("USD", "EUR", 1000, date="2026-01-15")
@@ -150,9 +157,9 @@ Discover all 160+ supported currency symbols and names:
 data = client.symbols()
 print(data["symbols"])
 # {
-#     "USD": "United States Dollar",
+#     "USD": "US Dollar",
 #     "EUR": "Euro",
-#     "GBP": "British Pound Sterling",
+#     "GBP": "British Pound",
 #     "JPY": "Japanese Yen",
 #     ...160+ currencies
 # }
@@ -213,6 +220,8 @@ print(f"1 USD = {rate['rate']} EUR")
 # With amount
 rate = client.get_rate("USD", "EUR", 500)
 print(f"$500 = €{rate['to']['amount']}")
+# {"from": {"currency": "USD", "amount": 500}, "to": {"currency": "EUR", "amount": 445.5335},
+#  "rate": 0.891067, "source": "mid-market"}
 ```
 
 ---
@@ -275,35 +284,38 @@ from allratestoday import AllRatesToday, AllRatesTodayError
 client = AllRatesToday(api_key="YOUR_API_KEY")
 
 try:
-    rate = client.get_rate("USD", "INVALID")
+    data = client.for_date("2026-01-15", symbols=["EUR"])
 except AllRatesTodayError as e:
-    print(e)        # "Currency not found"
-    print(e.status)  # 404
+    print(e)         # "Historical rates require a paid plan. ..."
+    print(e.status)  # 403
 ```
 
 | Status | Meaning                                |
 | ------ | -------------------------------------- |
-| —      | Missing API key (raised before request) |
+| —      | Missing API key, bad date or missing `symbols` (raised before any request) |
+| `400`  | Unknown currency code                  |
 | `401`  | Invalid API key                        |
-| `404`  | Currency code not found                |
-| `429`  | Rate limit exceeded                    |
+| `403`  | Your plan does not include this call (history needs a paid plan) |
+| `429`  | Quota or rate limit reached            |
 | `500`  | Server error                           |
 
 ---
 
-## 🧪 Testing
+## 💡 Quota tips
 
-Run tests:
+- Each method call is one request against your quota; `latest(symbols=[...])` returns several currencies in one call, so prefer it to looping `get_rate`.
+- `for_date()` and `time_series()` make one request per symbol.
+- Rates refresh every 60 seconds — caching responses for a minute loses nothing.
 
-```bash
-pip install pytest pytest-cov
-pytest tests/ -v
-```
+## 🏛️ Official central-bank rates
 
-Run with coverage:
+Mid-market rates are right for pricing and display. Tax filings, customs, statutory accounts and many invoicing rules instead require the rate a named institution published. For those, use [`allratestoday-central-bank`](https://pypi.org/project/allratestoday-central-bank/) — 121 central banks and 3 tax authorities, latest tables with no API key:
 
-```bash
-pytest tests/ --cov=allratestoday --cov-report=term-missing
+```python
+from allratestoday_central_bank import CentralBankRates
+
+cb = CentralBankRates()
+print(cb.latest("ecb", source="EUR", target="USD"))  # the ECB's own published rate and its rate_date
 ```
 
 ---

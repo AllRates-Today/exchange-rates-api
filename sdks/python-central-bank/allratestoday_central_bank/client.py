@@ -32,10 +32,14 @@ class NeedsApiKeyError(CentralBankError):
     bare 401.
     """
 
-    def __init__(self, what: str):
+    def __init__(self, what: str, paid: bool = False):
+        plan = (
+            "a paid plan (https://allratestoday.com/pricing) - register at "
+            if paid else "the free tier covers it - register at "
+        )
         super().__init__(
-            f"{what} requires an AllRatesToday API key. The free tier covers it - "
-            "register at https://allratestoday.com/register (no card), then pass "
+            f"{what} requires an AllRatesToday API key on {plan}"
+            "https://allratestoday.com/register (no card), then pass "
             "api_key= when constructing the client. Without a key this client can "
             "still return the latest published table for any source."
         )
@@ -195,7 +199,7 @@ class CentralBankRates:
             NeedsApiKeyError: if no API key is configured.
         """
         if self.keyless:
-            raise NeedsApiKeyError(f"The {bank} table for a specific date")
+            raise NeedsApiKeyError(f"The {bank} table for a specific date", paid=True)
         return self._request(
             f"/api/v1/central-bank/{urllib.parse.quote(bank.lower())}/{self._fmt_date(on)}",
             {
@@ -231,7 +235,7 @@ class CentralBankRates:
             NeedsApiKeyError: if no API key is configured.
         """
         if self.keyless:
-            raise NeedsApiKeyError("Historical series")
+            raise NeedsApiKeyError("Historical series", paid=True)
         return self._request(
             f"/api/v1/central-bank/{urllib.parse.quote(bank.lower())}/history",
             {
