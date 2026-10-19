@@ -7,7 +7,7 @@ customs valuations and statutory accounting require.
 The latest published table of any source is available without an API key.
 """
 
-from .client import CentralBankRates, CentralBankError
+from .client import CentralBankRates, CentralBankError, NeedsApiKeyError
 
 try:
     from importlib.metadata import version as _version
@@ -16,4 +16,4 @@ try:
 except Exception:  # pragma: no cover - running from a checkout, not installed
     __version__ = "0.0.0.dev0"
 
-__all__ = ["CentralBankRates", "CentralBankError", "__version__"]
+__all__ = ["CentralBankRates", "CentralBankError", "NeedsApiKeyError", "__version__"]
