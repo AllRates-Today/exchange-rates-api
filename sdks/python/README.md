@@ -318,6 +318,8 @@ cb = CentralBankRates()
 print(cb.latest("ecb", source="EUR", target="USD"))  # the ECB's own published rate and its rate_date
 ```
 
+Need the whole archive rather than an API call? The published central-bank tables are mirrored daily as open data, one CSV per institution: [Hugging Face](https://huggingface.co/datasets/AllRatesToday/central-bank-exchange-rates) · [Kaggle](https://www.kaggle.com/datasets/allratestoday/central-bank-exchange-rates) (CC BY-NC 4.0).
+
 ---
 
 ## 📖 Methods Reference
