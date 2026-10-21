@@ -15,7 +15,7 @@
 - 📡 **Real-Time Data** — Rates updated every 60 seconds
 - 💹 **Mid-Market Rates** — No retail spread or markup baked in
 - 🌍 **160+ Currencies** — Major, minor, and exotic currency pairs
-- 🏛️ **Official Rates Too** — latest tables from 121 central banks + 3 tax authorities via `officialRates()`, no key needed
+- 🏛️ **Official Rates Too** — latest tables from [122 central banks and 4 tax authorities](https://allratestoday.com/central-bank-rates-api/institutions/) via `officialRates()`, no key needed
 - 🔷 **Type-Safe** — Full TypeScript support with intelligent autocomplete
 - 🌐 **Universal** — Works seamlessly in Node.js 18+ and modern browsers
 - 🧑‍💻 **Developer-Friendly** — Simple API, extensive documentation, and great DX
@@ -264,8 +264,8 @@ console.log(`$500 = €${rate.to.amount}`);
 
 The methods above return live mid-market rates. For the **official rate an
 institution published** — what invoices, VAT returns, customs declarations and
-audits require — use `officialRates()`. It covers 121 central banks plus HMRC,
-the US Treasury and Swiss BAZG, and the latest table needs **no API key**:
+audits require — use `officialRates()`. It covers [122 central banks](https://allratestoday.com/central-bank-rates-api/institutions/) plus HMRC,
+the US Treasury, Swiss BAZG and India's CBIC, and the latest table needs **no API key**:
 
 ```typescript
 const client = new AllRatesToday(); // no key

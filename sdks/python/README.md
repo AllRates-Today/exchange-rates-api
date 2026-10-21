@@ -309,7 +309,7 @@ except AllRatesTodayError as e:
 
 ## 🏛️ Official central-bank rates
 
-Mid-market rates are right for pricing and display. Tax filings, customs, statutory accounts and many invoicing rules instead require the rate a named institution published. For those, use [`allratestoday-central-bank`](https://pypi.org/project/allratestoday-central-bank/) — 121 central banks and 3 tax authorities, latest tables with no API key:
+Mid-market rates are right for pricing and display. Tax filings, customs, statutory accounts and many invoicing rules instead require the rate a named institution published. For those, use [`allratestoday-central-bank`](https://pypi.org/project/allratestoday-central-bank/) — [122 central banks and 4 tax authorities](https://allratestoday.com/central-bank-rates-api/institutions/), latest tables with no API key:
 
 ```python
 from allratestoday_central_bank import CentralBankRates

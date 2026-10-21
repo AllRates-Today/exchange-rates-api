@@ -6,12 +6,12 @@
 [![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://pypi.org/project/allratestoday-central-bank/)
 [![ECB EUR/USD today](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fallratestoday.com%2Fapi%2Fopen%2Fcentral-bank%2Fecb%3Fsource%3DEUR%26target%3DUSD&query=%24.rate&label=ECB%20EUR%2FUSD&color=0A7E8C&cacheSeconds=3600)](https://allratestoday.com/central-bank-rates-api/ecb/)
 
-**Official exchange rates for Python, as published by 121 central banks and 3 tax authorities — ECB, Federal Reserve, Bank of Japan, Bank of England, HMRC, US Treasury and more. The latest table of every source works without an API key. Zero dependencies.**
+**Official exchange rates for Python, as published by [122 central banks and 4 tax authorities](https://allratestoday.com/central-bank-rates-api/institutions/) — ECB, Federal Reserve, Bank of Japan, Bank of England, HMRC, US Treasury and more. The latest table of every source works without an API key. Zero dependencies.**
 
 ## 🚀 Why this package?
 
 - 🏛️ **Published rates, not estimates** — each number is what a named institution printed, with that institution's own `rate_date`
-- 🔓 **No key for the latest table** — `latest()` reads an open, edge-cached endpoint for any of the 124 sources
+- 🔓 **No key for the latest table** — `latest()` reads an open, edge-cached endpoint for any of the [126 sources](https://allratestoday.com/central-bank-rates-api/institutions/)
 - 🌍 **One client, every source** — switch from the ECB to HMRC to the Reserve Bank of India by changing one string
 - 🔀 **Published vs derived, always flagged** — computed pairs carry `derived: True` and are never crossed between institutions
 - 📊 **Cross-source comparison** — one pair across every institution with spread statistics
@@ -117,7 +117,7 @@ cb.availability("ecb", year=2026)     # {"count": ..., "dates": ["2026-01-02", "
 ## 🌍 Covered sources
 
 <!-- sources:start -->
-**121 central banks and 3 tax authorities.** Pass the `Code` as `bank` (e.g. `cb.latest("rbi")`). Every source's latest table is keyless.
+**[122 central banks and 4 tax authorities](https://allratestoday.com/central-bank-rates-api/institutions/).** Pass the `Code` as `bank` (e.g. `cb.latest("rbi")`). Every source's latest table is keyless.
 
 ### Tax authorities
 
