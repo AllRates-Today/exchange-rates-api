@@ -50,7 +50,7 @@
     "directory": "sdks/javascript"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "^5.0.5",
     "tsup": "^9.0.0",
     "typescript": "^5.0.0",
     "vitest": "^5.0.5"
