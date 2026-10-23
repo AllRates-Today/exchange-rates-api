@@ -26,7 +26,7 @@
 - 🌍 **160+ currencies** — Major, emerging market, and popular currencies
 - 📅 **Historical data** — Access historical rates with flexible date ranges (1d/7d/30d/1y) on paid plans
 - 📦 **Official SDKs** — JavaScript/TypeScript, Python, PHP, and React
-- 🆓 **Free tier** — Get started at no cost (300 requests for latest rates; history is on paid plans)
+- 🆓 **Free tier** — Get started at no cost (latest rates; history is on paid plans)
 - 🛡️ **Fast & reliable** — Powered by Cloudflare's global edge network
 - 💹 **Mid-market rates** — no retail spread baked in
 
