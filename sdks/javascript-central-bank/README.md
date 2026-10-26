@@ -141,6 +141,7 @@ async function invoiceTotalInGbp(amountUsd: number, invoiceDate: string) {
 - [Register (Free)](https://allratestoday.com/register)
 - [Dashboard](https://allratestoday.com/profile)
 - [Status](https://allratestoday.com/status)
+- [Postman collection](https://allratestoday.com/postman/)
 - [GitHub](https://github.com/AllRates-Today/exchange-rates-api)
 
 MIT licensed. Rates are served as published by the named institution; AllRatesToday is not affiliated with any of them.

@@ -218,6 +218,7 @@ mirrored daily as open data, one CSV per institution:
 - [Central bank sources](https://allratestoday.com/central-bank-rates-api/) · [Tax authority sources](https://allratestoday.com/tax-authority-rates-api/)
 - [Register (Free)](https://allratestoday.com/register) · [Dashboard](https://allratestoday.com/profile) · [Pricing](https://allratestoday.com/pricing/)
 - [Status](https://allratestoday.com/status)
+- [Postman collection](https://allratestoday.com/postman/)
 - [GitHub](https://github.com/AllRates-Today/exchange-rates-api)
 - Support: support@allratestoday.com
 

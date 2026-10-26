@@ -599,6 +599,7 @@ npm run test:watch     # Watch mode for development
 - [GitHub](https://github.com/allratestoday/exchange-rates-api)
 - [Core SDK (Node.js)](https://www.npmjs.com/package/@allratestoday/sdk)
 - [Status](https://allratestoday.com/status)
+- [Postman collection](https://allratestoday.com/postman/)
 - [GitHub](https://github.com/AllRates-Today/exchange-rates-api)
 
 ## 📜 License
