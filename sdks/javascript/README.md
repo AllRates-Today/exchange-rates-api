@@ -543,6 +543,7 @@ The same rates are available to coding agents and LLM tools without a second int
 
 ## 🔗 Links
 
+- **Website:** [allratestoday.com](https://allratestoday.com)
 - [API Documentation](https://allratestoday.com/developers)
 - [Register (Free)](https://allratestoday.com/register)
 - [Dashboard](https://allratestoday.com/profile)
