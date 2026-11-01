@@ -136,6 +136,7 @@ async function invoiceTotalInGbp(amountUsd: number, invoiceDate: string) {
 ## Links
 
 - **Website:** [allratestoday.com](https://allratestoday.com)
+- **Download central bank rates:** [allratestoday.com/download-central-bank-rates](https://allratestoday.com/download-central-bank-rates/) — every bank's tables as Excel, CSV or JSON
 - Coverage and docs: <https://allratestoday.com/central-bank-rates-api/>
 - API reference: <https://allratestoday.com/docs>
 - Support: support@allratestoday.com

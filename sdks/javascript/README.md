@@ -544,6 +544,7 @@ The same rates are available to coding agents and LLM tools without a second int
 ## 🔗 Links
 
 - **Website:** [allratestoday.com](https://allratestoday.com)
+- [Download central bank rates](https://allratestoday.com/download-central-bank-rates/) — every bank's tables as Excel, CSV or JSON
 - [API Documentation](https://allratestoday.com/developers)
 - [Register (Free)](https://allratestoday.com/register)
 - [Dashboard](https://allratestoday.com/profile)
