@@ -218,6 +218,7 @@ For the complete technical reference, download the **AllRatesToday Currency Data
 - **Developer Guide:** [allratestoday.com/developers](https://allratestoday.com/developers)
 - **Status:** [allratestoday.com/status](https://allratestoday.com/status)
 - **Postman:** [allratestoday.com/postman](https://allratestoday.com/postman/)
+- [ChatGPT app](https://chatgpt.com/plugins/plugin_asdk_app_6ae1e76098f48191a285ac3f5ab7a83b) — ask ChatGPT for live and official central bank rates
 - **Support:** [allratestoday.com/contact](https://allratestoday.com/contact)
 - **Register (Free):** [allratestoday.com/register](https://allratestoday.com/register)
 - **Dashboard:** [allratestoday.com/profile](https://allratestoday.com/profile)
