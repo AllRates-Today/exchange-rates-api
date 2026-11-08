@@ -219,6 +219,7 @@ For the complete technical reference, download the **AllRatesToday Currency Data
 - **Status:** [allratestoday.com/status](https://allratestoday.com/status)
 - **Postman:** [allratestoday.com/postman](https://allratestoday.com/postman/)
 - **SwaggerHub:** [OpenAPI reference](https://app.swaggerhub.com/apis-docs/allratestoday/allratestoday-exchange-rate-central-bank-rates-api/2.2.0)
+- **Bump.sh:** [OpenAPI reference + changelog](https://bump.sh/allratestoday/doc/allratestoday-api)
 - [ChatGPT app](https://chatgpt.com/plugins/plugin_asdk_app_6ae1e76098f48191a285ac3f5ab7a83b) — ask ChatGPT for live and official central bank rates
 - **Support:** [allratestoday.com/contact](https://allratestoday.com/contact)
 - **Register (Free):** [allratestoday.com/register](https://allratestoday.com/register)
