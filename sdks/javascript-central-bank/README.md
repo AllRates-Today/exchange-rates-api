@@ -145,6 +145,7 @@ async function invoiceTotalInGbp(amountUsd: number, invoiceDate: string) {
 - [Status](https://allratestoday.com/status)
 - [Postman collection](https://allratestoday.com/postman/)
 - [ChatGPT app](https://chatgpt.com/plugins/plugin_asdk_app_6ae1e76098f48191a285ac3f5ab7a83b) — ask ChatGPT for live and official central bank rates
+- [OpenAPI reference on Bump.sh](https://bump.sh/allratestoday/doc/allratestoday-api) — also on [SwaggerHub](https://app.swaggerhub.com/apis-docs/allratestoday/allratestoday-exchange-rate-central-bank-rates-api/2.2.0)
 - [GitHub](https://github.com/AllRates-Today/exchange-rates-api)
 
 MIT licensed. Rates are served as published by the named institution; AllRatesToday is not affiliated with any of them.
