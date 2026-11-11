@@ -425,7 +425,7 @@ export class AllRatesToday {
 
   /**
    * Latest table of OFFICIAL rates published by a central bank or tax
-   * authority (121 central banks + HMRC, US Treasury, Swiss BAZG). These are
+   * authority (120+ central banks + HMRC, US Treasury, Swiss BAZG). These are
    * the fixed, citable rates for invoicing, tax, customs and accounting — not
    * live market rates. **No API key needed.**
    *
