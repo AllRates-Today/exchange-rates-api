@@ -499,6 +499,38 @@ class TestConvert:
 # ---------------------------------------------------------------------------
 
 
+class TestBankRates:
+    @patch("allratestoday.client.urllib.request.urlopen")
+    def test_country(self, mock_urlopen):
+        mock_urlopen.return_value = mock_response({"country": "in", "quote_ccy": "INR", "banks": [{"bank": "sbi"}]})
+        res = AllRatesToday(api_key=API_KEY).bank_rates("IN")
+        assert res["banks"][0]["bank"] == "sbi"
+        req = mock_urlopen.call_args[0][0]
+        assert req.full_url == "https://allratestoday.com/api/v1/bank-rates/in"
+        assert req.get_header("Authorization") == f"Bearer {API_KEY}"
+
+    @patch("allratestoday.client.urllib.request.urlopen")
+    def test_one_bank_currency_and_date(self, mock_urlopen):
+        mock_urlopen.return_value = mock_response({"bank": "sbi", "ccy": "USD", "buy": 93.5, "sell": 94.35})
+        res = AllRatesToday(api_key=API_KEY).bank_rates("in", "SBI", ccy="usd", date=date(2026, 10, 15))
+        assert res["buy"] == 93.5
+        url = mock_urlopen.call_args[0][0].full_url
+        assert url.startswith("https://allratestoday.com/api/v1/bank-rates/in/sbi?")
+        assert "ccy=USD" in url and "date=2026-10-15" in url
+
+    def test_requires_key(self):
+        with pytest.raises(AllRatesTodayError, match="API key is required"):
+            AllRatesToday().bank_rates("in")
+
+    def test_ccy_needs_bank(self):
+        with pytest.raises(AllRatesTodayError, match="need a bank"):
+            AllRatesToday(api_key=API_KEY).bank_rates("in", ccy="USD")
+
+    def test_invalid_country(self):
+        with pytest.raises(AllRatesTodayError, match="Invalid country code"):
+            AllRatesToday(api_key=API_KEY).bank_rates("india")
+
+
 class TestErrorHandling:
     @patch("allratestoday.client.urllib.request.urlopen")
     def test_http_error_with_json(self, mock_urlopen, client):

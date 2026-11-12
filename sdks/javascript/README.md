@@ -288,6 +288,31 @@ not the time of your call. Dated tables and history need a paid plan and use
 `/api/v1/central-bank/{bank}/{date}`; publication calendars work on any key. See the
 [central bank rates API](https://allratestoday.com/central-bank-rates-api/).
 
+### Commercial Bank Board Rates
+
+For the retail **buy and sell** rates a commercial bank displays on its own website
+(SBI's TT buying rate, an Emirates NBD or HSBC Hong Kong board), use `bankRates()`.
+It covers 36 banks in 12 countries, read hourly, and needs an API key (the free key works).
+These are bank prices, not official rates.
+
+```typescript
+const client = new AllRatesToday({ apiKey: 'YOUR_API_KEY' });
+
+// Every covered bank in a country
+const india = await client.bankRates('in');
+console.log(india.banks.map((b) => b.name));
+
+// One bank, one currency
+const sbi = await client.bankRates('in', { bank: 'sbi', ccy: 'USD' });
+console.log(`SBI ${sbi.bank_updated_at}: buys at ${sbi.buy}, sells at ${sbi.sell} ${sbi.quote_ccy}`);
+
+// The stored board for a past day (kept about 400 days)
+const past = await client.bankRates('in', { bank: 'sbi', ccy: 'USD', date: '2026-10-15' });
+```
+
+Countries and bank codes are listed on the
+[commercial bank rates](https://allratestoday.com/bank-exchange-rate-api/) page.
+
 ### Historical Rates by Period
 
 Get historical rates using preset periods — no date math needed (paid plans):
@@ -505,6 +530,7 @@ console.log({ labels, values });
 | `getHistoricalRates(source, target, period?, options?)` | Historical rates by preset period (1d/7d/30d/1y; paid plan) |
 | `officialRates(bank, options?)` | Latest official table (or one pair) published by a central bank / tax authority — **keyless** |
 | `officialSources(options?)` | Every covered official source with latest publication date and freshness — **keyless** |
+| `bankRates(country, options?)` | Retail buy/sell board rates from commercial banks, by country or one bank (API key) |
 
 ---
 

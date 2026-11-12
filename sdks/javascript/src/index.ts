@@ -145,6 +145,59 @@ export interface OfficialRatesResponse {
   free_key: string;
 }
 
+export interface BankRatesOptions extends RequestOptions {
+  /** Bank code within the country, e.g. `sbi`, `fab`, `hsbchk`. Omit for every covered bank in the country. */
+  bank?: string;
+  /** Narrow one bank's board to a single currency, e.g. `USD`. Needs `bank`. */
+  ccy?: string;
+  /** Stored board for a past day (YYYY-MM-DD or Date). Needs `bank`. Daily snapshots are kept about 400 days. */
+  date?: string | Date;
+}
+
+export interface BankBoardRow {
+  ccy: string;
+  /** What the bank pays for one unit of `ccy`, in the country's home currency. */
+  buy: number;
+  /** What the bank charges for one unit of `ccy`, in the country's home currency. */
+  sell: number;
+  mid: number;
+  spread_pct: number;
+  /** The country's central-bank rate for the same currency, when it publishes one. */
+  official?: number | null;
+  vs_official_pct?: number | null;
+}
+
+export interface BankBoard {
+  /** Bank code, e.g. `sbi`. */
+  bank: string;
+  name: string;
+  /** The bank's own last-updated stamp, as printed on its page. */
+  bank_updated_at?: string | null;
+  /** Which board this is, e.g. `Telegraphic transfer`, `Cash`. */
+  basis?: string | null;
+  /** When the board was read (ISO 8601). */
+  captured_at: string;
+  rates: BankBoardRow[];
+}
+
+/**
+ * Shape depends on the call: a country returns `banks`; one bank returns
+ * `rates`; one bank with `ccy` returns that row's fields (`buy`, `sell`, …)
+ * at the top level.
+ */
+export interface BankRatesResponse extends Partial<BankBoard>, Partial<BankBoardRow> {
+  country: string;
+  /** Home currency every rate is quoted in, e.g. `INR`. */
+  quote_ccy: string;
+  /** Every covered bank. Present for a country call. */
+  banks?: BankBoard[];
+  /** Present when `date` was given: the day asked for and the day of the stored board. */
+  date_requested?: string;
+  snapshot_date?: string;
+  disclaimer: string;
+  attribution: { source: string; url: string; terms: string; bank_url?: string };
+}
+
 export interface OfficialSource {
   /** Pass this as `bank` to `officialRates()`. */
   code: string;
@@ -475,6 +528,50 @@ export class AllRatesToday {
    */
   async officialSources(options: RequestOptions = {}): Promise<OfficialSourcesResponse> {
     return this.request<OfficialSourcesResponse>('/api/open/central-banks', {}, options.apiKey);
+  }
+
+  /**
+   * Retail buy and sell board rates that commercial banks display on their
+   * own websites, read hourly. These are bank prices, not official rates; for
+   * the rate a regulation names, use `officialRates()`. **Requires an API key**
+   * (the free key works).
+   *
+   * ```ts
+   * // Every covered bank in India
+   * const india = await client.bankRates('in');
+   * console.log(india.banks?.map((b) => b.name));
+   *
+   * // One bank, one currency: SBI's TT buying and selling rate for USD
+   * const sbi = await client.bankRates('in', { bank: 'sbi', ccy: 'USD' });
+   * console.log(sbi.bank_updated_at, sbi.buy, sbi.sell);
+   *
+   * // The stored board for a past day
+   * const past = await client.bankRates('in', { bank: 'sbi', ccy: 'USD', date: '2026-10-15' });
+   * ```
+   *
+   * Countries and bank codes: https://allratestoday.com/bank-exchange-rate-api/
+   */
+  async bankRates(country: string, options: BankRatesOptions = {}): Promise<BankRatesResponse> {
+    const key = this.resolveKey(options.apiKey);
+    const cc = country.trim().toLowerCase();
+    if (!/^[a-z]{2}$/.test(cc)) {
+      throw new AllRatesTodayError(`Invalid country code: ${country}. Use a two-letter code such as "in" or "ae".`);
+    }
+    const bank = options.bank?.trim().toLowerCase();
+    if (bank !== undefined && !/^[a-z0-9_-]{2,20}$/.test(bank)) {
+      throw new AllRatesTodayError(`Invalid bank code: ${options.bank}.`);
+    }
+    if (!bank && (options.ccy || options.date)) {
+      throw new AllRatesTodayError('ccy and date need a bank.');
+    }
+    const params: Record<string, string> = {};
+    if (options.ccy) params.ccy = options.ccy.toUpperCase();
+    if (options.date) params.date = this.formatDate(options.date);
+    return this.request<BankRatesResponse>(
+      `/api/v1/bank-rates/${cc}${bank ? `/${encodeURIComponent(bank)}` : ''}`,
+      params,
+      key,
+    );
   }
 
   /**

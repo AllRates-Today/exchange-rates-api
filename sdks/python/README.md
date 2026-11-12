@@ -320,6 +320,21 @@ print(cb.latest("ecb", source="EUR", target="USD"))  # the ECB's own published r
 
 Need the whole archive rather than an API call? The published central-bank tables are mirrored daily as open data, one CSV per institution: [Hugging Face](https://huggingface.co/datasets/AllRatesToday/central-bank-exchange-rates) · [Kaggle](https://www.kaggle.com/datasets/allratestoday/central-bank-exchange-rates) (CC BY-NC 4.0).
 
+## 🏦 Commercial bank board rates
+
+For the retail **buy and sell** rates a commercial bank displays on its own website (SBI's TT buying rate, an Emirates NBD or HSBC Hong Kong board), use `bank_rates()`. It covers 36 banks in 12 countries, read hourly, and needs an API key (the free key works). These are bank prices, not official rates.
+
+```python
+client = AllRatesToday(api_key="YOUR_API_KEY")
+
+india = client.bank_rates("in")                          # every covered bank in India
+sbi = client.bank_rates("in", "sbi", ccy="USD")          # one bank, one currency
+print(sbi["bank_updated_at"], sbi["buy"], sbi["sell"])
+past = client.bank_rates("in", "sbi", ccy="USD", date="2026-10-15")  # stored board for a past day
+```
+
+Countries and bank codes are on the [commercial bank rates](https://allratestoday.com/bank-exchange-rate-api/) page.
+
 ---
 
 ## 📖 Methods Reference
@@ -334,6 +349,7 @@ Need the whole archive rather than an API call? The published central-bank table
 | `get_rate(from, to, amount, api_key)`               | Get a single exchange rate                                 |
 | `get_rates(source, target, api_key)`                | Get rates with full metadata                               |
 | `get_historical_rates(source, target, period, api_key)` | Historical rates by preset period (1d/7d/30d/1y; paid plan) |
+| `bank_rates(country, bank, ccy, date, api_key)`     | Retail buy/sell board rates from commercial banks (API key) |
 
 ---
 

@@ -400,6 +400,57 @@ class AllRatesToday:
             "rates": rates,
         }
 
+    def bank_rates(
+        self,
+        country: str,
+        bank: Optional[str] = None,
+        *,
+        ccy: Optional[str] = None,
+        date: Optional[Union[str, date, datetime]] = None,
+        api_key: Optional[str] = None,
+    ) -> Any:
+        """Retail buy and sell board rates that commercial banks display on their own websites.
+
+        Read hourly. These are bank prices, not official rates. Requires an API
+        key (the free key works).
+
+        Args:
+            country: Two-letter country code (e.g., ``"in"``, ``"ae"``, ``"hk"``).
+            bank: Bank code within the country (e.g., ``"sbi"``). Omit for every covered bank.
+            ccy: Narrow one bank's board to a single currency (e.g., ``"USD"``). Needs ``bank``.
+            date: Stored board for a past day. Needs ``bank``. Snapshots are kept about 400 days.
+            api_key: Override the API key for this request only.
+
+        Returns:
+            dict. A country call has ``banks``; one bank has ``rates``; one bank
+            with ``ccy`` has that row's ``buy`` and ``sell`` at the top level.
+
+        Example::
+
+            sbi = client.bank_rates("in", "sbi", ccy="USD")
+            print(sbi["bank_updated_at"], sbi["buy"], sbi["sell"])
+
+        Countries and bank codes: https://allratestoday.com/bank-exchange-rate-api/
+        """
+        key = self._resolve_key(api_key)
+        cc = country.strip().lower()
+        if len(cc) != 2 or not cc.isalpha():
+            raise AllRatesTodayError(
+                f'Invalid country code: {country}. Use a two-letter code such as "in" or "ae".'
+            )
+        code = bank.strip().lower() if bank else None
+        if not code and (ccy or date):
+            raise AllRatesTodayError("ccy and date need a bank.")
+        params: Dict[str, str] = {}
+        if ccy:
+            params["ccy"] = ccy.upper()
+        if date:
+            params["date"] = self._format_date(date)
+        path = f"/api/v1/bank-rates/{cc}"
+        if code:
+            path += f"/{urllib.parse.quote(code, safe='')}"
+        return self._request(path, params, key)
+
     def convert(
         self,
         from_currency: str,

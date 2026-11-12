@@ -442,6 +442,45 @@ describe('officialRates / officialSources', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Commercial bank board rates — keyed
+// ---------------------------------------------------------------------------
+
+describe('bankRates', () => {
+  it('fetches every bank in a country with the API key', async () => {
+    const fetchMock = mockFetch({ country: 'in', quote_ccy: 'INR', banks: [{ bank: 'sbi', name: 'State Bank of India', captured_at: '', rates: [] }], disclaimer: '', attribution: { source: '', url: '', terms: '' } });
+    vi.stubGlobal('fetch', fetchMock);
+    const res = await client.bankRates('IN');
+    expect(res.banks?.[0].bank).toBe('sbi');
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe('https://allratestoday.com/api/v1/bank-rates/in');
+    expect(init.headers.Authorization).toBe(`Bearer ${API_KEY}`);
+  });
+
+  it('fetches one bank narrowed to a currency and a date', async () => {
+    const fetchMock = mockFetch({ bank: 'sbi', country: 'in', quote_ccy: 'INR', ccy: 'USD', buy: 93.5, sell: 94.35 });
+    vi.stubGlobal('fetch', fetchMock);
+    const res = await client.bankRates('in', { bank: 'SBI', ccy: 'usd', date: '2026-10-15' });
+    expect(res.buy).toBe(93.5);
+    const url = new URL(fetchMock.mock.calls[0][0]);
+    expect(url.pathname).toBe('/api/v1/bank-rates/in/sbi');
+    expect(url.searchParams.get('ccy')).toBe('USD');
+    expect(url.searchParams.get('date')).toBe('2026-10-15');
+  });
+
+  it('requires an API key', async () => {
+    await expect(new AllRatesToday().bankRates('in')).rejects.toThrow(/API key is required/);
+  });
+
+  it('rejects ccy or date without a bank', async () => {
+    await expect(client.bankRates('in', { ccy: 'USD' })).rejects.toThrow(/need a bank/);
+  });
+
+  it('rejects an invalid country code', async () => {
+    await expect(client.bankRates('india')).rejects.toThrow(/Invalid country code/);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // History-backed methods (the endpoint serves 7d / 30d / 1y windows ending today)
 // ---------------------------------------------------------------------------
 
