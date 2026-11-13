@@ -292,7 +292,7 @@ not the time of your call. Dated tables and history need a paid plan and use
 
 For the retail **buy and sell** rates a commercial bank displays on its own website
 (SBI's TT buying rate, an Emirates NBD or HSBC Hong Kong board), use `bankRates()`.
-It covers 36 banks in 12 countries, read hourly, and needs an API key (the free key works).
+It covers 73 banks in 27 countries, read hourly, and needs an API key (the free key works).
 These are bank prices, not official rates.
 
 ```typescript
