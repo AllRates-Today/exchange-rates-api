@@ -571,6 +571,7 @@ The same rates are available to coding agents and LLM tools without a second int
 
 - **Website:** [allratestoday.com](https://allratestoday.com)
 - [Download central bank rates](https://allratestoday.com/download-central-bank-rates/) — every bank's tables as Excel, CSV or JSON
+- [Bank Exchange Rate API](https://allratestoday.com/bank-exchange-rate-api/) — live buy and sell rates from 1,200+ commercial banks in 120+ countries · [npm](https://www.npmjs.com/package/bank-exchange-rates) · [GitHub](https://github.com/AllRates-Today/bank-exchange-rates)
 - [API Documentation](https://allratestoday.com/developers)
 - [Register (Free)](https://allratestoday.com/register)
 - [Dashboard](https://allratestoday.com/profile)
