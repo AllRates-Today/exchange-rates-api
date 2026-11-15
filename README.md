@@ -212,6 +212,7 @@ For the complete technical reference, download the **AllRatesToday Currency Data
 
 - **Keyless endpoints, no sign-up:** [free-exchange-rate-api](https://github.com/AllRates-Today/free-exchange-rate-api) — open central-bank tables, drop-ins for Frankfurter, Fixer, exchangeratesapi and exchangerate.host
 - **Website:** [allratestoday.com](https://allratestoday.com)
+- [Bank Exchange Rate API](https://allratestoday.com/bank-exchange-rate-api/) — live buy and sell rates from 1,200+ commercial banks in 120+ countries · [npm](https://www.npmjs.com/package/bank-exchange-rates) · [GitHub](https://github.com/AllRates-Today/bank-exchange-rates)
 - **API Specs:** [allratestoday.com/api-specifications](https://allratestoday.com/api-specifications)
 - **Exchange Rate API overview:** [allratestoday.com/exchange-rate-api](https://allratestoday.com/exchange-rate-api/)
 - **API Docs:** [allratestoday.com/docs](https://allratestoday.com/docs)
