@@ -46,7 +46,7 @@ class NeedsApiKeyError(CentralBankError):
 
 
 class CentralBankRates:
-    """Official exchange rates from 130+ central banks and tax authorities.
+    """Official exchange rates from 120+ central banks and 50+ tax authorities.
 
     Works without an API key: :meth:`latest` reads the open, edge-cached endpoint
     that serves each source's most recent published table. Publication calendars

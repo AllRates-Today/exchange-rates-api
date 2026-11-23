@@ -15,7 +15,7 @@
 - 📡 **Real-Time Data** — Rates updated every 60 seconds
 - 💹 **Mid-Market Rates** — No retail spread or markup baked in
 - 🌍 **160+ Currencies** — Major, minor, and exotic currency pairs
-- 🏛️ **Official Rates Too** — latest tables from [130+ central banks and tax authorities](https://allratestoday.com/central-bank-rates-api/institutions/) via `officialRates()`, no key needed
+- 🏛️ **Official Rates Too** — latest tables from [120+ central banks and 50+ tax authorities](https://allratestoday.com/central-bank-rates-api/institutions/) via `officialRates()`, no key needed
 - 🔷 **Type-Safe** — Full TypeScript support with intelligent autocomplete
 - 🌐 **Universal** — Works seamlessly in Node.js 18+ and modern browsers
 - 🧑‍💻 **Developer-Friendly** — Simple API, extensive documentation, and great DX
